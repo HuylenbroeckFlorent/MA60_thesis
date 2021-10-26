@@ -1,0 +1,7 @@
+=== 1 ===
+Se familiariser avec les notions de :
+- jeu joué sur graphe.
+- stratégie.
+- jeu d'atteignabilité.
+- attracteur.
+- résolution d'un jeu d'atteignabilité via les attracteurs.
