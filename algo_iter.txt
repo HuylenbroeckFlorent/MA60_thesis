@@ -1,0 +1,25 @@
+Soit :
+	- j0 le joueur, j1 le joueur "ennemi"
+	- G un graphe dont chaque sommet appartient à un des deux joueurs
+	- F un ensemble de sommet du graphe
+	
+Attractor(F): #Calcule l'attracteur vers les sommets F pour j0
+	
+	#pre-processing
+	Pour tout sommet S appartenant à j1:
+	Initialiser S.n = degré sortant de S
+	
+	#Calcul
+	Initialiser une liste de sommets de départ S_start contenant les sommets de F.
+	On marque les sommets de F
+	Pour chaque sommet S de S_start:
+		Pour chaque arc entrant de S, on le remonte.
+			Si on arrive à un sommet de j0, on le marque et on l'ajoute à S_start
+			Si on arrive à un sommet de j1, on décrémente S.n de 1, si cette valeur atteint 0, on marque le sommet et on l'ajoute à S_start
+		On retire S de S_start
+		
+	On retourne la liste des sommets marqués.
+
+
+
+Max arc+sommets blocs d'instructions en 0(1)

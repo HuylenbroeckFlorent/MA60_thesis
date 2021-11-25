@@ -1,0 +1,48 @@
+- G liste de noeuds du graphe
+- chaque noeud possède une liste (.succ) de successeurs et un numéro (.player) de joueur
+
+Attractor(G, F, player):
+	attractor = [F]
+	pending = [F]
+	treated = [F] 
+	Pour chaque noeud N de G:
+		Si N pas dans treated :
+			Attractor_rec(N, attractor, pending, treated, player)
+	return attractor
+
+Attractor_rec(N, attractor, pending, treated, player):
+	pending.append(N)
+	
+	Si N.joueur = player:
+		one_in_attr = false
+		Pour Nsucc dans N.succ:
+			Si Nsucc treated:
+				Si Nsucc dans attractor:
+					one_in_attr = true
+					break
+			Sinon:
+				Si Nsucc pas dans pending:
+					one_in_attr = (one_in_attr || Attractor_rec(Nsucc, attractor, pending, treated, player))
+
+		Si one_in_attr == true:
+			attractor.append(N)
+		treated.append(N)
+		return one_in_attr
+
+	Sinon
+		all_in_attr = true
+		Pour Nsucc dans N.succ:
+			Si Nsucc treated:
+				Si Nsucc pas dans attractor:
+					all_in_attr = false
+					break
+			Sinon:
+				Si Nsucc pas dans pending:
+					all_in_attr = (all_in_attr && Attractor_rec(Nsucc, attractor, pending, treated, player))
+
+		Si all_in_attr == true:
+			attractor.append(N)
+		treated.append(N)
+		return all_in_attr 
+
+	
