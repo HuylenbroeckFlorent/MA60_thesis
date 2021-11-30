@@ -5,11 +5,11 @@
 \usepackage{hyperref} 
 \usepackage[utf8]{inputenc}
 %\usepackage[T1]{fontenc}
-%\usepackage{amsmath}
+\usepackage{amsmath} %%
 %\usepackage{amsfonts}
 %\usepackage{amscd}
 %\usepackage{amstext}
-%\usepackage{amssymb}
+\usepackage{amssymb} %%
 %\usepackage{bar}
 \usepackage{color}
 %\usepackage{mathrsfs}
@@ -21,6 +21,10 @@
 %\usepackage{layout}
 %\pagestyle{headings}
 \usepackage{fancyhdr}
+\usepackage{pdfpages} %
+\usepackage{algorithm} %
+\usepackage{algpseudocode} %
+\usepackage{makecell} %
 \pagestyle{fancy}
 
 %\setlength{\textheight}{630pt}
@@ -53,7 +57,7 @@
 }
 
 \begin{document}
-
+\includepdf{pageGarde.pdf}
 %newpage
 %\thispagestyle{empty}
 %\null
@@ -75,32 +79,161 @@ Nous remercions ...\\
 \pagenumbering{arabic}
 \renewcommand{\leftmark}{INTRODUCTION}
 \chapter{Introduction}
-Mettez l'introduction ici. Expliquez le contexte du travail, et les objectifs du travail.
-
-Avant de commencer la r\'edaction d'un projet ou un mémoire, lisez d'abord attentivement les conseils donn\'es dans \cite{Melot2007UMONS}.
-
+\subsubsection*{Contexte}
+\subsubsection*{Définition du problème}
+Le probleme dumodel-checking consiste a vérifier qu’un système informatique satisfait une spécification
+quand ceux-ci sont donnes sous la forme de modèles mathématiques. Des spècifications typiques sont : est-
+ce que le systeme peut atteindre unétat de deadlock ? Est-ce qu’une requète reçoit toujours une reponse ?
+Les modeles utilisés peuvent varier : les comportements du système informatique peuventétre modelisè
+par un automate acceptant des mots infinis, tandis que la specification peutètre modelisèe par une formule
+de logique temporelle LTL.
+Plutot que de verifier qu’un système informatique satisfait une spécification, on peut aller plus loin en
+envisageant la synthese de controleur. Dans le but de definir les interactions d’un système informatique
+avec son environnement, on considere ici un graphe orienté dont les sommets sont partagès entre le système
+et l’environnement. Une interaction est alors un chemin infini dans le graphe tel qu’en tout sommet 
+systeme (resp. de l’environnement), c’est lui qui décide quel arc suivrea partir de ce sommet. L’objectif
+du systeme est, par exemple, d’éviter unètat de deadlock quoique fasse l’environnement, ou encore de
+repondrea une requéte quoique fasse l’environnement. Pour y arriver, il a besoin d’une strategie gagnante
+qui n’est rien d’autre qu’un programme de controle. La synthese de controleur revient donca construire
+(quand c’est possible) une strategie gagnante (contre l’environnement) pour un objectif donnè du système.
+Dans ce projet, on propose d’etudier ce problème de synthése pour desjeux de surete´ joues sur graphes.
+Pour ces jeux, le systeme a pour objectif d’éviter de passer par certains sommets du graphe.  
+\subsubsection*{Présentation et limitations des solutions existantes}
+Quand le
+graphe est fini, il existe des algorithmes simples qui indiquent si le systeme peut y parvenir et qui dans ce cas
+indiquent comment jouer (voir par exemple le livre [1]). Quand le graphe est infini, l’article [2] propose 
+algorithme partiel qui utilise des SAT solveurs.
+\subsubsection*{Objectif du travail et idées principales}
+Dans le cadre du projet, l’etudiant sera amenè´ a comprendre
+ces algorithmes et a reproduire les expérimentations de l’article [2], et d’envisager une implèmentation de
+calcul de strategie gracea la structure de données “binary decision diagrams” [3,4]
+\subsubsection*{Brève description du contenu, chapitre par chapitre}
 \newpage
 
 
 %ICI COMMENCE LE CHAPITRE 2
-\chapter{Titre du deuxième chapitre}\label{ch:1}
-\renewcommand{\leftmark}{CHAPITRE \thechapter.~~Titre du deuxième chapitre}
+\chapter{Jeux joués sur graphes}\label{ch:1}
+\renewcommand{\leftmark}{CHAPITRE \thechapter.~~Jeux joués sur graphes}
+\section*{Jeux de sûreté}
+Un \emph{jeu de sûreté} se joue sur une \emph{arène} $A = (V_0,V_1,E)$ composée de deux ensembles disjoints, non-vides de sommets $V_0$ et $V_1$, avec $V_0 \cup V_1 = V$, et d'un ensemble d'arêtes $E \subseteq V\times V$.\\
+Un tel jeu est défini par un triplet $\mathfrak{G} = (A, I, F)$, avec $A$ une arène, $I\subseteq F$ un ensemble de sommets initiaux et $F\subseteq V$ un ensemble de sommets $safe$. \\
+Le jeu est joué par deux \emph{joueurs} numérotés $j_0$ et $j_1$ qui déplacent tour à tour un pion le long des arêtes de l'arène. Une $partie$ d'un jeu est une séquence infinie $\pi=v_0 v_1 ...$ où $v_0\in I, \forall i\in \mathbb{N},v_i \in V, $ et $(v_i, v_{i+1})\in E$. Une partie est gagnante pour le joueur $j_0$ si $\forall i \in \mathbb{N}, v_i \in F$, sinon le joueur $j_1$ l'emporte.\\
+Les coups des joueurs sont décidés par la $strat\text{é}gie$ adoptée par ces derniers. Une stratégie est une fonction $s_{j_n} : V^*V_n\to V$ qui indique vers quel sommet déplacer le pion selon la séquence de déplacement précédents.
+Une stratégie peut être \emph{sans mémoire} $s_{j_n} : V_n \to V$ si elle ne prend en compte que le sommet actuel où se trouve le pion.\\
+Calculer une stratégie gagnante pour un joueur revient généralement à calculer un ensemble gagnant $W\subseteq V$ pour ce joueur.
+$$W_n=\{v\in V|j_n\text{ gagne à partir de }v\}$$
+Cette définition d'un ensemble gagnant donne immédiatement une stratégie pour le joueur $j_0$. A chaque tour, $j_0$ n'a qu'à bouger le pion vers un sommet dans $W$.
+\section*{Jeux d'atteignabilité}
+Un \emph{jeu d'atteignabilité} est similaire à un jeu de sûreté $\mathfrak{G} = (A, I, F)$, sauf que $F \subseteq V$ est un ensemble de sommet à atteindre, et donc $I\subseteq V\setminus F$. Une partie $\pi=v_0v_1...$ est donc gagnante pour le joueur $j_0$ si $\exists i \in \mathbb{N}, v_i \in F$
 
-\section{Section}
 
-Ici on a la premi\`ere section du chapitre~\ref{ch:1}.
+\chapter{Cas fini}
+\renewcommand{\leftmark}{CHAPITRE \thechapter.~~Cas fini}
+Une \emph{arène finie} est une arène $A=(V_0, V_1, E)$ pour laquelle $V_0$ et $V_1$ sont des ensembles finis.
+\section*{Résolution via les attracteurs}
+Une méthode pour calculer les ensembles gagnants des jeux d'atteignabilité se base sur le principe d'attracteur.\\ Soit un jeu d'atteignabilité $\mathfrak{G} = (A, I, F)$ avec $A=(V_0, V_1, E)$ une arène finie, on a :\\
+$Attr_{j_n}^i=\{v\in V|\text{ le joueur }j_n\text{ peut forcer une visite d'un sommet de }F\text{ depuis }v\text{ en } \leq  i \text{ déplacements}\}$\\
+Construction par induction :
+%%% INDUCTION ATTRACTEUR
+\begin{equation}
+\begin{split}
+Attr^0_{j_0}(F)&=F\\
+Attr^{i+1}_{j_0}(F)&=Attr^i_{j_0}(F)\\
+			&\cup \{v'\in V_0|\exists(v,v')\in E:v\in Attr^i_{j_0}(F)\}\\
+			&\cup \{v'\in V_1|\forall(v,v')\in E:v\in Attr^i_{j_0}(F)\}
+\end{split}
+\end{equation}
+On obtient une séquence d'attracteurs $Attr_{j_0}^0(F)\subseteq Attr_{j_0}^1(F) \subseteq ...$ laquelle sera fixe à partir d'une certaine itération vu que $V$ est un ensemble fini. On notera donc $Attr_{j_0}(F)=\bigcup_{i=0}^{|V|}Attr_{j_0}^i$\\
 
-\subsection{Une sous section}
 
-\subsection{Encore une sous section}
+Cette construction de l'attracteur correspond à l'ensemble gagnant de $j_0$.\\
+En effet on a que $W_0 \subseteq Attr_{j_0}$ car
+\begin{itemize}
+\item $\forall v \in Attr_{j_0}^{i+1}\cap V_0, v$ possède un successeur dans $Attr_{j_0}^i$.
+\item $\forall v \in Attr_{j_0}^{i+1}\cap V_1,$ tous les successeurs de $v$ sont dans $Attr_{j_0}^i$.
+\item $Attr_{j_0}^0(F) \subseteq F$\\
+\end{itemize}
+Donc $j_0$ peut gagner la partie à partir de tous les sommets de $W_0$.\\
+Pour montrer que $Attr_{j_0}(F)\subseteq W_0$, il faut montrer que $j_0$ ne peut pas gagner la partie à partir d'un sommet hors de $Attr_{j_0}(F)$, autrement dit que $j_1$ peut forcer le pion à rester en dehors de $Attr_{j_0}(F)$ depuis tout sommet hors de $Attr_{j_0}(F)$.\\
+Soit un sommet $v\in V_1\setminus Attr_{j_0}(F)$, alors $v$ possède au moins une arête $(v, v')$ avec $v'\notin Attr_{j_0}(F)$, sinon on aurait $v \in Attr_{j_0}(F)$.\\
+Soit  un sommet $v\in V_0\setminus Attr_{j_0}(F)$, alors toutes les arêtes $v$
+mènent vers un sommet hors de $Attr_{j_0}(F)$, sinon on aurait $v \in Attr_{j_0}(F)$.\\
+Ces deux cas étant exhaustifs, on a bien que $Attr_{j_0}(F)\subseteq W_0$ et donc $W_0 = Attr_{j_0}(F)$.\\
 
-\section{Encore une section}
 
-%ICI COMMENCE LE CHAPITRE 2
-\chapter{Titre du troisième chapitre}
-\renewcommand{\leftmark}{CHAPITRE \thechapter.~~Titre du troisième chapitre}
+$Attr_{j_0}(F)$ étant l'ensemble gagnant pour $j_0$, il lui permet d'établir sa stratégie. A chaque tour, le joueur va déplacer le pion d'un sommet de $Attr_{j_0}^{i+1}(F)$ vers un sommet de $Attr_{j_0}^i(F)$ jusqu'à atteindre $Attr_{j_0}^0(F) = F$\\
 
-%ICI COMMENCE LE DERNIER CHAPITRE
+
+
+%%% ALGO ATTRACTEURS
+\begin{algorithm}
+\caption{Attracteur}\label{attractor}
+\hspace*{\algorithmicindent} 
+\begin{tabular}{lll}
+	\textbf{Entrées} & \textbf{G} : &Graphe, structure de donnée composée d'un tableau à deux\\
+	&&dimensions $predecessors$ de prédecesseurs (la liste de \\
+	&&prédecesseurs d'un noeud $i$ est stockée à la \\
+	&&$i^e$ entrée du tableau) et une liste $players$ (le $i^e$ noeud\\
+	&&appartient au joueur dont le numéro figure en \\
+	&&$i^e$ entrée de $players$).\\
+	&\textbf{F} : &Liste de numéro de sommets.\\
+	&\textbf{p} : &Numéro de joueur.\\
+	&\textbf{i} : &Nombre d'itération pour la construction de\\
+	&&l'attracteur, une valeur négative calculera l'attracteur\\
+	&&complet.\\
+	\textbf{Sortie} &\multicolumn{2}{l}{$Attr_p^i(F)$}\\
+\end{tabular}\\
+\begin{algorithmic}[1]
+\Procedure{Attractor}{$G, F, p, i$}
+	\State $out\_degrees \gets$ tableau de taille $|G|$\Comment Pré-traitement
+	\For{$j$ allant de 0 à $|G|-1$}
+		\If{$G.players[j] \neq p$}
+			\State $out\_degrees[j] \gets $ demi-degré extérieur du noeud $j$
+		\EndIf
+	\EndFor
+	
+	\State $attractor \gets$ tableau de taille $|G|$\Comment Initialisation
+	\For{$index$ in $F$}
+		\State $attractor[index] \gets 1$
+	\EndFor
+	\State $attractor\_new \gets F$
+	
+	\While{$attractor\_new$ non-vide \textbf{and} $i\neq 0$}\Comment Calcul de l'attracteur
+		\State $to\_check \gets attractor\_new$
+		\State $attractor\_new \gets [$ $]$
+		\For{$index$ in $to\_check$}
+			\For{$pred$ in $G.predecessors[index]$}
+				\If{$attractor[pred] = 0$}
+					\If{$G.players[pred] = p$}
+						\State $attractor\_new.append(pred)$
+					\Else
+						\State $out\_degrees[pred]\gets out\_degrees[pred]-1$
+						\If{$out\_degrees[pred]=0$}
+							\State $attractor\_new.append(pred)$
+						\EndIf
+					\EndIf
+				\EndIf
+			\EndFor
+		\EndFor
+	\algstore{attractor}
+\end{algorithmic}
+\end{algorithm}
+\newpage
+\begin{algorithm}
+\begin{algorithmic}[1]
+	\algrestore{attractor}
+		\For{$index$ in $attractor\_new$}
+			\State $attractor[index]\gets 1$
+		\EndFor
+		\State $i\gets i-1$
+	\EndWhile
+	\State\Return $attractor$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\chapter{Cas infini}
+
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
 \renewcommand{\leftmark}{CONCLUSION}
