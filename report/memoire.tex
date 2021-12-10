@@ -15,7 +15,7 @@
 %\usepackage{mathrsfs}
 \usepackage{graphicx}
 %\usepackage{calligra}
-%\usepackage{amsthm}
+\usepackage{amsthm} % proof
 %\usepackage{multirow}
 %\usepackage{tabularx}
 %\usepackage{layout}
@@ -111,15 +111,19 @@ calcul de strategie gracea la structure de données “binary decision diagrams�
 \newpage
 
 
-%ICI COMMENCE LE CHAPITRE 2
 \chapter{Jeux joués sur graphes}\label{ch:1}
 \renewcommand{\leftmark}{CHAPITRE \thechapter.~~Jeux joués sur graphes}
 \section*{Jeux de sûreté}
-Un \emph{jeu de sûreté} se joue sur une \emph{arène} $A = (V_0,V_1,E)$ composée de deux ensembles disjoints, non-vides de sommets $V_0$ et $V_1$, avec $V_0 \cup V_1 = V$, et d'un ensemble d'arêtes $E \subseteq V\times V$.\\
-Un tel jeu est défini par un triplet $\mathfrak{G} = (A, I, F)$, avec $A$ une arène, $I\subseteq F$ un ensemble de sommets initiaux et $F\subseteq V$ un ensemble de sommets $safe$. \\
-Le jeu est joué par deux \emph{joueurs} numérotés $j_0$ et $j_1$ qui déplacent tour à tour un pion le long des arêtes de l'arène. Une $partie$ d'un jeu est une séquence infinie $\pi=v_0 v_1 ...$ où $v_0\in I, \forall i\in \mathbb{N},v_i \in V, $ et $(v_i, v_{i+1})\in E$. Une partie est gagnante pour le joueur $j_0$ si $\forall i \in \mathbb{N}, v_i \in F$, sinon le joueur $j_1$ l'emporte.\\
-Les coups des joueurs sont décidés par la $strat\text{é}gie$ adoptée par ces derniers. Une stratégie est une fonction $s_{j_n} : V^*V_n\to V$ qui indique vers quel sommet déplacer le pion selon la séquence de déplacement précédents.
+Un \emph{jeu de sûreté} se joue sur une \emph{arène} $A = (V_0,V_1,E)$ composée de deux ensembles disjoints, non-vides de sommets $V_0$ et $V_1$, avec $V_0 \cup V_1 = V$, et d'un ensemble d'arêtes $E \subseteq V\times V$. De plus, chaque sommet d'une arène doit posséder au moins un successeur dans l'arène, autre que lui-même.\\
+Un tel jeu est défini par un triplet $\mathfrak{G} = (A, I, F)$, avec $A$ une arène, $I\subseteq F$ un ensemble de sommets initiaux et $F\subseteq V$ un ensemble de sommets \emph{sûrs}. \\
+Au début de la partie, un pion est placé sur un sommet de l'ensemble $I$.\\
+Le jeu est joué par deux \emph{joueurs} numérotés $j_0$ et $j_1$ qui déplacent tour à tour le pion le long des arêtes de l'arène. Une $partie$ d'un jeu est une séquence infinie $\pi=v_0 v_1 ...$ où $v_0\in I, \forall i\in \mathbb{N},v_i \in V, $ et $(v_i, v_{i+1})\in E$.\\
+Les coups des joueurs sont décidés par la \emph{stratégie} adoptée par ces derniers. Une stratégie est une fonction $s_{j_n} : V^*V_n\to V$ ($n\in \{0,1\}$) qui indique vers quel sommet déplacer le pion selon la séquence de déplacement précédents.
+Une stratégie $s_{j_n}$ est \emph{gagnante} si une partie jouée selon cette stratégie satisfait une condition de victoire pour le joueur $j_n$.
+Une partie est dites jouée selon une stratégie $s_{j_n}$ si
+$\forall i \in N, v_{i+1} = s_{j_n}(v_0v_1...v_i)$ et $v_i \in V_n$\\
 Une stratégie peut être \emph{sans mémoire} $s_{j_n} : V_n \to V$ si elle ne prend en compte que le sommet actuel où se trouve le pion.\\
+La \emph{condition de victoire} d'un jeu de sûreté est que tous les sommets visités au cours de la partie soient de l'ensemble $F$. Autrement dit, soit une partie $\pi = v_0v_1...$, $\forall i\in\mathbb{N}, v_i\in F$.\\
 Calculer une stratégie gagnante pour un joueur revient généralement à calculer un ensemble gagnant $W\subseteq V$ pour ce joueur.
 $$W_n=\{v\in V|j_n\text{ gagne à partir de }v\}$$
 Cette définition d'un ensemble gagnant donne immédiatement une stratégie pour le joueur $j_0$. A chaque tour, $j_0$ n'a qu'à bouger le pion vers un sommet dans $W$.
@@ -131,10 +135,14 @@ Un \emph{jeu d'atteignabilité} est similaire à un jeu de sûreté $\mathfrak{G
 \renewcommand{\leftmark}{CHAPITRE \thechapter.~~Cas fini}
 Une \emph{arène finie} est une arène $A=(V_0, V_1, E)$ pour laquelle $V_0$ et $V_1$ sont des ensembles finis.
 \section*{Résolution via les attracteurs}
-Une méthode pour calculer les ensembles gagnants des jeux d'atteignabilité se base sur le principe d'attracteur.\\ Soit un jeu d'atteignabilité $\mathfrak{G} = (A, I, F)$ avec $A=(V_0, V_1, E)$ une arène finie, on a :\\
-$Attr_{j_n}^i=\{v\in V|\text{ le joueur }j_n\text{ peut forcer une visite d'un sommet de }F\text{ depuis }v\text{ en } \leq  i \text{ déplacements}\}$\\
-Construction par induction :
+Une méthode pour calculer les ensembles gagnants des jeux de sûreté se base sur le principe d'attracteur. Intéressons nous d'abord au cas des jeux d'atteignabilité :
+\begin{defi}
+	Soit un jeu d'atteignabilité $\mathfrak{G} = (A, I, F)$ avec $A=(V_0, V_1, E)$ une arène finie, le $i^e$ attracteur pour le joueur $j_n$ est l'ensemble :\\
+	$Attr_{j_n}^i=\{v\in V|\text{ le joueur }j_n\text{ peut forcer une visite d'un sommet de }F\text{ depuis }v\text{ en } \leq  i \text{ déplacements}\}$
+\end{defi}
+
 %%% INDUCTION ATTRACTEUR
+\noindent Construction par induction :
 \begin{equation}
 \begin{split}
 Attr^0_{j_0}(F)&=F\\
@@ -143,25 +151,35 @@ Attr^{i+1}_{j_0}(F)&=Attr^i_{j_0}(F)\\
 			&\cup \{v'\in V_1|\forall(v,v')\in E:v\in Attr^i_{j_0}(F)\}
 \end{split}
 \end{equation}
-On obtient une séquence d'attracteurs $Attr_{j_0}^0(F)\subseteq Attr_{j_0}^1(F) \subseteq ...$ laquelle sera fixe à partir d'une certaine itération vu que $V$ est un ensemble fini. On notera donc $Attr_{j_0}(F)=\bigcup_{i=0}^{|V|}Attr_{j_0}^i$\\
+On obtient une séquence d'attracteurs $Attr_{j_0}^0(F)\subseteq Attr_{j_0}^1(F) \subseteq ...$ laquelle sera fixe à partir d'une certaine itération $k\leq|V|$ vu que $V$ est un ensemble fini et qu'à chaque itération, au moins un sommet de $V$ est ajouté à l'attracteur. On notera donc $Attr_{j_0}(F)=\bigcup_{i=0}^{|V|}Attr_{j_0}^i$\\
 
 
-Cette construction de l'attracteur correspond à l'ensemble gagnant de $j_0$.\\
+\noindent Cette construction de l'attracteur correspond à l'ensemble gagnant de $j_0$.\\
+\begin{demonstration}{
 En effet on a que $W_0 \subseteq Attr_{j_0}$ car
 \begin{itemize}
 \item $\forall v \in Attr_{j_0}^{i+1}\cap V_0, v$ possède un successeur dans $Attr_{j_0}^i$.
 \item $\forall v \in Attr_{j_0}^{i+1}\cap V_1,$ tous les successeurs de $v$ sont dans $Attr_{j_0}^i$.
-\item $Attr_{j_0}^0(F) \subseteq F$\\
+\item $Attr_{j_0}^0(F) \subseteq F$
 \end{itemize}
 Donc $j_0$ peut gagner la partie à partir de tous les sommets de $W_0$.\\
-Pour montrer que $Attr_{j_0}(F)\subseteq W_0$, il faut montrer que $j_0$ ne peut pas gagner la partie à partir d'un sommet hors de $Attr_{j_0}(F)$, autrement dit que $j_1$ peut forcer le pion à rester en dehors de $Attr_{j_0}(F)$ depuis tout sommet hors de $Attr_{j_0}(F)$.\\
+
+\noindent Pour montrer que $Attr_{j_0}(F)\subseteq W_0$, il faut montrer que $j_0$ ne peut pas gagner la partie à partir d'un sommet hors de $Attr_{j_0}(F)$, autrement dit que $j_1$ peut forcer le pion à rester en dehors de $Attr_{j_0}(F)$ depuis tout sommet hors de $Attr_{j_0}(F)$.\\
 Soit un sommet $v\in V_1\setminus Attr_{j_0}(F)$, alors $v$ possède au moins une arête $(v, v')$ avec $v'\notin Attr_{j_0}(F)$, sinon on aurait $v \in Attr_{j_0}(F)$.\\
 Soit  un sommet $v\in V_0\setminus Attr_{j_0}(F)$, alors toutes les arêtes $v$
 mènent vers un sommet hors de $Attr_{j_0}(F)$, sinon on aurait $v \in Attr_{j_0}(F)$.\\
-Ces deux cas étant exhaustifs, on a bien que $Attr_{j_0}(F)\subseteq W_0$ et donc $W_0 = Attr_{j_0}(F)$.\\
+Ces deux cas étant exhaustifs, on a bien que $Attr_{j_0}(F)\subseteq W_0$\\
+
+\noindent L'inclusion étant vérifiée dans les deux sens, on a bien que $W_0 = Attr_{j_0}(F)$.\\}
+\end{demonstration}
 
 
-$Attr_{j_0}(F)$ étant l'ensemble gagnant pour $j_0$, il lui permet d'établir sa stratégie. A chaque tour, le joueur va déplacer le pion d'un sommet de $Attr_{j_0}^{i+1}(F)$ vers un sommet de $Attr_{j_0}^i(F)$ jusqu'à atteindre $Attr_{j_0}^0(F) = F$\\
+\noindent $Attr_{j_0}(F)$ étant l'ensemble gagnant pour $j_0$, il lui permet d'établir sa stratégie. A chaque tour, le joueur va déplacer le pion d'un sommet de $Attr_{j_0}^{i+1}(F)$ vers un sommet de $Attr_{j_0}^i(F)$ jusqu'à atteindre $Attr_{j_0}^0(F) = F$\\
+De cette stratégie découle immédiatement la stratégie pour le joueur $j_1$ : déplacer le pion vers des sommets hors de l'attracteur car, à partir d'un tel sommet, $j_0$ ne peut pas forcer une visite d'un sommet de $F$.
+
+Cette méthode de résolution pour les jeux d'atteignabilité permet aussi de résoudre les jeux de sûreté. Soit un jeu de sûreté $\mathfrak{G} = (A, I, F)$ avec $A$ une arène finie. Si l'on construit $Attr_{j_1}(V\setminus F)$, autrement dit la liste de sommets depuis lesquels $j_1$ peut forcer une visite d'un sommet hors de $F$, on peut en déduire une stratégie pour $j_0$ de manière analogue à la stratégie pour le joueur $j_1$ dans un jeu d'atteignabilité. Il suffit à $j_0$ de ne pas visiter de sommets de cet attracteur. Ainsi, $j_1$ ne pourra pas forcer de visite de $F$.
+
+
 
 
 
@@ -231,6 +249,36 @@ $Attr_{j_0}(F)$ étant l'ensemble gagnant pour $j_0$, il lui permet d'établir s
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\subsection*{Explication}
+Cet algorithme se base sur la construction par induction de $Attr_{j_n}^i(F)$.\\
+Le cas de départ de la construction se retrouve dans l'étape d'initialisation de l'algorithme. On y ajoute les noeuds de $F$ dans l'attracteur.\\
+L'étape du calcul de l'attracteur représente la deuxième étape de la construction. Identifions les 3 éléments de l'union qui constitue $Attr^{i+1}_{j_0}(F)$ dans l'algorithme :
+\begin{itemize}
+\item $Attr^i_{j_0}(F)$ se retrouve à la ligne 30. A chaque étape on ne crée pas un nouvel attracteur mais on ajoute de nouveaux sommets à l'ancien.
+\item $\{v'\in V_0$ $|$ $\exists(v,v')\in E:v\in Attr^i_{j_0}(F)\}$. Dans la boucle intérieure, ligne 19, si un prédecesseur du noeud en cours de traitement appartient au joueur cible, alors il est ajouté à l'attracteur.
+\item $\{v'\in V_1$ $|$ $\forall(v,v')\in E:v\in Attr^i_{j_0}(F)\}$. Dans la boucle intérieure, ligne 21, si un prédecesseur du noeud en cours de traitement appartient au joueur ennemi, alors il est ajouté à l'attracteur si tous ses successeurs sont aussi dans l'attracteur. C'est à cette étape que le pré-traitement joue un rôle. Afin de se souvenir de l'appartenance des successeurs du noeud à l'attracteur, on calcule initialement son demi-degré extérieur. Ainsi, à chaque fois qu'un noeud est rencontré dans la liste des prédecesseurs d'un autre noeud, on décremente son demi-degré extérieur. Si cette valeur atteint $0$, cela veut dire que tous les successeurs de ce noeud font partie de l'attracteur (car on ne visite les prédecesseurs d'un noeud que s'il a été ajouté à l'attracteur). On peut donc l'ajouter à son tour à l'attracteur.
+\end{itemize}
+
+
+\subsection*{Preuve}
+voir plus haut
+\subsection*{Complexité}
+Considérons un graphe $G$ possédant $n$ noeuds et $m$ arêtes. Alors l'algorithme \emph{Attractor} possède une complexité dans le pire des cas en $O(n+m)$.
+\begin{demonstration}
+Afin de calculer la complexité totale de l'algorithme, intéressons-nous à la complexité des 3 boucles principales :
+\begin{itemize}
+\item \textit{Pré-traitement}\\
+Le calcul du demi-degré extérieur à l'aide d'une structure de données telle que décrite dans l'entête de l'algorithme se fait en temps $O(m)$. En effet il s'agit d'itérer sur la liste de prédecesseurs et, pour chaque noeud rencontré, incrémenter son demi-degré extérieur. Le graphes possédant $m$ arêtes, il y aura au plus $m$ éléments dans la liste des prédécesseurs.
+\item \textit{Initialisation}\\
+Cette étape se fait en temps $O(n)$ car il y au plus $n$ noeuds dans le graphes, donc pour lesquels on souhaite construire l'attracteur.
+\item \textit{Calcul de l'attracteur}\\
+Considérons une valeur de $i$ négative pour le pire des cas. Il y aura au maximum $n$ passages dans la boucle extérieure (ligne 13) car, à chaque étape, $attractor\_new$ doit contenir au moins un noeud de $G$ hors de l'attracteur courant. L'évaluation de la condition d'arrêt se fait en $O(1)$. La boucle à la ligne 16 itère sur les noeuds d'$attractor\_new$ et, pour chacun d'entre eux, la boucle à la ligne 17 va itèrer sur ses prédecesseurs. Toutes les opérations à l'intérieur de cette boucle sont en temps constant $O(1)$. On a donc que, dans le pire des cas, l'algorithme va effectuer des opérations en $O(1)$ pour chaque prédecesseurs de chaque noeud de $G$. Finalement, la boucle à la ligne 30 effectuera dans le pire des cas $n$ fois une opération en $O(1)$, car au plus $n$ noeuds seront ajoutés à l'attracteur.\\
+Cela nous donne une comlexité en $O(n$ (évaluation de la condition d'arrêt) $+m$ (boucle intérieure) $+n$ (ajout à l'attracteur) $) = O(m+n)$.\\
+\end{itemize}
+Nous obtenons donc une complexité totale de $O(n+m+(n+m)) = O(2(n+m)) = O(n+m)$.
+\end{demonstration}
+\subsection*{Exemple}
 
 \chapter{Cas infini}
 
