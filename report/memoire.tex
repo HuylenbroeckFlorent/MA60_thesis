@@ -25,6 +25,7 @@
 \usepackage{algorithm} %
 \usepackage{algpseudocode} %
 \usepackage{makecell} %
+\usepackage{tikz} %grahps 
 \pagestyle{fancy}
 
 %\setlength{\textheight}{630pt}
@@ -151,7 +152,7 @@ Attr^{i+1}_{j_0}(F)&=Attr^i_{j_0}(F)\\
 			&\cup \{v'\in V_1|\forall(v,v')\in E:v\in Attr^i_{j_0}(F)\}
 \end{split}
 \end{equation}
-On obtient une séquence d'attracteurs $Attr_{j_0}^0(F)\subseteq Attr_{j_0}^1(F) \subseteq ...$ laquelle sera fixe à partir d'une certaine itération $k\leq|V|$ vu que $V$ est un ensemble fini et qu'à chaque itération, au moins un sommet de $V$ est ajouté à l'attracteur. On notera donc $Attr_{j_0}(F)=\bigcup_{i=0}^{|V|}Attr_{j_0}^i$\\
+Par cette construction, on obtient une séquence d'attracteurs $Attr_{j_0}^0(F)\subseteq Attr_{j_0}^1(F) \subseteq ...$ laquelle sera fixe à partir d'une certaine itération $k\leq|V|$ vu que $V$ est un ensemble fini et qu'à chaque itération, au moins un sommet de $V$ est ajouté à l'attracteur. On notera donc $Attr_{j_0}(F)=\bigcup_{i=0}^{|V|}Attr_{j_0}^i$\\
 
 
 \noindent Cette construction de l'attracteur correspond à l'ensemble gagnant de $j_0$.\\
@@ -273,12 +274,309 @@ Le calcul du demi-degré extérieur à l'aide d'une structure de données telle 
 \item \textit{Initialisation}\\
 Cette étape se fait en temps $O(n)$ car il y au plus $n$ noeuds dans le graphes, donc pour lesquels on souhaite construire l'attracteur.
 \item \textit{Calcul de l'attracteur}\\
-Considérons une valeur de $i$ négative pour le pire des cas. Il y aura au maximum $n$ passages dans la boucle extérieure (ligne 13) car, à chaque étape, $attractor\_new$ doit contenir au moins un noeud de $G$ hors de l'attracteur courant. L'évaluation de la condition d'arrêt se fait en $O(1)$. La boucle à la ligne 16 itère sur les noeuds d'$attractor\_new$ et, pour chacun d'entre eux, la boucle à la ligne 17 va itèrer sur ses prédecesseurs. Toutes les opérations à l'intérieur de cette boucle sont en temps constant $O(1)$. On a donc que, dans le pire des cas, l'algorithme va effectuer des opérations en $O(1)$ pour chaque prédecesseurs de chaque noeud de $G$. Finalement, la boucle à la ligne 30 effectuera dans le pire des cas $n$ fois une opération en $O(1)$, car au plus $n$ noeuds seront ajoutés à l'attracteur.\\
-Cela nous donne une comlexité en $O(n$ (évaluation de la condition d'arrêt) $+m$ (boucle intérieure) $+n$ (ajout à l'attracteur) $) = O(m+n)$.\\
+Considérons une valeur de $i$ négative pour le pire des cas. Il y aura au maximum $n$ passages dans la boucle extérieure (ligne 13) car, à chaque étape, $attractor\_new$ doit contenir au moins un noeud de $G$ hors de l'attracteur courant. L'évaluation de la condition d'arrêt se fait en $O(1)$. La boucle à la ligne 16 itère sur les noeuds d'$attractor\_new$ et, pour chacun d'entre eux, la boucle à la ligne 17 va itèrer sur ses prédecesseurs. Toutes les opérations à l'intérieur de cette boucle sont en temps constant $O(1)$. On a donc que, dans le pire des cas, l'algorithme va effectuer des opérations en $O(1)$ pour chaque prédecesseur de chaque noeud de $G$. Finalement, la boucle à la ligne 30 effectuera dans le pire des cas $n$ fois une opération en $O(1)$, car au plus $n$ noeuds seront ajoutés à l'attracteur.\\
+Cela nous donne une comlexité en $O(n$ (évaluation de la condition d'arrêt) $+m$ (boucle intérieure) $+n$ (ajout à l'attracteur) $) = O(2n+m) = O(n+m)$.\\
 \end{itemize}
 Nous obtenons donc une complexité totale de $O(n+m+(n+m)) = O(2(n+m)) = O(n+m)$.
 \end{demonstration}
+\newpage
 \subsection*{Exemple}
+Considérons l'arène suivante :
+
+%%% ARENA
+\begin{tikzpicture}[	
+						node distance={20mm},
+						round/.style = {draw, circle, minimum size=12mm},
+						cround/.style = {draw, fill=gray!25, circle, minimum size=12mm},
+						bround/.style = {draw=red!75, very thick, circle, minimum size=12mm},
+						bcround/.style = {draw=red!75, very thick, fill=gray!25, circle, minimum size=12mm},
+						square/.style = {draw, rectangle, minimum size=10mm},
+						csquare/.style = {draw, fill=gray!25, rectangle, minimum size=10mm},
+						bsquare/.style = {draw=red!75, very thick, rectangle, minimum size=10mm},
+						bcsquare/.style = {draw=red!75, very thick, fill=gray!25, rectangle, minimum size=10mm}
+					]
+\node[square] (1) {$1$};
+\node[square] (2) [below of=1] {$2$};
+\node[round] (3) [right of=1] {$3$};
+\node[round] (4) [right of=3] {$4$};
+\node[square] (5) [below of=4] {$5$};
+\node[round] (6) [right of=4] {$6$};
+\node[square] (7) [above of=6] {$7$};
+\node[round] (9) [below right of=6] {$9$};
+\node[square] (10) [above right of=9] {$10$};
+\node[round] (8) [above of=10] {$8$};
+\node[square] (11) [right of=10] {$11$};
+
+\draw[->] (1) -- (2);
+\draw[->] (2) -- (5);
+\draw[->] (3) -- (1);
+\draw[->] (3) -- (2);
+\draw[->] (4) to [out=135, in=45] (1);
+\draw[->] (4) -- (3);
+\draw[->] (4) -- (5);
+\draw[->] (5) -- (3);
+\draw[->] (5) to [out=60, in=210] (6);
+\draw[->] (6) -- (4);
+\draw[->] (6) to [out=240, in=30] (5);
+\draw[->] (6) to [out=135, in=225] (7);
+\draw[->] (6) -- (9);
+\draw[->] (6) to [out=22, in=225] (8);
+\draw[->] (7) to [out=315, in=45] (6);
+\draw[->] (8) -- (7);
+\draw[->] (9) -- (10);
+\draw[->] (9) to [out=315, in=270] (11);
+\draw[->] (10) -- (8);
+\draw[->] (10) to [out=315, in=225] (11);
+\draw[->] (11) to [out=135, in=45] (10);
+\end{tikzpicture}
+
+Les noeuds ronds appartiennent au joueur $j_0$, et les carrés à $j_1$. Appliquons l'algorithme \emph{Attractor} sur celui-ci, avec comme ensemble de départ $F=\{1,2,11\}$ (il est intéressant de noter que l'ensemble $F$ ne doit pas forcément être connexe) et pour le joueur $j_0$. De plus nous allons supposer $i$ négatif afin de calculer l'attracteur complet.\\
+L'étape de pré-traitement sera rendue visuelle en ajoutant aux noeuds de $j_1$ la valeur correspondant dans le tableau $out\_degrees$. Les noeuds faisant partie de l'attracteur courant $attractor$ seront colorés en gris et ceux étant ajoutés à l'attracteur à l'itération suivante (les noeuds de la liste $attractor\_new$) seront entourés en rouge.
+Nous obtenons donc, avant l'entrée dans la boucle principale de l'algorithme, la représentation suivante :\\
+
+%%% ATTR0
+\begin{tikzpicture}[	
+						node distance={20mm},
+						round/.style = {draw, circle, minimum size=12mm},
+						cround/.style = {draw, fill=gray!25, circle, minimum size=12mm},
+						bround/.style = {draw=red!75, very thick, circle, minimum size=12mm},
+						bcround/.style = {draw=red!75, very thick, fill=gray!25, circle, minimum size=12mm},
+						square/.style = {draw, rectangle, minimum size=10mm},
+						csquare/.style = {draw, fill=gray!25, rectangle, minimum size=10mm},
+						bsquare/.style = {draw=red!75, very thick, rectangle, minimum size=10mm},
+						bcsquare/.style = {draw=red!75, very thick, fill=gray!25, rectangle, minimum size=10mm}
+					]
+\node[bcsquare] (1) {$1$};
+\node[bcsquare] (2) [below of=1] {$2$};
+\node[round] (3) [right of=1] {$3(2)$};
+\node[round] (4) [right of=3] {$4(3)$};
+\node[square] (5) [below of=4] {$5$};
+\node[round] (6) [right of=4] {$6(4)$};
+\node[square] (7) [above of=6] {$7$};
+\node[round] (9) [below right of=6] {$9(2)$};
+\node[square] (10) [above right of=9] {$10$};
+\node[round] (8) [above of=10] {$8(1)$};
+\node[bcsquare] (11) [right of=10] {$11$};
+
+\draw[->] (1) -- (2);
+\draw[->] (2) -- (5);
+\draw[->] (3) -- (1);
+\draw[->] (3) -- (2);
+\draw[->] (4) to [out=135, in=45] (1);
+\draw[->] (4) -- (3);
+\draw[->] (4) -- (5);
+\draw[->] (5) -- (3);
+\draw[->] (5) to [out=60, in=210] (6);
+\draw[->] (6) -- (4);
+\draw[->] (6) to [out=240, in=30] (5);
+\draw[->] (6) to [out=135, in=225] (7);
+\draw[->] (6) -- (9);
+\draw[->] (6) to [out=22, in=225] (8);
+\draw[->] (7) to [out=315, in=45] (6);
+\draw[->] (8) -- (7);
+\draw[->] (9) -- (10);
+\draw[->] (9) to [out=315, in=270] (11);
+\draw[->] (10) -- (8);
+\draw[->] (10) to [out=315, in=225] (11);
+\draw[->] (11) to [out=135, in=45] (10);
+\end{tikzpicture}\\
+Nous avons donc bien $Attr_{j_0}^0(F)=\{1,2,11\}$.\\
+La première itération du calcul de l'attracteur va ajouter les noeuds $3$ et $10$ à l'attracteur. En effet, la valeur de $out\_degrees$ de $3$ va être décrémentée deux fois, une fois en suivant les prédecesseurs de $1$ et une autre fois en suivant ceux de $2$. Cette valeur atteignant $0$, il sera ajouté à l'attracteur. La valeur de $out\_degrees$ de $4$ sera aussi décrémentée une fois en partant de $1$. Le cas de $10$ est plus trivial, il appartient à $j_0$ et a été rencontré en suivant les prédecesseurs de $11$, il est donc ajouté à l'attracteur. La valeur de $out\_degrees$ de $9$ est elle aussi décrémentée car le noeud $9$ est un prédecesseur de $11$. Nous obtenons donc la représentation suivante :\\
+
+%%% ATTR1
+\begin{tikzpicture}[	
+						node distance={20mm},
+						round/.style = {draw, circle, minimum size=12mm},
+						cround/.style = {draw, fill=gray!25, circle, minimum size=12mm},
+						bround/.style = {draw=red!75, very thick, circle, minimum size=12mm},
+						bcround/.style = {draw=red!75, very thick, fill=gray!25, circle, minimum size=12mm},
+						square/.style = {draw, rectangle, minimum size=10mm},
+						csquare/.style = {draw, fill=gray!25, rectangle, minimum size=10mm},
+						bsquare/.style = {draw=red!75, very thick, rectangle, minimum size=10mm},
+						bcsquare/.style = {draw=red!75, very thick, fill=gray!25, rectangle, minimum size=10mm}
+					]
+\node[csquare] (1) {$1$};
+\node[csquare] (2) [below of=1] {$2$};
+\node[bcround] (3) [right of=1] {$3(0)$};
+\node[round] (4) [right of=3] {$4(2)$};
+\node[square] (5) [below of=4] {$5$};
+\node[round] (6) [right of=4] {$6(4)$};
+\node[square] (7) [above of=6] {$7$};
+\node[round] (9) [below right of=6] {$9(1)$};
+\node[bcsquare] (10) [above right of=9] {$10$};
+\node[round] (8) [above of=10] {$8(1)$};
+\node[csquare] (11) [right of=10] {$11$};
+
+\draw[->] (1) -- (2);
+\draw[->] (2) -- (5);
+\draw[->] (3) -- (1);
+\draw[->] (3) -- (2);
+\draw[->] (4) to [out=135, in=45] (1);
+\draw[->] (4) -- (3);
+\draw[->] (4) -- (5);
+\draw[->] (5) -- (3);
+\draw[->] (5) to [out=60, in=210] (6);
+\draw[->] (6) -- (4);
+\draw[->] (6) to [out=240, in=30] (5);
+\draw[->] (6) to [out=135, in=225] (7);
+\draw[->] (6) -- (9);
+\draw[->] (6) to [out=22, in=225] (8);
+\draw[->] (7) to [out=315, in=45] (6);
+\draw[->] (8) -- (7);
+\draw[->] (9) -- (10);
+\draw[->] (9) to [out=315, in=270] (11);
+\draw[->] (10) -- (8);
+\draw[->] (10) to [out=315, in=225] (11);
+\draw[->] (11) to [out=135, in=45] (10);
+\end{tikzpicture}\\
+Qui correspond à $Attr_{j_0}^1(F)=\{1,2,3,10,11\}$.\\
+$5$ possède maintenant un successeur dans l'attracteur, il y sera donc ajouté à l'étape suivante. La valeur de $out\_degrees$ de 4 est décrémentée une fois, car il est prédecesseur de $3$. Le noeud $9$ est atteint une deuxième fois, cette fois depuis $10$. Sa valeur de $out\_degrees$ passant à 0, il est ajouté à l'attracteur.\\
+%%% ATTR2
+\begin{tikzpicture}[	
+						node distance={20mm},
+						round/.style = {draw, circle, minimum size=12mm},
+						cround/.style = {draw, fill=gray!25, circle, minimum size=12mm},
+						bround/.style = {draw=red!75, very thick, circle, minimum size=12mm},
+						bcround/.style = {draw=red!75, very thick, fill=gray!25, circle, minimum size=12mm},
+						square/.style = {draw, rectangle, minimum size=10mm},
+						csquare/.style = {draw, fill=gray!25, rectangle, minimum size=10mm},
+						bsquare/.style = {draw=red!75, very thick, rectangle, minimum size=10mm},
+						bcsquare/.style = {draw=red!75, very thick, fill=gray!25, rectangle, minimum size=10mm}
+					]
+\node[csquare] (1) {$1$};
+\node[csquare] (2) [below of=1] {$2$};
+\node[cround] (3) [right of=1] {$3(0)$};
+\node[round] (4) [right of=3] {$4(1)$};
+\node[bcsquare] (5) [below of=4] {$5$};
+\node[round] (6) [right of=4] {$6(4)$};
+\node[square] (7) [above of=6] {$7$};
+\node[bcround] (9) [below right of=6] {$9(0)$};
+\node[csquare] (10) [above right of=9] {$10$};
+\node[round] (8) [above of=10] {$8(1)$};
+\node[csquare] (11) [right of=10] {$11$};
+
+\draw[->] (1) -- (2);
+\draw[->] (2) -- (5);
+\draw[->] (3) -- (1);
+\draw[->] (3) -- (2);
+\draw[->] (4) to [out=135, in=45] (1);
+\draw[->] (4) -- (3);
+\draw[->] (4) -- (5);
+\draw[->] (5) -- (3);
+\draw[->] (5) to [out=60, in=210] (6);
+\draw[->] (6) -- (4);
+\draw[->] (6) to [out=240, in=30] (5);
+\draw[->] (6) to [out=135, in=225] (7);
+\draw[->] (6) -- (9);
+\draw[->] (6) to [out=22, in=225] (8);
+\draw[->] (7) to [out=315, in=45] (6);
+\draw[->] (8) -- (7);
+\draw[->] (9) -- (10);
+\draw[->] (9) to [out=315, in=270] (11);
+\draw[->] (10) -- (8);
+\draw[->] (10) to [out=315, in=225] (11);
+\draw[->] (11) to [out=135, in=45] (10);
+\end{tikzpicture}\\
+Nous obtenons $Attr_{j_0}^2(F)=\{1,2,3,5,9,10,11\}$\\
+$4$ est atteint une dernière fois car il est prédecesseur de $5$. Sa valeur de $out\_degree$ passant à 0, il est ajouté à l'attracteur. Cette même valeur pour $6$ est décrémentée deux fois lors de cette itération car il est successeur de $5$ et $9$.\\
+%%% ATTR3
+\begin{tikzpicture}[	
+						node distance={20mm},
+						round/.style = {draw, circle, minimum size=12mm},
+						cround/.style = {draw, fill=gray!25, circle, minimum size=12mm},
+						bround/.style = {draw=red!75, very thick, circle, minimum size=12mm},
+						bcround/.style = {draw=red!75, very thick, fill=gray!25, circle, minimum size=12mm},
+						square/.style = {draw, rectangle, minimum size=10mm},
+						csquare/.style = {draw, fill=gray!25, rectangle, minimum size=10mm},
+						bsquare/.style = {draw=red!75, very thick, rectangle, minimum size=10mm},
+						bcsquare/.style = {draw=red!75, very thick, fill=gray!25, rectangle, minimum size=10mm}
+					]
+\node[csquare] (1) {$1$};
+\node[csquare] (2) [below of=1] {$2$};
+\node[cround] (3) [right of=1] {$3(0)$};
+\node[bcround] (4) [right of=3] {$4(1)$};
+\node[csquare] (5) [below of=4] {$5$};
+\node[round] (6) [right of=4] {$6(2)$};
+\node[square] (7) [above of=6] {$7$};
+\node[cround] (9) [below right of=6] {$9(0)$};
+\node[csquare] (10) [above right of=9] {$10$};
+\node[round] (8) [above of=10] {$8(1)$};
+\node[csquare] (11) [right of=10] {$11$};
+
+\draw[->] (1) -- (2);
+\draw[->] (2) -- (5);
+\draw[->] (3) -- (1);
+\draw[->] (3) -- (2);
+\draw[->] (4) to [out=135, in=45] (1);
+\draw[->] (4) -- (3);
+\draw[->] (4) -- (5);
+\draw[->] (5) -- (3);
+\draw[->] (5) to [out=60, in=210] (6);
+\draw[->] (6) -- (4);
+\draw[->] (6) to [out=240, in=30] (5);
+\draw[->] (6) to [out=135, in=225] (7);
+\draw[->] (6) -- (9);
+\draw[->] (6) to [out=22, in=225] (8);
+\draw[->] (7) to [out=315, in=45] (6);
+\draw[->] (8) -- (7);
+\draw[->] (9) -- (10);
+\draw[->] (9) to [out=315, in=270] (11);
+\draw[->] (10) -- (8);
+\draw[->] (10) to [out=315, in=225] (11);
+\draw[->] (11) to [out=135, in=45] (10);
+\end{tikzpicture}\\
+On obtient $Attr_{j_0}^3(F)=\{1,2,3,4,5,9,10,11\}$\\
+La valeur de $out\_degrees$ de $6$ est décrémentée une fois car il est prédecesseur de $4$. Aucun noeud n'est ajouté à $attractor\_new$, l'algorithme s'arrête.\\
+%ATTR4
+\begin{tikzpicture}[	
+						node distance={20mm},
+						round/.style = {draw, circle, minimum size=12mm},
+						cround/.style = {draw, fill=gray!25, circle, minimum size=12mm},
+						bround/.style = {draw=red!75, very thick, circle, minimum size=12mm},
+						bcround/.style = {draw=red!75, very thick, fill=gray!25, circle, minimum size=12mm},
+						square/.style = {draw, rectangle, minimum size=10mm},
+						csquare/.style = {draw, fill=gray!25, rectangle, minimum size=10mm},
+						bsquare/.style = {draw=red!75, very thick, rectangle, minimum size=10mm},
+						bcsquare/.style = {draw=red!75, very thick, fill=gray!25, rectangle, minimum size=10mm}
+					]
+\node[csquare] (1) {$1$};
+\node[csquare] (2) [below of=1] {$2$};
+\node[cround] (3) [right of=1] {$3$};
+\node[cround] (4) [right of=3] {$4$};
+\node[csquare] (5) [below of=4] {$5$};
+\node[round] (6) [right of=4] {$6$};
+\node[square] (7) [above of=6] {$7$};
+\node[cround] (9) [below right of=6] {$9$};
+\node[csquare] (10) [above right of=9] {$10$};
+\node[round] (8) [above of=10] {$8$};
+\node[csquare] (11) [right of=10] {$11$};
+
+\draw[->] (1) -- (2);
+\draw[->] (2) -- (5);
+\draw[->] (3) -- (1);
+\draw[->] (3) -- (2);
+\draw[->] (4) to [out=135, in=45] (1);
+\draw[->] (4) -- (3);
+\draw[->] (4) -- (5);
+\draw[->] (5) -- (3);
+\draw[->] (5) to [out=60, in=210] (6);
+\draw[->] (6) -- (4);
+\draw[->] (6) to [out=240, in=30] (5);
+\draw[->] (6) to [out=135, in=225] (7);
+\draw[->] (6) -- (9);
+\draw[->] (6) to [out=22, in=225] (8);
+\draw[->] (7) to [out=315, in=45] (6);
+\draw[->] (8) -- (7);
+\draw[->] (9) -- (10);
+\draw[->] (9) to [out=315, in=270] (11);
+\draw[->] (10) -- (8);
+\draw[->] (10) to [out=315, in=225] (11);
+\draw[->] (11) to [out=135, in=45] (10);
+\end{tikzpicture}\\
+L'attracteur final calculé par l'algorithme est donc $Attr_{j_0}^4(F)=Attr_{j_0}^3(F)=Attr_{j_0}(F)=\{1,2,3,4,5,9,10,11\}$
+
+
+
 
 \chapter{Cas infini}
 
