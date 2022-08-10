@@ -26,6 +26,7 @@
 \usepackage{algpseudocode} %
 \usepackage{makecell} %
 \usepackage{tikz} %grahps 
+\usetikzlibrary{automata, arrows, positioning, decorations.pathreplacing}
 \usepackage{float} %force algorithm in place
 \pagestyle{fancy}
 
@@ -57,6 +58,8 @@
 \fancyhead[R]{\thepage}
 \renewcommand{\headrulewidth}{0pt} % et le filet
 }
+
+\newcommand{\unary}[1][1.5ex]{\rule{1pt}{#1}}
 
 \begin{document}
 \includepdf{pageGarde.pdf}
@@ -166,36 +169,38 @@ Une \emph{arène} est un graphe $A = (V_0,V_1,E)$ composé de deux ensembles dis
 \end{figure}
 \section{Coups, parties et objectifs}
 Au début de la partie, un \emph{pion} est placé sur un sommet du graphe. Ce pion est un marquage d'un sommet de l'arène qui va être modifié tour à tour par les joueurs. Dans la suite de ce rapport, \emph{déplacer le pion} référera à l'action de retirer le marquage du sommet courant, et de marquer un autre sommet du graphe.\\
-Le jeu est joué par deux \emph{joueurs} numérotés $j_0$ et $j_1$ qui déplacent le pion le long en suivant les arcs de l'arène. Le joueur qui déplace le pion est le joueur à qui appartient le sommet courant où se trouve le pion. Un \emph{coup} est l'action d'un joueur de déplacer le pion le long d'un arc du graphe, depuis un sommet lui appartenant, vers un de ses successeurs.\\
+Le jeu est joué par deux \emph{joueurs} numérotés $j_0$ et $j_1$ qui déplacent le pion le long des arcs de l'arène. Le joueur qui déplace le pion est le joueur à qui appartient le sommet courant où se trouve le pion. Un \emph{coup} est l'action d'un joueur de déplacer le pion le long d'un arc du graphe, depuis un sommet lui appartenant, vers un de ses successeurs.\\
 Une séquence infinie de coups forme une \emph{partie}.
 \begin{defi}
 	Une \emph{partie} d'un jeu est une séquence infinie $\pi=v_0 v_1 ...$ où $\forall i\in \mathbb{N},v_i \in V, $ et $(v_i, v_{i+1})\in E$.
 \end{defi}
-\noindent L'\emph{objectif} $\Omega$ d'un jeu joué sur graphes est ce qui va définir la condition de victoire des joueurs. Dans ce rapport nous allons nous intéresser à deux types de jeux, les jeux de sûreté et les jeux d'atteignabilité. L'objectif pour ces deux types de jeux est défini par un sous ensemble $F\subseteq V$.
+\noindent L'\emph{objectif} $\Omega$ d'un jeu joué sur graphes est ce qui va définir la condition de victoire des joueurs. Dans ce rapport nous allons nous intéresser à deux types de jeux, les jeux de sûreté et les jeux d'atteignabilité. L'objectif pour ces deux types de jeux est défini par un sous ensemble $F\subseteq V$. Dans ces jeux, les deux joueurs jouent selon des objectifs opposés.
 \subsection{Jeux de sûreté}
-Un jeu de sûreté est défini par un tuple $\mathfrak{G}=(A,F)$ avec $A$ une arène et $F\subseteq V$ un sous ensemble de sommets dits \emph{sûrs}. L'objectif d'un jeu de sûreté est que tous les sommets visités lors de la partie soient des sommets sûrs.
+Un jeu de sûreté est défini par un tuple $\mathfrak{G}=(A,I,F)$ avec $A$ une arène, $I\subseteq F$ un ensemble de sommets de départ et $F\subseteq V$ un sous ensemble de sommets dits \emph{sûrs}. L'objectif pour le joueur $j_0$ d'un jeu de sûreté est que tous les sommets visités lors de la partie soient des sommets sûrs. L'objectif pour le joueur $j_1$ est donc qu'au moins un sommet hors de $F$ soit visité.
 \begin{defi}
-Soit $\mathfrak{G}=(A,F)$ un jeu de sûreté, une partie $\pi=v_0v_1...$ est gagnante pour le joueur $j_0$ si $\forall i\in \mathbb{N}, v_i \in F$
+Soit $\mathfrak{G}=(A,I,F)$ un jeu de sûreté, une partie $\pi=v_0v_1...$ est gagnante pour le joueur $j_0$ si $\forall i\in \mathbb{N}, v_i \in F$
 \end{defi}
 \subsection{Jeux d'atteignabilité}
-Un jeu d'atteignabilité est défini par un tuple $\mathfrak{G}=(A,F)$ avec $A$ une arène et $F\subseteq V$ un sous ensemble de sommets \emph{à atteindre}. L'objectif d'un jeu de sûreté est qu'au moins un sommet de $F$ soit visité au cours de la partie. 
+Un jeu d'atteignabilité est défini par un tuple $\mathfrak{G}=(A,I,F)$ avec $A$ une arène, $I\subseteq V\setminus F$ un ensemble de sommets de départ et $F\subseteq V$ un sous ensemble de sommets \emph{à atteindre}. L'objectif pour le joueur $j_0$ d'un jeu de sûreté est qu'au moins un sommet de $F$ soit visité au cours de la partie. L'objectif du joueur $j_1$ est que seuls des sommets hors de $F$ soient visités.
 \begin{defi}
-Soit $\mathfrak{G}=(A,F)$ un jeu d'atteignabilité, une partie $\pi=v_0v_1...$ est gagnante pour le joueur $j_0$ si $\exists i\in \mathbb{N}, v_i \in F$
+Soit $\mathfrak{G}=(A,I,F)$ un jeu d'atteignabilité, une partie $\pi=v_0v_1...$ est gagnante pour le joueur $j_0$ si $\exists i\in \mathbb{N}, v_i \in F$
 \end{defi}
-\noindent Les jeux d'atteignabilité sont en dualité avec les jeux de sûreté. 
+\noindent Les jeux d'atteignabilité sont en dualité avec les jeux de sûreté. En effet, on remarque que l'objectif du joueur $j_0$ (resp. $j_1$) d'un jeu de sûreté est similaire à celui du joueur $j_1$ (resp. $j_0$) pour un jeu d'atteignabilité.
 
 \section{Stratégies et ensembles gagnants}
 \noindent Les coups des joueurs sont décidés par la \emph{stratégie} adoptée par ces derniers. Une stratégie est une fonction $s_{j_n} : V^*V_n\to V$ qui indique vers quel sommet le joueur $j_n$ va déplacer le pion depuis le sommet courant $v\in V_n$ selon la séquence de déplacements précédents.\\
-Une stratégie peut être \emph{sans mémoire} $s_{j_n} : V_n \to V$ si elle ne prend en compte que le sommet actuel où se trouve le pion.\\
+Une stratégie peut être \emph{sans mémoire} (ou \emph{positionnelle}) $s_{j_n} : V_n \to V$ si elle ne prend en compte que le sommet actuel où se trouve le pion.\\
 
-\noindent Une stratégie $s_{j_n}$ est \emph{gagnante} pour le joueur $j_n$ si toutes les parties \emph{jouées selon cette stratégie} mènent à une victoire du joueur $j_n$.
+\noindent Une stratégie est gagnante \emph{à partir d'un sommet} $v$ si un partie jouée selon cette stratégie 
+
 \begin{defi}
-Une partie $\pi=v_0 v_1 ...$ est dite \emph{jouée selon une stratégie} $s_{j_n}$ si $\forall i \in \mathbb{N}, v_{i+1} = s_{j_n}(v_0v_1...v_i)$ et $v_i \in V_n$
+Une partie $\pi=v_0 v_1 ...$ est dite \emph{jouée selon une stratégie} $s_{j_n}$  (à partir d'un sommet $v_0 \in V$) si $\forall i \in \mathbb{N}, v_i \in V_n, v_{i+1} = s_{j_n}(v_0v_1...v_i)$
 \end{defi}
 
 \noindent La notion de stratégie gagnante nous permet de définir un \emph{ensemble gagnant}. 
 \begin{defi}
-Soit $\mathfrak{G}=(A,F)$ un jeu, avec $A=(V_0, V_1, E)$, l'\emph{ensemble gagnant} $W\subseteq V$ est l'ensemble $W=\{v\in V$ $|$ $j_0$ possède une stratégie gagnante à partir de $v \}$
+\label{finitewinningset}
+Soit $\mathfrak{G}=(A,I,F)$ un jeu, avec $A=(V_0, V_1, E)$, l'\emph{ensemble gagnant} pour le joueur $j_n$, $W_n\subseteq V$, est l'ensemble $W_n=\{v\in V$ $|$ $j_n$ possède une stratégie gagnante à partir de $v \}$
 \end{defi}
 
 
@@ -209,8 +214,8 @@ Une \emph{arène finie} est une arène $A=(V_0, V_1, E)$ pour laquelle $V_0$ et 
 \section{Résolution via les attracteurs}
 Une méthode pour calculer les ensembles gagnants des jeux de sûreté et d'atteignabilité se base sur le principe d'attracteur. 
 \begin{defi}
-	Soit un jeu $\mathfrak{G} = (A,F)$ avec $A=(V_0, V_1, E)$ une arène finie et $F$ un sous-ensemble de sommets, tel que $F\subseteq V$, soit $i\in \mathbb{N}$, le $i^e$ attracteur pour le joueur $j_n$ est l'ensemble :\\
-	$Attr_{j_n}^i=\{v\in V$ $|$ le joueur $j_n$ peut forcer une visite d'un sommet de $F
+	Soit un jeu $\mathfrak{G} = (A,I,F)$ avec $A=(V_0, V_1, E)$ une arène finie et $F$ un sous-ensemble de sommets, tel que $F\subseteq V$, soit $i\in \mathbb{N}$, le $i^e$ attracteur pour le joueur $j_n$ est l'ensemble :\\
+	$Attr_{j_n}^i(F)=\{v\in V$ $|$ le joueur $j_n$ peut forcer une visite d'un sommet de $F
 $ depuis $v$ en $ \leq  i $ déplacements$\}$
 \end{defi}
 
@@ -227,13 +232,13 @@ Attr^{i+1}_{j_n}(F)&=Attr^i_{j_n}(F)\\
 \end{equation}
 \noindent L'intuition derrière cette formule est la suivante :\\
 Initialement, le joueur $j_n$ ne peut forcer une visite d'un sommet de $F$ que depuis un sommet de $F$. On a donc que l'attracteur de départ, $Attr^0_{j_n}(F)$ ne contient que les sommets de $F$.\\
-Ensuite, en incrémentant le nombre de coups, autrement dit la valeur de $i$, on va considérer l'ajout des sommets qui sont des prédécesseurs des sommets de l'attracteur courant, car ceux-ci mettront, dans le pire des cas, un coup de plus à atteindre un sommet de $F$. Donc, si un sommet est prédécesseur d'un sommet de l'attracteur sans en faire partie lui-même, il y a deux possibilités (correspondant aux deux ensembles unis à $Attr^i_{j_n}(F)$ dans la formule 3.1). Soit le sommet appartient à $j_n$ et ce sera à lui de jouer un coup à partir de ce sommet. Il pourra ainsi décider de s'approcher d'un sommet de $F$. Il ne faut donc qu'un seul successeur dans l'attracteur courant pour être ajouté à l'attracteur suivant. Par contre si le sommet appartient au joueur opposé à $j_n$, alors il faut s'assurer que peu importe le coup qu'il joue, il se rapproche d'un sommet de $F$. Il est donc nécessaire que tous les successeurs du sommet soient dans $Attr^i_{j_n}(F)$ pour que le sommet soit ajouté à l'attracteur suivant.
+Ensuite, en incrémentant le nombre de coups, autrement dit la valeur de $i$, on va considérer l'ajout des sommets qui sont des prédécesseurs des sommets de l'attracteur courant, car ceux-ci mettront, dans le pire des cas, un coup de plus à atteindre un sommet de $F$. Donc, si un sommet est prédécesseur d'un sommet de l'attracteur sans en faire partie lui-même, il y a deux possibilités (correspondant aux deux ensembles unis à $Attr^i_{j_n}(F)$ dans la formule \ref{eq:induction}). Soit le sommet appartient à $j_n$ et ce sera à lui de jouer un coup à partir de ce sommet. Il pourra ainsi décider de s'approcher d'un sommet de $F$. Il ne faut donc qu'un seul successeur dans l'attracteur courant pour être ajouté à l'attracteur suivant. Par contre si le sommet appartient au joueur opposé à $j_n$, alors il faut s'assurer que peu importe le coup qu'il joue, il se rapproche d'un sommet de $F$. Il est donc nécessaire que tous les successeurs du sommet soient dans $Attr^i_{j_n}(F)$ pour que le sommet soit ajouté à l'attracteur suivant.
 
 
 Par cette construction, on obtient une séquence d'attracteurs $Attr_{j_n}^0(F)\subseteq Attr_{j_n}^1(F) \subseteq ...$ laquelle sera fixe à partir d'une certaine itération $k\leq|V|$ vu que $V$ est un ensemble fini et qu'à chaque itération, au moins un sommet de $V$ est ajouté à l'attracteur. On notera $Attr_{j_n}(F)=\bigcup_{i=0}^{|V|}Attr_{j_n}^i(F)$
 
 \begin{thm} 
-	Pour un jeu d'atteignabilité, cette construction de l'attracteur pour $j_0$ vers $F$ donnera l'ensemble gagnant de $j_0$.
+	Pour un jeu d'atteignabilité, cette construction de l'attracteur pour $j_0$ vers $F$ donnera l'ensemble gagnant $W_0$ de $j_0$, ainsi que la stratégie gagnante positionnelle des deux joueurs.
 \end{thm}
 \begin{demonstration}{
 On a que $Attr_{j_0}(F)\subseteq W_0 $ car
@@ -242,18 +247,22 @@ On a que $Attr_{j_0}(F)\subseteq W_0 $ car
 \item $\forall v \in Attr_{j_0}^{i+1}\cap V_1,$ tous les successeurs de $v$ sont dans $Attr_{j_0}^i$.
 \item $Attr_{j_0}^0(F) \subseteq F$
 \end{itemize}
-Donc $j_0$ peut gagner la partie à partir de tous les sommets de $Attr_{j_0}(F)$. Il lui suffit, à chaque coup depuis un sommet de $Attr^{i+1}_{j_0}(F)$, de déplacer le pion vers un sommet dans $Attr^{i}_{j_0}(F)$ afin de se rapprocher progressivement de $Attr_{j_0}^0(F) \subseteq F$, ce qui est possible par la manière dont est construit l'attracteur. Cette construction explique aussi que le joueur opposé sera forcé d'en faire autant. Cette stratégie est donc gagnante pour $j_0$ depuis chaque sommet de l'attracteur.\\
+Donc $j_0$ peut gagner la partie à partir de tous les sommets de $Attr_{j_0}(F)$. Sa stratégie gagnante est, pour chaque coup depuis un sommet de $Attr^{i+1}_{j_0}(F)$, de déplacer le pion vers un sommet dans $Attr^{i}_{j_0}(F)$ afin de se rapprocher progressivement de $Attr_{j_0}^0(F) \subseteq F$, ce qui est possible par la manière dont est construit l'attracteur. Cette construction explique aussi que le joueur opposé sera forcé d'en faire autant. Cette stratégie est donc gagnante pour $j_0$ depuis chaque sommet de l'attracteur.\\
 
 \noindent Pour montrer que $W_0\subseteq Attr_{j_0}(F)$, il faut montrer que $j_0$ ne peut pas gagner la partie à partir d'un sommet hors de $Attr_{j_0}(F)$, autrement dit que $j_1$ peut forcer le pion à rester en dehors de $Attr_{j_0}(F)$ depuis tout sommet hors de $Attr_{j_0}(F)$.\\
-Soit un sommet $v\in V_1\setminus Attr_{j_0}(F)$, alors $v$ possède au moins un arc $(v, v')$ avec $v'\notin Attr_{j_0}(F)$, sinon on aurait $v \in Attr_{j_0}(F)$. La stratégie gagnante pour $j_1$ est donc de déplacer le pion le long de cet arc afin de rester hors de l'attracteur.\\
+Soit un sommet $v\in V_1\setminus Attr_{j_0}(F)$, alors $v$ possède au moins un arc $(v, v')$ avec $v'\notin Attr_{j_0}(F)$, sinon on aurait $v \in Attr_{j_0}(F)$. La stratégie gagnante pour $j_1$ dans ce cas est de déplacer le pion le long de cet arc afin de rester hors de l'attracteur.\\
 Soit  un sommet $v\in V_0\setminus Attr_{j_0}(F)$, alors tous les arcs $v$
-mènent vers un sommet hors de $Attr_{j_0}(F)$, sinon on aurait $v \in Attr_{j_0}(F)$. $j_0$ ne peut donc pas entrer dans l'attracteur depuis ce sommet et ne peut donc pas forcer de visite d'un sommet de $F$ depuis ce sommet.
+mènent vers un sommet hors de $Attr_{j_0}(F)$, sinon on aurait $v \in Attr_{j_0}(F)$. $j_0$ ne peut donc pas entrer dans l'attracteur depuis ce sommet et ne peut donc pas forcer de visite d'un sommet de $F$ depuis ce sommet. La stratégie gagnante de $j_1$ dans ce cas est de suivre n'importe lequel de ces arcs.
 Ces deux cas étant exhaustifs, et ayant montré que $j_0$ est contraint de rester hors de l'attracteur dans ces deux cas, on a bien que $W_0\subseteq Attr_{j_0}(F)$
 
 \noindent L'inclusion étant vérifiée dans les deux sens, on en déduit $W_0 = Attr_{j_0}(F)$.}
 \end{demonstration}
+\noindent Ces deux cas exhaustifs nous permettent aussi de déduire la stratégie gagnante du joueur $j_1$. A chaque coup, il doit déplacer le pion vers un sommet hors de l'attracteur.
+
 Ainsi nous avons montré que l'on peut construire l'ensemble gagnant $W_0$ du joueur $j_0$ pour un jeu d'atteignabilité en utilisant le principe d'attracteur. On obtient aussi immédiatement l'ensemble gagnant $W_1=V\setminus W_0$ du joueur $j_1$. Chaque joueur peut gagner la partie à partir de chaque sommet de leur ensemble gagnant respectif en adoptant les stratégies énoncées ci-dessus.\\
-De plus, la dualité entre un jeu d'atteignabilité et un jeu de sûreté nous permet d'énoncer le théorème suivant :
+Ainsi, un jeu de sûreté joué selon ces stratégies sera toujours gagnant pour le joueur $j_0$ si $I\subseteq W_0$.
+
+\noindent De plus, la dualité entre un jeu d'atteignabilité et un jeu de sûreté nous permet d'énoncer le théorème suivant :
 
 \begin{thm}
 	Cette méthode de résolution pour les jeux d'atteignabilité permet aussi de résoudre les jeux de sûreté.
@@ -262,7 +271,7 @@ De plus, la dualité entre un jeu d'atteignabilité et un jeu de sûreté nous p
 \begin{demonstration}
 Soit un jeu de sûreté $\mathfrak{G} = (A, F)$ avec $A$ une arène finie. on construit $Attr_{j_1}(V\setminus F)$, autrement dit la liste de sommets depuis lesquels $j_1$ peut forcer une visite d'un sommet hors de $F$. En adoptant la même stratégie que $j_0$ dans un jeu d'atteignabilité, cet attracteur donne l'ensemble gagnant de $j_1$ pour un jeu de sûreté. De manière analogue, $j_0$, en adoptant la stratégie du joueur $j_1$ du jeu d'atteignabilité, ne pourra gagner le jeu de sûreté que depuis les sommets hors de cet attracteur.
 \end{demonstration}
-\noindent La figure suivante représente, en gris, l'ensemble gagnant du joueur $j_0$ d'un jeu d'atteignabilité joue sur l'arène de la figure \ref{fig:arena}, avec $F=\{1,2,11\}$.
+\noindent La figure \ref{fig:ensemblegagnant} représente, en gris, l'ensemble gagnant du joueur $j_0$ d'un jeu d'atteignabilité joue sur l'arène de la figure \ref{fig:arena}, avec $F=\{1,2,11\}$.
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[	
@@ -311,6 +320,7 @@ Soit un jeu de sûreté $\mathfrak{G} = (A, F)$ avec $A$ une arène finie. on co
 \draw[->] (11) to [out=135, in=45] (10);
 \end{tikzpicture}\\
 \caption{Illustration d'un ensemble gagnant}
+\label{fig:ensemblegagnant}
 \end{figure}
 \newpage
 
@@ -675,6 +685,7 @@ Résoudre les jeux de sûreté joués sur des \emph{arènes infinies} va nécess
 \begin{defi}
 Une \emph{arène infinie} est une arène $A=(V_0, V_1, E)$ pour laquelle on autorise $V_0$ et $V_1$ à être des ensembles infinis.
 \end{defi}
+
 \section{Alphabets, automates et transducteurs}
 Un \emph{alphabet} $\Sigma$ est un ensemble fini, non vide, de symboles. Un \emph{mot} de longueur $n\in\mathbb{N}$ sur l'alphabet $\Sigma$ est une séquence de symboles $u=u_1u_2...u_n$ avec $\forall i\in\mathbb{N}, x_i\in \Sigma$. Le mot vide est noté $\lambda$.\\
 La \emph{concaténation} de deux mots $u=u_1u_2...u_n$ et $v=v_1v_2...v_m$ ($n,m\in\mathbb{N}$) est le mot $w=u\cdot v=u_1u_2...u_nv_1v_2...v_m$ de longueur $n+m$. L'ensemble $\Sigma^*$ contient tous les mots possibles sur l'alphabet $\Sigma$. Un sous ensemble $L\subseteq \Sigma^*$ est appelé un langage.\\
@@ -697,9 +708,225 @@ Un automate fini qui n'est pas déterministe est appelé \emph{non déterministe
 \noindent Enfin, un \emph{transducteur} est un automate fini non déterministe $\mathcal{T}=(Q,\hat{\Sigma},\delta,q_0,F)$ où $\hat{\Sigma}=(\Sigma\cup\{\lambda\})\times(\Gamma\cup\{\lambda\})$ avec $\Sigma$ et $\Gamma$ deux alphabets. Un parcours d'un transducteur ne se fait pas par un mot mais par une paire de mots $(u,v)$ avec $u\in\Sigma^*$ et $v\in\Gamma^*$ afin de produire une séquence $q_0q_1...q_n$, $n\in\mathbb{N}$ telle que $\forall i\in\mathbb{N}, \delta(q_i,(u_i,v_i))=q_{i+1}$. Les mots $u$ et $v$ peuvent être de longueur différente car $\lambda$ est inclu aux deux alphabets.\\
 Un transducteur, en acceptant des paires de mots, permet de définir une \emph{relation} $R$ entre deux langages. L'ensemble des paires de mots acceptées par un transducteur forme la relation $\mathcal{R}$. Pour finir, une relation est dite \emph{régulière} s'il exite un transducteur $\mathcal{T}$ tel que $\mathcal{R}(\mathcal{T})=R$.
 
+\section{Exemple de jeu de sûreté infini}
+Afin d'illustrer le cas infini, nous allons considérer l'arène infinie simple représentée à la figure \ref{fig:infinite-arena}. Il s'agit d'un tableau infini, à une dimension, fermé à gauche. Chaque sommet est décrit par le numéro du joueur à qui il appartient, et un nombre $k\in\mathbb{N}$. Il existe un sommet appartenant à chaque joueur pour chaque valeur possible de $k$ et ceux-ci sont arrangé dans l'ordre croissant de cette valeur, en alternant les sommets de $j_0$ et $j_1$. L'ensemble $F$ est représenté par les sommets grisés. Il est décrit par une certaine valeur non nulle de $k$, à partir de laquelle tous les sommets font partie de $F$ (à la figure \ref{fig:infinite-arena}, $k=2$).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+						node distance={20mm},
+						round/.style = {draw, circle, minimum size=12mm},
+						cround/.style = {draw, fill=gray!25, circle, minimum size=12mm},
+						noround/.style = {circle, minimum size=12mm},
+						square/.style = {draw, rectangle, minimum size=10mm},
+						csquare/.style = {draw, fill=gray!25, rectangle, minimum size=10mm},
+					]
+					
+\node[square] (1) {($j_1$,$0$)};
+\node[round] (2) [right of=1] {($j_0$,$0$)};
+\node[square] (3) [right of=2] {($j_1$,$1$)};
+\node[round] (4) [right of=3] {($j_0$,$1$)};
+\node[csquare] (5) [right of=4] {($j_1$,$2$)};
+\node[cround] (6) [right of=5] {($j_0$,$2$)};
+\node[csquare] (7) [right of=6] {($j_1$,$3$)};
+\node[noround] (8) [right of=7] {...};
+
+\draw[->] (1) to [out=30,in=150] (2);
+\draw[->] (2) to [out=210,in=330] (1);
+\draw[->] (2) to [out=30,in=150] (3);
+\draw[->] (3) to [out=210,in=330] (2);
+\draw[->] (3) to [out=30,in=150] (4);
+\draw[->] (4) to [out=210,in=330] (3);
+\draw[->] (4) to [out=30,in=150] (5);
+\draw[->] (5) to [out=210,in=330] (4);
+\draw[->] (5) to [out=30,in=150] (6);
+\draw[->] (6) to [out=210,in=330] (5);
+\draw[->] (6) to [out=30,in=150] (7);
+\draw[->] (7) to [out=210,in=330] (6);
+\draw[->] (7) to [out=30,in=150] (8);
+\draw[->] (8) to [out=210,in=330] (7);
+
+\end{tikzpicture}
+\caption{Exemple d'arène infinie}
+\label{fig:infinite-arena}
+\end{figure}
+\noindent Nous appelerons le jeu joué sur cette arène $\mathfrak{G}_k$. Les règles du jeu sont différentes pour cet exemple. Les joueurs bougent le pion chacun à leur tour. Le joueur $j_0$ ne peut déplacer le pion que vers la droite ou ne pas le déplacer du tout, et le joueur $j_1$ ne peut le déplacer que vers la gauche (s'il n'est pas arrivé au bout de l'arène) ou ne pas le déplacer. Au début de la partie, le pion est placé sur un sommet appartenant à $F$, et le joueur $j_0$ commence. Les objectifs des joueurs restent les mêmes, $j_0$ veut rester dans $F$ tandis que $j_1$ essaie d'en sortir. Cet exemple est simple car le joueur $j_0$ peut gagner, peu importe $F$, en choisissant de bouger le pion à droite à chaque coup. Il reste néanmoins intéressant à résoudre.
+
 \section{Jeux de sûreté rationnels}
 Un jeu de sûreté rationnel est une représentation symbolique d'un jeu de sûreté, basée sur les langages rationnels et les relations rationnelles.
+\begin{defi}
+Une \emph{arène rationelle} sur l'alphabet $\Sigma$ est une arène $A_\Sigma=(V_0,V_1,E)$ où $V_0,V_1$ sont des langages réguliers et $E$ est une relation régulière.
+\end{defi}
+
+\begin{defi}
+Un \emph{jeu de sûreté rationnel} sur l'alphabet $\Sigma$ est un jeu $\mathfrak{G}_\Sigma=(A_\Sigma, I, F)$ où $A_\Sigma$ est une arène rationnelle sur $\Sigma$ et $I,F\subseteq \Sigma^*$ sont des langages réguliers.
+\end{defi}
+\noindent Nous allons maintenant traduire le jeu $\mathfrak{G}_k$ en un jeu de sûreté rationnel. Pour cela, nous devons proposer un encodage qui fait correspondre à chaque arc et chaque sommet un mot unique d'un alphabet. Pour cela, nous allons considérer l'alphabet $\Sigma=\{j_0,j_1,\unary\}$ afin d'associer le sommet $(x,i) \in \{j_0,j_1\}\times\mathbb{N}$ au mot $x\unary^i$ où $\unary^i$ est l'encodage de $i$ en unaire. 
+
+\noindent Ainsi, les automates suivants représentent les ensembles $V_0$ et $V_1$ :
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{0.35\textwidth}
+\begin{tikzpicture} [
+						node distance=2cm, 
+						auto,
+						every initial by arrow/.style={->}
+					]
+					
+\node (1) [state, initial, initial text=] {};
+\node (2) [state, accepting, right of=1] {};
+\node (0) [left of=1] {$\mathcal{A}_{V_0}$ :};
+
+\path[->]
+	(1) edge node {$j_0$}   (2)
+	(2) edge [loop right] node {$\unary$} ();
+\end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.45\textwidth}
+\begin{tikzpicture} [
+						node distance=2cm, 
+						auto,
+						every initial by arrow/.style={->}
+					]
+					
+\node (1) [state, initial, initial text=] {};
+\node (2) [state, accepting, right of=1] {};
+\node (0) [left of=1] {$\mathcal{A}_{V_1}$ :};
+
+\path[->]
+	(1) edge node {$j_1$}   (2)
+	(2) edge [loop right] node {$\unary$} ();
+\end{tikzpicture}
+\end{minipage}
+%\caption{Représentation rationelle des ensembles $V_0$ et $V_1$ de $\mathfrak{G}_k$.}
+\end{figure}
+\noindent Les arcs (l'ensemble $E$) sont représentés par le transducteur suivant 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture} [
+						node distance=2.5cm, 
+						auto,
+						every initial by arrow/.style={->}
+					]
+					
+\node (1) [state, initial above, initial text=] {};
+\node (2) [state, accepting, right of=1] {};
+\node (3) [state, accepting, left of=1] {};
+\node (4) [state, accepting, right of=2] {};
+\node (5) [state, accepting, left of=3] {};
+\node (0) [left of=5, xshift=1cm] {$\mathcal{T}_E$ :};
+
+\path[->]
+	(1) edge node {$(j_0,j_1)$}   (2)
+	(1) edge node[anchor=south] {$(j_1,j_0)$}   (3)
+	(2) edge [loop above] node {$(\unary,\unary)$} ()
+	(3) edge [loop above] node {$(\unary,\unary)$} ()
+	(2) edge node {$(\epsilon,\unary)$} (4)
+	(3) edge node[anchor=south] {$(\unary,\epsilon)$} (5);
+\end{tikzpicture}
+%\caption{Représentation rationelle de l'ensemble $E$ de $\mathcal{G}_k$.}
+\end{figure}
+
+\noindent Et pour finir, les automates $\mathcal{A}_F$ et $\mathcal{A}_I$ représentent les ensembles $F$ et $I$.
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture} [
+						node distance=2cm, 
+						auto,
+						every initial by arrow/.style={->},
+						noround/.style = {circle, minimum size=12mm}
+					]
+\node (1) [state, initial, initial text=] {};
+\node (2) [state, xshift=0.5cm, right of=1] {};
+\node[noround] (3) [right of=2] {...};
+\node (4) [state, right of=3] {};
+\node (5) [state, accepting, right of=4] {};
+\node (0) [left of=1] {$\mathcal{A}_F$ :};
+
+
+
+
+\path[->]
+	(1) edge node {$(j_0,j_1)$} (2)
+	(2) edge node {$\unary$} (3)
+	(3) edge node {$\unary$} (4)
+	(4) edge node {$\unary$} (5)
+	(5) edge [loop right] node {$\unary$} ();
+	
+\draw[decorate, decoration={brace, mirror, amplitude=5pt},] ([yshift=-0.75cm]2.center)--([yshift=-0.75cm]4.center) node[pos=0.5, below=0.2cm]{$k-1$ états};
+\end{tikzpicture}
+%\caption{Représentation rationelle de l'ensemble $F$ de $\mathfrak{G}_k$.}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture} [
+						node distance=2cm, 
+						auto,
+						every initial by arrow/.style={->},
+						noround/.style = {circle, minimum size=12mm}
+					]
+\node (1) [state, initial, initial text=] {};
+\node (2) [state, right of=1] {};
+\node[noround] (3) [right of=2] {...};
+\node (4) [state, right of=3] {};
+\node (5) [state, accepting, right of=4] {};
+\node (0) [left of=1] {$\mathcal{A}_I$ :};
+
+
+
+
+\path[->]
+	(1) edge node {$j_0$} (2)
+	(2) edge node {$\unary$} (3)
+	(3) edge node {$\unary$} (4)
+	(4) edge node {$\unary$} (5)
+	(5) edge [loop right] node {$\unary$} ();
+	
+\draw[decorate, decoration={brace, mirror, amplitude=5pt},] ([yshift=-0.75cm]2.center)--([yshift=-0.75cm]4.center) node[pos=0.5, below=0.2cm]{$k-1$ états};
+\end{tikzpicture}
+%\caption{Représentation rationelle de l'ensemble $I$ de $\mathfrak{G}_k$.}
+\end{figure}
+
+
 \section{Apprentissage}
+Résoudre un jeu de sûreté rationnel consiste à produire un automate fini déterministe (\emph{AFD}) qui acceptera tous les mots représentant les sommets de l'ensemble gagnant $W_0$. Afin de produire un tel automate, nous allons utiliser le principe d'\emph{apprentissage}. Cet apprentissage à lieu entre un \emph{enseignant}, lequel est en connaisance du jeu de sûreté que l'on veut résoudre, et un \emph{élève}, cherchant à en apprendre l'AFD décrivant l'ensemble gagnant. On suppose que l'alphabet utilisé est connu par les deux partis avant que l'apprentissage commence.\\
+
+Avant de commencer l'apprentissage, \cite{NeiderAutomaton} suggère d'apporter quelques précisions à la définition \ref{finitewinningset} d'ensemble gagnant.
+\begin{defi}
+\label{infinitewinningset}
+Soit $\mathfrak{G}=(A,I,F)$ un jeu, avec $A=(V_0, V_1, E)$, l'\emph{ensemble gagnant} pour le joueur $j_0$ est l'ensemble $W\subseteq V$ qui satisfait :
+\begin{itemize}
+\item (1) $I\subseteq W$ 
+\item (2) $W\subseteq F$ 
+\item (3) $\forall v\in W\cap V_0,$ $Succ(v)\cap W\neq\emptyset$ (\emph{fermeture existentielle})
+\item (4) $\forall v\in W\cap V_1,$ $Succ(v)\subseteq W$ (\emph{fermeture universelle})
+\end{itemize}
+Où \emph{Succ($v$)} est la fonction retournant les successeurs du sommet $v$.
+\end{defi}
+L'apprentissage se fait à l'intérieur d'une boucle de type \emph{CEGIS} (Counter-example guided inductive synthesis, ou synthèse inductive guidée par le contre-exemple). A chaque itération de cette boucle, l'élève conjecture une AFD $\mathcal{C}$ et l'enseignant vérifie à l'aide de la définition \ref{infinitewinningset} si $\mathcal{L}(\mathcal{C})$ est un ensemble gagnant. Si $\mathcal{L}(\mathcal{C})$ est un ensemble gagnant, alors l'enseignant répond "\emph{oui}" et l'apprentissage s'arrête. Sinon, l'enseignant retourne un \emph{contre-exemple} pour une des règles non respectées de la définition \ref{infinitewinningset} et l'apprentissage se poursuit dans l'itération suivante. Plus formellement, la définition suivante établi le protocole de vérification par l'enseignant :
+\begin{defi}{Enseignant pour jeux de sûreté rationnels\\}
+Soit $\mathfrak{G}_\Sigma=(A_\Sigma, I, F)$, un jeu de sûreté rationnel, avec $A_\Sigma=(V_0,V_1,E)$. Soit un AFD $\mathcal{C}$. Un enseignant pour $\mathfrak{G}_\Sigma$ confronté à $\mathcal{C}$ va effectuer les vérifications suivantes :\\
+\begin{itemize}
+\item (1) Si $I\nsubseteq \mathcal{L}(\mathcal{C})$, alors l'enseignant retourne un \emph{contre-exemple positif} $u\in I\setminus \mathcal{L}(\mathcal{C})$. Sinon,
+\item (2) Si $\mathcal{L}(\mathcal{C}) \nsubseteq F$, alors l'enseignant retourne un \emph{contre-exemple négatif} $u\in \mathcal{L}(\mathcal{C})\setminus F$. Sinon, 
+\item (3) Si $\exists u\in \mathcal{L}(\mathcal{C})\cap V_0,$ $Succ(u)\cap \mathcal{L}(\mathcal{C})=\emptyset$ alors l'enseignant choisi ce $u$ et retourne un \emph{contre-exemple d'implication existentielle} $(u, \mathcal{A})\in \Sigma^* \times AFN_\Sigma$ où $\mathcal{L}(\mathcal{A})=Succ(u)$. Sinon, 
+\item (4) Si $\exists u\in \mathcal{L}(\mathcal{C})\cap V_1,$ $Succ(u)\nsubseteq \mathcal{L}(\mathcal{C})$, alors l'enseignant choisi ce $u$ et retourne un \emph{contre-exemple d'implication universelle} $(u, \mathcal{A})\in \Sigma^* \times AFN_\Sigma$ où $\mathcal{L}(\mathcal{A})=Succ(u)$.
+\end{itemize}
+Où 
+\begin{itemize}
+\item $AFN_\Sigma$ est l'ensemble des automates finis non-déterministes sur $\Sigma$.
+\item Un \emph{contre-exemple positif} est un mot $u$ qui devrait être accepté par $\mathcal{C}$, mais qui a été rejeté.
+\item Un \emph{contre-exemple négatif} est un mot $u$ qui devrait être rejeté par $\mathcal{C}$, mais qui a été accepté.
+\item Un \emph{contre-exemple d'implication existentielle} $(u, \mathcal{A})$ signifie que si $\mathcal{C}$ accepte $u$, alors au moins un mot $v \in \mathcal{L}(\mathcal{A})$ doit, lui aussi, être accepté, et cela n'a pas été respecté.
+\item Un \emph{contre-exemple d'implication universelle} $(u, \mathcal{A})$ signifie que si $\mathcal{C}$ accepte $u$, alors tous les mots $v \in \mathcal{L}(\mathcal{A})$ doivent, eux aussi, être acceptés, et cela n'a pas été respecté.\\
+\end{itemize}
+
+\noindent Si les 4 vérifications ne retournent pas de contre-exemples, alors l'enseignant répond "\emph{oui}".\\
+L'ordre des vérifications n'a pas d'importance.
+\end{defi}
 \section{Résolution par la programmation logique}
 \section{Algorithmes}
 \subsection{Complexité}

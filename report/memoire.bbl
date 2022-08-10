@@ -1,0 +1,16 @@
+\begin{thebibliography}{1}\setlength{\itemsep}{-1ex}\small
+
+\bibitem{NeiderAutomaton}
+D.~Neider.
+\newblock An automaton learning approach to solving safety games over infinite
+  graphs.
+\newblock Technical report, {Department of Electrical and Systems Engineering
+  University of Pennsylvania, USA}, 2016.
+
+\bibitem{Church}
+W.~Thomas.
+\newblock Church’s problem and a tour through automata theory.
+\newblock Technical report, {RWTH Aachen, Lehrstuhl Informatik 7, 52056 Aachen,
+  Germany}, 2008.
+
+\end{thebibliography}
