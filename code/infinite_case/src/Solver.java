@@ -10,11 +10,11 @@ public class Solver{
 		RegExp f = new RegExp("sl{2}l*");
 
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("se","a");
-		map.put("es","b");
-		map.put("ll","c");
-		map.put("0l","d");
-		map.put("l0","e");
+		map.put("a","se");
+		map.put("b","es");
+		map.put("c","ll");
+		map.put("d","0l");
+		map.put("e","l0");
 
 		RegExp e = new RegExp("(ac*d?)|(bc*e?)");
 

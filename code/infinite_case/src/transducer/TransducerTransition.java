@@ -1,15 +1,17 @@
 package transducer;
 
-public class TransducerTransition extends Transition{
+public class TransducerTransition{
 	TransducerPair min;
 	TransducerPair max;
+
+	TransducerState to;
 
 	/** 
 	 * Constructs a new singleton interval transition. 
 	 * @param p transition Pair
 	 * @param to destination state
 	 */
-	public TransducerTransition(TransducerPair p, State to){
+	public TransducerTransition(TransducerPair p, TransducerState to){
 		min = max = p;
 		this.to = to;
 	}

@@ -10,6 +10,13 @@ public class TransducerPair{
 		this.v=v;
 	}
 
+	public TransducerPair(String s){
+		if(s.length() == 2){
+			u = s.charAt(0);
+			v = s.charAt(1);
+		}
+	}
+
 	public char getU(){
 		return u;
 	}

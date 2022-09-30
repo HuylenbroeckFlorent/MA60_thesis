@@ -60,6 +60,9 @@ public class State implements Serializable, Comparable<State> {
 		id = next_id++;
 	}
 	
+	public int getId(){
+		return id;
+	}
 	/** 
 	 * Resets transition set. 
 	 */
