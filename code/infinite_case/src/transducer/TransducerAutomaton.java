@@ -4,13 +4,14 @@ import java.util.*;
 
 public class TransducerAutomaton extends Automaton{
 
-	TransducerPair singleton;
+	TransducerState initial;
 
+	public TransducerAutomaton(){
+		initial = new TransducerState();
+	}
 
 	public TransducerAutomaton(Automaton a, HashMap<String, String> map){
 		TransducerState ret = new TransducerState();
-
-		a.expandSingleton();
 
 		Set<State> created = new HashSet<State>();
 		LinkedList<State> worklist = new LinkedList<State>();
@@ -29,10 +30,11 @@ public class TransducerAutomaton extends Automaton{
 
 			if (s.equals(a.getInitialState())){
 				ts = new TransducerState();
+				if (s.isAccept()){
+					ts.setAccept(true);
+				}
 				this.setInitialState(ts);
 				id_map.put(sid, ts);
-
-				
 			}
 			else {
 				if (id_map.containsKey(s.getId())){
@@ -40,10 +42,13 @@ public class TransducerAutomaton extends Automaton{
 				}
 				else {
 					ts = new TransducerState();
+					if (s.isAccept()){
+						ts.setAccept(true);
+					}
 					id_map.put(sid, ts);
 				}
 			}
-			
+
 			// Create transitions
 			Collection<Transition> tr = s.transitions;
 			for (Transition t : tr){
@@ -56,6 +61,9 @@ public class TransducerAutomaton extends Automaton{
 				}
 				else{
 					tto = new TransducerState();
+					if (t.to.isAccept()){
+						tto.setAccept(true);
+					}
 					id_map.put(tid, tto);
 				}
 				TransducerTransition tt = new TransducerTransition(p, tto);
@@ -66,5 +74,53 @@ public class TransducerAutomaton extends Automaton{
 				}
 			}
 		}	
+	}
+
+	public TransducerState getInitialState(){
+		return this.initial;
+	}
+
+	public void setInitialState(TransducerState ts){
+		this.initial = ts;
+	}
+
+	/**
+	 * Returns a string representation of this automaton.
+	 */
+	@Override
+	public String toString() {
+		String b = "";
+
+		Set<TransducerState> states = getTransducerStates();
+		// setStateNumbers(states);
+		b += "initial state: " + initial.getId()+"\n";
+		for (TransducerState s : states)
+			b += s.toString();
+
+		return b;
+	}
+
+	/** 
+	 * Returns the set of states that are reachable from the initial state.
+	 * @return set of {@link State} objects
+	 */
+	public Set<TransducerState> getTransducerStates() {
+
+		Set<TransducerState> visited = new HashSet<TransducerState>();
+		LinkedList<TransducerState> worklist = new LinkedList<TransducerState>();
+
+		worklist.add(this.initial);
+		visited.add(this.initial);
+
+		while (worklist.size() > 0) {
+			TransducerState s = worklist.removeFirst();
+			Collection<TransducerTransition> tr = s.transitions;
+			for (TransducerTransition t : tr)
+				if (!visited.contains(t.to)) {
+					visited.add(t.to);
+					worklist.add(t.to);
+				}
+		}
+		return visited;
 	}
 }

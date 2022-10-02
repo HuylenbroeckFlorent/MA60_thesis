@@ -1,6 +1,6 @@
 import java.util.*;
 
-import dk.brics.automaton.*;
+import transducer.*;
 
 public class Solver{
 	public static void main(String[] args){
@@ -18,7 +18,15 @@ public class Solver{
 
 		RegExp e = new RegExp("(ac*d?)|(bc*e?)");
 
-		Transducer te = new Transducer(e.toAutomaton(), map);
+		TransducerAutomaton te = e.toTransducer(map);
+
+		// System.out.println(te);
+		// System.out.println(TransducerOperations.run(te, "slll", "elll"));
+
+		// TransducerAutomaton cte = TransducerOperations.invert(te);
+
+		// System.out.println(cte);
+		// System.out.println(TransducerOperations.run(te, "slll", "elll"));
 
 		SafetyProblem sp = new SafetyProblem(v0.toAutomaton(), v1.toAutomaton(), i.toAutomaton(), f.toAutomaton(), te);
 	}

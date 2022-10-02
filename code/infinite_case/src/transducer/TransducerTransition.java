@@ -50,4 +50,16 @@ public class TransducerTransition{
 	public int hashCode() {
 		return min.hashcode(); // return min * 2 + max * 3;
 	}
+
+	/** 
+	 * Returns a string describing this state. Normally invoked via 
+	 * {@link Automaton#toString()}. 
+	 */
+	@Override
+	public String toString() {
+		String b = "";
+		b += min.toString();
+		b += " -> " + to.getId();
+		return b;
+	}
 }

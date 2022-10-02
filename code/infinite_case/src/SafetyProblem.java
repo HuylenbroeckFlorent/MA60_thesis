@@ -1,11 +1,11 @@
-import dk.brics.automaton.*;
+import transducer.*;
 
 public class SafetyProblem{
 
 	private Automaton aV0, aV1, aI, aF;
-	private Transducer tE;
+	private TransducerAutomaton tE;
 
-	public SafetyProblem(Automaton aV0, Automaton aV1, Automaton aI, Automaton aF, Transducer tE){
+	public SafetyProblem(Automaton aV0, Automaton aV1, Automaton aI, Automaton aF, TransducerAutomaton tE){
 		this.aV0=aV0;
 		this.aV1=aV1;
 		this.aI=aI;
@@ -29,7 +29,7 @@ public class SafetyProblem{
 		return aF;
 	}
 
-	public Transducer getTE(){
+	public TransducerAutomaton getTE(){
 		return tE;
 	}
 }

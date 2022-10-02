@@ -25,8 +25,12 @@ public class TransducerPair{
 		return v;
 	}
 
-	public TransducerPair invert(){
+	public TransducerPair inverse(){
 		return new TransducerPair(v, u);
+	}
+
+	public TransducerPair deepcopy(){
+		return new TransducerPair(u, v);
 	}
 
 	public boolean equals(Object o){
@@ -40,6 +44,10 @@ public class TransducerPair{
 		} else {
 			return false;
 		}		
+	}
+
+	public String toString(){
+		return "("+u+":"+v+")";
 	}
 
 	public int hashcode(){
