@@ -1,6 +1,6 @@
 package transducer;
 
-public class TransducerPair{
+public class TransducerPair implements Comparable{
 
 	private char u;
 	private char v;
@@ -52,5 +52,23 @@ public class TransducerPair{
 
 	public int hashcode(){
 		return u*2+v*3;
+	}
+
+	@Override
+	public int compareTo(Object o){
+		if (o instanceof TransducerPair){
+			TransducerPair p = (TransducerPair) o;
+			if (this.u=='0' && p.getU()!='0'){
+				return -1;
+			}
+			else if (this.u!='0' && p.getU()=='0'){
+				return 1;
+			}
+			else{
+				return 0;
+			}
+		}else{
+			return 0;
+		}
 	}
 }

@@ -1,9 +1,7 @@
 package transducer;
 
-public class TransducerTransition{
-	TransducerPair min;
-	TransducerPair max;
-
+public class TransducerTransition implements Comparable{
+	TransducerPair p;
 	TransducerState to;
 
 	/** 
@@ -12,18 +10,17 @@ public class TransducerTransition{
 	 * @param to destination state
 	 */
 	public TransducerTransition(TransducerPair p, TransducerState to){
-		min = max = p;
+		this.p = p;
 		this.to = to;
 	}
 
-	/** Returns minimum of this transition interval. */
-	public TransducerPair getMin() {
-		return min;
+	/** Returns the pair of this transition. */
+	public TransducerPair getPair() {
+		return p;
 	}
-	
-	/** Returns maximum of this transition interval. */
-	public TransducerPair getMax() {
-		return max;
+
+	public TransducerState getDest(){
+		return to;
 	}
 
 	/** 
@@ -36,7 +33,7 @@ public class TransducerTransition{
 	public boolean equals(Object obj) {
 		if (obj instanceof TransducerTransition) {
 			TransducerTransition t = (TransducerTransition)obj;
-			return t.min.equals(min) && t.max.equals(max) && t.to == to;
+			return p.equals(p) && t.to == to;
 		} else
 			return false;
 	}
@@ -48,7 +45,7 @@ public class TransducerTransition{
 	 */
 	@Override
 	public int hashCode() {
-		return min.hashcode(); // return min * 2 + max * 3;
+		return p.hashcode(); // return min * 2 + max * 3;
 	}
 
 	/** 
@@ -58,8 +55,19 @@ public class TransducerTransition{
 	@Override
 	public String toString() {
 		String b = "";
-		b += min.toString();
+		b += p.toString();
 		b += " -> " + to.getId();
 		return b;
+	}
+
+	@Override
+	public int compareTo(Object o){
+		if (o instanceof TransducerTransition){
+			TransducerTransition tt = (TransducerTransition) o;
+			return this.p.compareTo(tt.getPair());
+		}else{
+			return 0;
+		}
+		
 	}
 }

@@ -20,7 +20,6 @@ public class Solver{
 
 		TransducerAutomaton te = e.toTransducer(map);
 
-		// System.out.println(te);
 		// System.out.println(TransducerOperations.run(te, "slll", "elll"));
 
 		// TransducerAutomaton cte = TransducerOperations.invert(te);
@@ -29,5 +28,18 @@ public class Solver{
 		// System.out.println(TransducerOperations.run(te, "slll", "elll"));
 
 		SafetyProblem sp = new SafetyProblem(v0.toAutomaton(), v1.toAutomaton(), i.toAutomaton(), f.toAutomaton(), te);
+
+		// System.out.println(TransducerOperations.invert(sp.getTE()));
+		// System.out.println(sp.getTE());
+		// Automaton test = sp.getAV0();
+		// Automaton test = sp.getAV1();
+		// Automaton test = new RegExp("sl{3}").toAutomaton();
+		// Automaton test = new RegExp("sl{3}e").toAutomaton();
+
+
+		// System.out.println(test);
+
+		// System.out.println(TransducerOperations.image(sp.getTE(), test));
+		// System.out.println(TransducerOperations.image(TransducerOperations.invert(sp.getTE()), test));
 	}
 }

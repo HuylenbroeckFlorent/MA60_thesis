@@ -14,7 +14,7 @@ public class TransducerState extends State{
 
 	public TransducerState step(TransducerPair p) {
 		for (TransducerTransition t : transitions)
-			if (t.min.equals(p) || t.max.equals(p))
+			if (t.getPair().equals(p) || t.getPair().equals(p))
 				return t.to;
 		return null;
 	}
@@ -33,6 +33,12 @@ public class TransducerState extends State{
 
 	public boolean isAccept(){
 		return accept;
+	}
+
+	public List<TransducerTransition> getSortedTransitions(){
+		ArrayList<TransducerTransition> ret = new ArrayList(transitions);
+		Collections.sort(ret, Collections.reverseOrder());
+		return ret;
 	}
 
 	/** 

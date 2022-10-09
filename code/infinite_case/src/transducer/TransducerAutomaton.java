@@ -123,4 +123,13 @@ public class TransducerAutomaton extends Automaton{
 		}
 		return visited;
 	}
+
+	public Set<TransducerTransition> getTransducerTransitions(){
+		Set<TransducerState> states = getTransducerStates();
+		Set<TransducerTransition> ret = new HashSet();
+
+		for (TransducerState t : states)
+			ret.addAll(t.transitions);
+		return ret;
+	}
 }
