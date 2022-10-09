@@ -2,7 +2,7 @@
 	<property name="src" location="src/"/>
 	<property name="build" location="build/"/>
 
-	<target name="build">
+	<target name="build" depends="clean">
 		<mkdir dir="${build}"/>
 		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
 			<classpath>
