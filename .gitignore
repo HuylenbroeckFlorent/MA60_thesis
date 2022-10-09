@@ -3,5 +3,5 @@ report/*.log
 report/*.out
 report/*.synctex.gz
 report/*.toc
-code/infinite_case/build/*.class
+code/infinite_case/build/*
 report/archive
