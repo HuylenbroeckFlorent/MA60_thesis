@@ -152,6 +152,8 @@ public class TransducerOperations{
 	public static Automaton image(TransducerAutomaton ta, Automaton a){
 		Automaton ret = new Automaton();
 
+		a.expandSingleton();
+
 		State as = a.getInitialState();
 		TransducerState tas = ta.getInitialState();
 
