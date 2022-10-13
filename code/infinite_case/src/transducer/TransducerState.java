@@ -35,15 +35,38 @@ public class TransducerState extends State{
 		return accept;
 	}
 
-	public List<TransducerTransition> getSortedTransitions(){
-		ArrayList<TransducerTransition> ret = new ArrayList(transitions);
-		Collections.sort(ret, Collections.reverseOrder());
+	/**
+	 * Returns a list of the non-epsilon transition from this state.
+	 * 
+	 * @return Set<TransducerState> non-epsilon transitions going ou of this state.
+	 */
+	public Set<TransducerTransition> getAlphaTransitions(){
+		Set<TransducerTransition> ret = new HashSet();
+		for (TransducerTransition t: transitions){
+			if (t.getPair().getU()!='0'){
+				ret.add(t);
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * Returns a list of the epsilon transition from this state.
+	 * 
+	 * @return Set<TransducerState> epsilon transitions going ou of this state.
+	 */
+	public Set<TransducerTransition> getEpsilonTransitions(){
+		Set<TransducerTransition> ret = new HashSet();
+		for (TransducerTransition t: transitions){
+			if (t.getPair().getU()=='0'){
+				ret.add(t);
+			}
+		}
 		return ret;
 	}
 
 	/** 
-	 * Returns string describing this state. Normally invoked via 
-	 * {@link Automaton#toString()}. 
+	 * Returns string describing this state.
 	 */
 	@Override
 	public String toString() {

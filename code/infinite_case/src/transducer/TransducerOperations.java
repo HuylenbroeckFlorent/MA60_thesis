@@ -64,7 +64,6 @@ public class TransducerOperations{
 					}
 				}
 			}
-					
 		}
 		return ts.isAccept();
 	}
@@ -141,14 +140,20 @@ public class TransducerOperations{
 
 	public static TransducerAutomaton invert(TransducerAutomaton ta){
 		return deepcopy(ta, true);
-		
 	}
 
 	public static TransducerAutomaton copy(TransducerAutomaton ta){
 		return deepcopy(ta, false);
-		
 	}
 
+
+	/**
+	 * Computes the image of the given Relation for the langage accapted by a given NFA 
+	 * 
+	 * @param ta TransducerAutomaton representing the relation.
+	 * @param a Automaton to compute the image.
+	 * @return Automaton accepting the computed image.
+	 */
 	public static Automaton image(TransducerAutomaton ta, Automaton a){
 		Automaton ret = new Automaton();
 
@@ -172,7 +177,7 @@ public class TransducerOperations{
 
 		for (Transition ast : as.getTransitions()){
 			char c = ast.getMin();
-			for (TransducerTransition tast : tas.getSortedTransitions()){
+			for (TransducerTransition tast : tas.getAlphaTransitions()){
 
 				TransducerPair p = tast.getPair();
 
@@ -197,7 +202,7 @@ public class TransducerOperations{
 			}
 		}
 
-		for (TransducerTransition tast : tas.getSortedTransitions()){
+		for (TransducerTransition tast : tas.getEpsilonTransitions()){
 
 			TransducerPair p = tast.getPair();
 			if(p.getU() == '0'){
