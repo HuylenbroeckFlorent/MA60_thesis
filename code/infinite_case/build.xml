@@ -8,7 +8,7 @@
 	</target>
 
 	<target name="run" depends="build">
-		<java classname="Solver">
+		<java classname="Main">
 			<classpath>
 				<pathelement location="${build}"/>
 			</classpath>
