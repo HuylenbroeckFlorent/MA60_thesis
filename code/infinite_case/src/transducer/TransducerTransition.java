@@ -50,7 +50,6 @@ public class TransducerTransition implements Comparable{
 
 	/** 
 	 * Returns a string describing this state. Normally invoked via 
-	 * {@link Automaton#toString()}. 
 	 */
 	@Override
 	public String toString() {

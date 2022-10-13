@@ -45,8 +45,8 @@ public class Solver{
 
 		Sample s = new Sample();
 
-		System.out.println(check(sp, new RegExp("(e|s)ll*").toAutomaton(), s));
-		System.out.println(s.toString());
+		//System.out.println(check(sp, new RegExp("(e|s)ll*").toAutomaton(), s));
+		//System.out.println(s.toString());
 	}
 
 	/**
