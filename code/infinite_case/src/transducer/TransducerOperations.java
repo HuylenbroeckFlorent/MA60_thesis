@@ -193,64 +193,26 @@ public class TransducerOperations{
 							imageRec(next, ast.getDest(), tast.getDest());
 						}
 					}
-				}else{
-					if(p.getU() == '0'){
-						State next = new State();
-						for (Transition tmp : current.getTransitions()){
-							if(tmp.getMin() == p.getV() && (
-																	(tmp.getDest().isAccept() && tast.getDest().isAccept())
-																||
-																	(!tmp.getDest().isAccept() && !tast.getDest().isAccept())
-															))
-								next = tmp.getDest();
-						}
-						current.addTransition(new Transition(p.getV(), next));
-						imageRec(next, as, tast.getDest());
-					}
 				}
 			}
 		}
 
-		// for (Transition ast : as.getTransitions()){
-		// 	char c = ast.getMin();
-		// 	for (TransducerTransition tast : tas.transitions){
-		// 		TransducerPair p = tast.getPair();
-		// 		if(c == p.getU()){
-		// 			if(p.getV() == '0'){
-		// 				imageRec(current, ast.getDest(), tast.getDest());
-		// 			}
-		// 			else{
-		// 				if(ast.getDest().equals(as)){
-		// 					Set<Transition> ct = current.getTransitions();
-		// 					Transition tmp = new Transition(p.getV(), current);
-		// 					if (!(ct.contains(tmp))){
-		// 						current.addTransition(tmp);
-		// 						imageRec(current, as, tast.getDest());
-		// 					}
-		// 				}else{
-		// 					State next = new State();
-		// 					current.addTransition(new Transition(p.getV(), next));
-		// 					imageRec(next, ast.getDest(), tast.getDest());
-		// 				}
-		// 			}
-		// 		}
-		// 		else{
-		// 			if(p.getU() == '0'){
-		// 				if(ast.getDest().equals(as)){
-		// 					Set<Transition> ct = current.getTransitions();
-		// 					Transition tmp = new Transition(p.getV(), current);
-		// 					if (!(ct.contains(tmp))){
-		// 						current.addTransition(tmp);
-		// 						imageRec(current, as, tast.getDest());
-		// 					}
-		// 				}else{
-		// 					State next = new State();
-		// 					current.addTransition(new Transition(p.getV(), next));
-		// 					imageRec(next, ast.getDest(), tast.getDest());
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// }
+		for (TransducerTransition tast : tas.getSortedTransitions()){
+
+			TransducerPair p = tast.getPair();
+			if(p.getU() == '0'){
+				State next = new State();
+				for (Transition tmp : current.getTransitions()){
+					if(tmp.getMin() == p.getV() && (
+															(tmp.getDest().isAccept() && tast.getDest().isAccept())
+														||
+															(!tmp.getDest().isAccept() && !tast.getDest().isAccept())
+													))
+						next = tmp.getDest();
+				}
+				current.addTransition(new Transition(p.getV(), next));
+				imageRec(next, as, tast.getDest());
+			}
+		}
 	}
 }
