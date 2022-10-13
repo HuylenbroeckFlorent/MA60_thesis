@@ -16,4 +16,8 @@ public class CounterExample{
     public Automaton getA(){
         return a;
     }
+
+    public String toString(){
+        return "u: "+u+"\nDFA: \n"+a.toString()+"\n";
+    }
 }

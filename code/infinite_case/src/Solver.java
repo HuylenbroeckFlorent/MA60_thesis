@@ -33,7 +33,7 @@ public class Solver{
 		// System.out.println(TransducerOperations.invert(sp.getTE()));
 		// System.out.println(sp.getTE());
 		// Automaton test = sp.getAV0();
-		// Automaton test = sp.getAV1();
+		//Automaton test = sp.getAV1();
 		//Automaton test = new RegExp("sl{3}").toAutomaton();
 		//Automaton test = new RegExp("sl{3}e").toAutomaton();
 
@@ -46,6 +46,7 @@ public class Solver{
 		Sample s = new Sample();
 
 		System.out.println(check(sp, new RegExp("(e|s)ll*").toAutomaton(), s));
+		System.out.println(s.toString());
 	}
 
 	/**
