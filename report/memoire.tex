@@ -699,14 +699,22 @@ La \emph{concaténation} de deux mots $u=u_1u_2...u_n$ et $v=v_1v_2...v_m$ ($n,m
 	\item $F\subseteq Q$ est l'ensemble des états finaux.
 \end{itemize}
 \begin{defi}
+\label{deter}
 Un automate $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ est \emph{déterministe} si, $\delta(q,a)=p_1$ et $\delta(q,a)=p_2$ implique que $p_1=p_2$.
 \end{defi}
-Un automate fini qui n'est pas déterministe est appelé \emph{non déterministe}.\\
+Un automate fini qui n'est pas déterministe est appelé \emph{automate fini non déterministe (AFD)}.\\
 
 \noindent Un \emph{parcours} d'un automate par un mot $u=u_1u_2...u_n$, $n\in\mathbb{N}$ est une séquence d'états $q_0q_1...q_n$ telle que $\forall i\in\mathbb{N}, \delta(q_i,u_i)=q_{i+1}$. Un mot $u$ est \emph{accepté} par un automate $\mathcal{A}$ si le parcours de l'automate par ce mot se termine sur un état final $q\in F$. L'ensemble des mots acceptés par un automate forme le langage $\mathcal{L}(\mathcal{A})$ de cet automate. Un langage $L$ est dit \emph{régulier} s'il existe un automate fini $\mathcal{A}$ tel que $\mathcal{L}(\mathcal{A})=L$.\\
 
+
 \noindent Enfin, un \emph{transducteur} est un automate fini non déterministe $\mathcal{T}=(Q,\hat{\Sigma},\delta,q_0,F)$ où $\hat{\Sigma}=(\Sigma\cup\{\lambda\})\times(\Gamma\cup\{\lambda\})$ avec $\Sigma$ et $\Gamma$ deux alphabets. Un parcours d'un transducteur ne se fait pas par un mot mais par une paire de mots $(u,v)$ avec $u\in\Sigma^*$ et $v\in\Gamma^*$ afin de produire une séquence $q_0q_1...q_n$, $n\in\mathbb{N}$ telle que $\forall i\in\mathbb{N}, \delta(q_i,(u_i,v_i))=q_{i+1}$. Les mots $u$ et $v$ peuvent être de longueur différente car $\lambda$ est inclu aux deux alphabets.\\
-Un transducteur, en acceptant des paires de mots, permet de définir une \emph{relation} $R$ entre deux langages. L'ensemble des paires de mots acceptées par un transducteur forme la relation $\mathcal{R}$. Pour finir, une relation est dite \emph{régulière} s'il exite un transducteur $\mathcal{T}$ tel que $\mathcal{R}(\mathcal{T})=R$.
+Un transducteur, en acceptant des paires de mots, permet de définir une \emph{relation} $R$ entre deux langages. L'ensemble des paires de mots acceptées par un transducteur forme la relation $\mathcal{R}$. Une relation est dite \emph{régulière} s'il exite un transducteur $\mathcal{T}$ tel que $\mathcal{R}(\mathcal{T})=R$.
+\begin{defi}[Image d'une relation]
+Soit $\mathcal{T}$ un transducteur acceptant la relation $R$ et $\mathcal{A}$ un AFN, alors $\mathcal{R}(\mathcal{T})(\mathcal{L}(\mathcal{A}))$ est l'image du langage $\mathcal{L}(\mathcal{A})$ par la relation $R$.
+\end{defi}
+\begin{defi}[Inverse d'une relation]
+Soit $\mathcal{T}=(Q,\hat{\Sigma},\delta,q_0,F)$ un transducteur acceptant la relation $R$. On définit l'inverse de $R$ par $\mathcal{R}(\mathcal{T})^{-1}=\{(u,v)$ $|$ $\forall (v,u)\in \delta\}$, la relation que l'on obtient en échangeant tous les composants des paires des transitions de $\mathcal{T}$.
+\end{defi}
 
 \section{Exemple de jeu de sûreté infini}
 Afin d'illustrer le cas infini, nous allons considérer l'arène infinie simple représentée à la figure \ref{fig:infinite-arena}. Il s'agit d'un tableau infini, à une dimension, fermé à gauche. Chaque sommet est décrit par le numéro du joueur à qui il appartient, et un nombre $k\in\mathbb{N}$. Il existe un sommet appartenant à chaque joueur pour chaque valeur possible de $k$ et ceux-ci sont arrangé dans l'ordre croissant de cette valeur, en alternant les sommets de $j_0$ et $j_1$. L'ensemble $F$ est représenté par les sommets grisés. Il est décrit par une certaine valeur non nulle de $k$, à partir de laquelle tous les sommets font partie de $F$ (à la figure \ref{fig:infinite-arena}, $k=2$).
@@ -855,7 +863,7 @@ Un \emph{jeu de sûreté rationnel} sur l'alphabet $\Sigma$ est un jeu $\mathfra
 	(4) edge node {$\unary$} (5)
 	(5) edge [loop right] node {$\unary$} ();
 	
-\draw[decorate, decoration={brace, mirror, amplitude=5pt},] ([yshift=-0.75cm]2.center)--([yshift=-0.75cm]4.center) node[pos=0.5, below=0.2cm]{$k-1$ états};
+\draw[decorate, decoration={brace, mirror, amplitude=5pt},] ([yshift=-0.75cm]2.center)--([yshift=-0.75cm]4.center) node[pos=0.5, below=0.2cm]{$k$ états};
 \end{tikzpicture}
 %\caption{Représentation rationelle de l'ensemble $F$ de $\mathfrak{G}_k$.}
 \end{figure}
@@ -885,14 +893,14 @@ Un \emph{jeu de sûreté rationnel} sur l'alphabet $\Sigma$ est un jeu $\mathfra
 	(4) edge node {$\unary$} (5)
 	(5) edge [loop right] node {$\unary$} ();
 	
-\draw[decorate, decoration={brace, mirror, amplitude=5pt},] ([yshift=-0.75cm]2.center)--([yshift=-0.75cm]4.center) node[pos=0.5, below=0.2cm]{$k-1$ états};
+\draw[decorate, decoration={brace, mirror, amplitude=5pt},] ([yshift=-0.75cm]2.center)--([yshift=-0.75cm]4.center) node[pos=0.5, below=0.2cm]{$k$ états};
 \end{tikzpicture}
 %\caption{Représentation rationelle de l'ensemble $I$ de $\mathfrak{G}_k$.}
 \end{figure}
 
 
 \section{Apprentissage}
-Résoudre un jeu de sûreté rationnel consiste à produire un automate fini déterministe (\emph{AFD}) qui acceptera tous les mots représentant les sommets de l'ensemble gagnant $W_0$. Afin de produire un tel automate, nous allons utiliser le principe d'\emph{apprentissage}. Cet apprentissage à lieu entre un \emph{enseignant}, lequel est en connaisance du jeu de sûreté que l'on veut résoudre, et un \emph{élève}, cherchant à en apprendre l'AFD décrivant l'ensemble gagnant. On suppose que l'alphabet utilisé est connu par les deux partis avant que l'apprentissage commence.\\
+Résoudre un jeu de sûreté rationnel consiste à produire un AFD qui acceptera tous les mots représentant les sommets de l'ensemble gagnant $W_0$. Afin de produire un tel automate, nous allons utiliser le principe d'\emph{apprentissage}. Cet apprentissage à lieu entre un \emph{enseignant}, lequel est en connaisance du jeu de sûreté que l'on veut résoudre, et un \emph{élève}, cherchant à en apprendre l'AFD décrivant l'ensemble gagnant. On suppose que l'alphabet utilisé est connu par les deux partis avant que l'apprentissage commence.\\
 
 Avant de commencer l'apprentissage, \cite{NeiderAutomaton} suggère d'apporter quelques précisions à la définition \ref{finitewinningset} d'ensemble gagnant.
 \begin{defi}
@@ -927,7 +935,53 @@ Où
 \noindent Si les 4 vérifications ne retournent pas de contre-exemples, alors l'enseignant répond "\emph{oui}".\\
 L'ordre des vérifications n'a pas d'importance.
 \end{defi}
+Afin de se souvenir de ces contre-exemples, l'élève les enregistre dans un \emph{échantillon}, lequel est un 4-uple $S=(Pos, Neg, Ex, Uni)$ composé de 4 ensembles finis. L'ensemble $Pos$ (resp. $Neg$) $\subset\Sigma^*$ contient les contre-exemples positifs (resp. négatifs), et l'ensemble $Ex$ (resp. $Uni$) $\subset(\Sigma^*\times AFN_\Sigma)$ contient les contre-exemples d'implication existentielle (resp. universelle).
+\begin{defi}
+Un échantillon $S=(Pos, Neg, Ex, Uni)$ est \emph{sans contradicitions} si \begin{enumerate}
+\item $Pos\cap Neg=\emptyset$.\\ 
+Si $Pos$ et $Neg$ ne sont pas disjoints, alors les mots $u\in Pos\cap Neg$ devraient à la fois être acceptés et rejetés par l'élève.
+\item La fermeture transitive (alternée) des contre-exemples d'implication de $Ex$ et $Uni$ ne contient pas de paire de mots $(u,v)$ telle que $u\in Pos \land v\in Neg$.\\
+Si un telle paire existe, alors à nouveau, le mot $v$ devrait à la fois être accepté et rejeté par l'élève.
+
+\end{enumerate}
+\end{defi}
+\noindent Ainsi, l'élève devra s'assurer que les AFD qu'il soumet à l'enseignant sont \emph{cohérents} avec l'échantillon $S$.
+\begin{defi}
+Soit $\mathcal{C}$ un $AFD$, $S=(Pos, Neg, Ex, Uni)$ un echantillon sans contradictions. On dit que $\mathcal{C}$ est \emph{cohérent} avec $S$ si
+\begin{itemize}
+\item $Pos\subseteq \mathcal{L}(\mathcal{C})$
+\item $Neg\cap \mathcal{L}(\mathcal{C})=\emptyset$
+\item $\forall (u,\mathcal{A})\in Ex, u\in\mathcal{L}(\mathcal{C})\implies  \mathcal{L}(\mathcal{C})\cap \mathcal{L}(\mathcal{A})\neq\emptyset$
+\item $\forall (u,\mathcal{A})\in Uni, u\in\mathcal{L}(\mathcal{C})\implies  \mathcal{L}(\mathcal{A})\subseteq \mathcal{L}(\mathcal{C})$
+\end{itemize}
+\end{defi}
+\noindent La section suivante va maintenant pouvoir décrire la manière dont l'élève peut conjecturer un $AFD$ cohérent avec un échantillon $S$.
 \section{Résolution par la programmation logique}
+Afin de construire un $AFD$ cohérent avec un échantillon $S$ donné, une nouvelle étape de symbolisation va être nécessaire. Cette fois-ci, il s'agit de traduire le problème rationel en une série de formules boléennes propositionnelles et de résoudre les problèmes de satisfaisabilité (\emph{problème SAT}) résultants. Il sera ensuite possible de traduire les \emph{modèles} (assignations de variables boléennes rendant la formule vraie) de ce problème SAT en ensemble gagnant pour le jeu de sûreté.\\
+
+\noindent Pour cela, l'élève va créer une série de formules boléennes $\phi^S_n$ pour une valeur incrémentale de $n\in\mathbb{N}_0$ et telle que :
+\begin{itemize}
+\item La formule $\phi^S_n$ est satisfaisable si et seulement si il existe un AFD qui possède $n$ sommets et qui est cohérent avec $S$.
+\item Un modèle $\mathfrak{M}$ de $\phi^S_n$ contient assez d'information pour construire un AFD $\mathcal{A}_\mathfrak{M}$ à $n$ sommet et cohérent avec $S$.
+\end{itemize}
+
+\noindent Autrement formulé, l'objectif de $\phi^S_n$ est d'encoder un $AFD$ $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ où $|Q|=n$.\\
+
+\noindent Etant donné $n$, on peut à l'avance fixer l'ensemble des états de cet $AFD$  à $Q=\{0,1,...$ $,n-1\}$ et le sommet de départ $q_0=0$. Ainsi, la formule $\phi^S_n$ n'a plus qu'à en encoder les transitions $\delta$ et les états finaux $F$ (l'alphabet $\Sigma$ est annoncé par l'enseignant). Afin de représenter ces deux ensembles, nous allons introduire les variables boléennes $f_q$ et $d_{p,a,q}$ avec $a\in\Sigma$ et $p,q\in Q$. La variable $f_q$ vraie signifie que $q$ est un état final et $d_{p,a,q}$ vraie signifie que la transition $\delta(p,a)$ existe et transitionne vers $q$. De plus, vu que l'on cherche à encoder un AFD, et non un AFN, il faut imposer les conditions suivantes à nos variables, afin de respecter la définition \ref{deter}.
+\begin{equation}
+\label{booldeter1}
+\begin{aligned} \bigwedge _{p \in Q}~ \bigwedge _{a \in \varSigma }~ \bigwedge _{q, q' \in Q, q \ne q'}~ \lnot d_{p, a, q} \vee \lnot d_{p, a, q'} \end{aligned}
+\end{equation}
+\begin{equation}
+\label{booldeter2}
+\begin{aligned} \bigwedge _{p \in Q}~ \bigwedge _{a \in \varSigma }~ \bigvee _{q \in Q}~ d_{p, a, q} \end{aligned}
+\end{equation}
+Ainsi, il est possible pour l'élève de construire un AFD $\mathcal{A}_\mathfrak{M}$ à partir d'un modèle $\mathfrak{M}$ satisfaisant $\phi_n=(\ref{booldeter1})\land(\ref{booldeter2})$.
+\begin{defi}
+Soit $\mathfrak{M}$ un modèle satisfaisant $\phi_n=(\ref{booldeter1})\land(\ref{booldeter2})$, alors on peut construire $\mathcal{A}_\mathfrak{M}=(Q,\Sigma,\delta,q_0,F)$ avec $Q$ et $q_0$ fixés, $\Sigma$ annoncé par l'enseignant, $\delta(p,a)=q$ pour tout $\mathfrak{M}(d_{p,a,q})=$ vrai, et $F=\{q\in Q$ $|$ $\mathfrak{M}(f_q)=$ vrai $\}$
+\end{defi}
+\noindent Il reste maintenant à rendre cet AFD cohérent avec $S$.
+
 \section{Algorithmes}
 \subsection{Complexité}
 
