@@ -687,8 +687,12 @@ Une \emph{arène infinie} est une arène $A=(V_0, V_1, E)$ pour laquelle on auto
 \end{defi}
 
 \section{Alphabets, automates et transducteurs}
-Un \emph{alphabet} $\Sigma$ est un ensemble fini, non vide, de symboles. Un \emph{mot} de longueur $n\in\mathbb{N}$ sur l'alphabet $\Sigma$ est une séquence de symboles $u=u_1u_2...u_n$ avec $\forall i\in\mathbb{N}, x_i\in \Sigma$. Le mot vide est noté $\lambda$.\\
+Un \emph{alphabet} $\Sigma$ est un ensemble fini, non vide, de symboles. Un \emph{mot} de longueur $n\in\mathbb{N}$ sur l'alphabet $\Sigma$ est une séquence de symboles $u=u_1u_2...u_n$ avec $\forall i\in\mathbb{N}, u_i\in \Sigma$. Le mot vide est noté $\lambda$.\\
 La \emph{concaténation} de deux mots $u=u_1u_2...u_n$ et $v=v_1v_2...v_m$ ($n,m\in\mathbb{N}$) est le mot $w=u\cdot v=u_1u_2...u_nv_1v_2...v_m$ de longueur $n+m$. L'ensemble $\Sigma^*$ contient tous les mots possibles sur l'alphabet $\Sigma$. Un sous ensemble $L\subseteq \Sigma^*$ est appelé un langage.\\
+Un préfixe $v\in\Sigma^*$ d'un mot $u\in\Sigma^*$ est un mot tel que $\exists w\in\Sigma^*, vw=u$.
+\begin{defi}
+L'ensemble des préfixes d'un langage $L\subseteq\Sigma^*$ est l'ensemble $Pref(L)=\{u\in\Sigma^*$ $|$ $\exists v\in\Sigma^*, uv\in L\}$.
+\end{defi}
 
 \noindent Un \emph{automate} fini est un 5-uple $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ où 
 \begin{itemize}
@@ -698,9 +702,9 @@ La \emph{concaténation} de deux mots $u=u_1u_2...u_n$ et $v=v_1v_2...v_m$ ($n,m
 	\item $q_0\subseteq Q$ est l'ensemble des états initiaux.
 	\item $F\subseteq Q$ est l'ensemble des états finaux.
 \end{itemize}
-\begin{defi}
+\begin{defi}[Automate fini déterministe (AFD)]
 \label{deter}
-Un automate $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ est \emph{déterministe} si, $\delta(q,a)=p_1$ et $\delta(q,a)=p_2$ implique que $p_1=p_2$.
+Un automate $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ est \emph{déterministe} si $\forall q,p_1,p_2\in Q, a\in\Sigma^*, \delta(q,a)=p_1$ et $\delta(q,a)=p_2$ implique que $p_1=p_2$.
 \end{defi}
 Un automate fini qui n'est pas déterministe est appelé \emph{automate fini non déterministe (AFD)}.\\
 
@@ -708,12 +712,12 @@ Un automate fini qui n'est pas déterministe est appelé \emph{automate fini non
 
 
 \noindent Enfin, un \emph{transducteur} est un automate fini non déterministe $\mathcal{T}=(Q,\hat{\Sigma},\delta,q_0,F)$ où $\hat{\Sigma}=(\Sigma\cup\{\lambda\})\times(\Gamma\cup\{\lambda\})$ avec $\Sigma$ et $\Gamma$ deux alphabets. Un parcours d'un transducteur ne se fait pas par un mot mais par une paire de mots $(u,v)$ avec $u\in\Sigma^*$ et $v\in\Gamma^*$ afin de produire une séquence $q_0q_1...q_n$, $n\in\mathbb{N}$ telle que $\forall i\in\mathbb{N}, \delta(q_i,(u_i,v_i))=q_{i+1}$. Les mots $u$ et $v$ peuvent être de longueur différente car $\lambda$ est inclu aux deux alphabets.\\
-Un transducteur, en acceptant des paires de mots, permet de définir une \emph{relation} $R$ entre deux langages. L'ensemble des paires de mots acceptées par un transducteur forme la relation $\mathcal{R}$. Une relation est dite \emph{régulière} s'il exite un transducteur $\mathcal{T}$ tel que $\mathcal{R}(\mathcal{T})=R$.
+Un transducteur, en acceptant des paires de mots, permet de définir une \emph{relation} $R$ entre deux langages. L'ensemble des paires de mots acceptées par un transducteur forme la relation $\mathcal{R}(\mathcal{T})$ de ce transducteur. Une relation est dite \emph{régulière} s'il exite un transducteur $\mathcal{T}$ tel que $\mathcal{R}(\mathcal{T})=R$.
 \begin{defi}[Image d'une relation]
-Soit $\mathcal{T}$ un transducteur acceptant la relation $R$ et $\mathcal{A}$ un AFN, alors $\mathcal{R}(\mathcal{T})(\mathcal{L}(\mathcal{A}))$ est l'image du langage $\mathcal{L}(\mathcal{A})$ par la relation $R$.
+Soit $\mathcal{T}$ un transducteur acceptant la relation $R$ sur $\hat{\Sigma}=(\Sigma\cup\{\lambda\})\times(\Gamma\cup\{\lambda\})$ et $\mathcal{A}$ un AFN, alors\\ $\mathcal{R}(\mathcal{T})(\mathcal{L}(\mathcal{A}))=\{v\in\Gamma^*$ $|$ $\exists u\in\Sigma^*, (u,v)\in\mathcal{R}(\mathcal{T})\}$ est l'image du langage $\mathcal{L}(\mathcal{A})$ par la relation $R$.
 \end{defi}
 \begin{defi}[Inverse d'une relation]
-Soit $\mathcal{T}=(Q,\hat{\Sigma},\delta,q_0,F)$ un transducteur acceptant la relation $R$. On définit l'inverse de $R$ par $\mathcal{R}(\mathcal{T})^{-1}=\{(u,v)$ $|$ $\forall (v,u)\in \delta\}$, la relation que l'on obtient en échangeant tous les composants des paires des transitions de $\mathcal{T}$.
+Soit $\mathcal{T}=(Q,\hat{\Sigma},\delta,q_0,F)$ un transducteur acceptant la relation $R$. On définit l'inverse de $R$ par $\mathcal{R}(\mathcal{T})^{-1}=\{(u,v)$ $|$ $(v,u)\in R\}$, la relation que l'on obtient en échangeant tous les composants des paires de $R$.
 \end{defi}
 
 \section{Exemple de jeu de sûreté infini}
@@ -947,6 +951,7 @@ Si un telle paire existe, alors à nouveau, le mot $v$ devrait à la fois être 
 \end{defi}
 \noindent Ainsi, l'élève devra s'assurer que les AFD qu'il soumet à l'enseignant sont \emph{cohérents} avec l'échantillon $S$.
 \begin{defi}
+\label{consistency}
 Soit $\mathcal{C}$ un $AFD$, $S=(Pos, Neg, Ex, Uni)$ un echantillon sans contradictions. On dit que $\mathcal{C}$ est \emph{cohérent} avec $S$ si
 \begin{itemize}
 \item $Pos\subseteq \mathcal{L}(\mathcal{C})$
@@ -965,29 +970,67 @@ Afin de construire un $AFD$ cohérent avec un échantillon $S$ donné, une nouve
 \item Un modèle $\mathfrak{M}$ de $\phi^S_n$ contient assez d'information pour construire un AFD $\mathcal{A}_\mathfrak{M}$ à $n$ sommet et cohérent avec $S$.
 \end{itemize}
 
-\noindent Autrement formulé, l'objectif de $\phi^S_n$ est d'encoder un $AFD$ $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ où $|Q|=n$.\\
+\noindent Autrement formulé, l'objectif de $\phi^S_n$ est d'encoder un $AFD$ $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ où $|Q|=n$ et cohérent avec $S$.\\
 
-\noindent Etant donné $n$, on peut à l'avance fixer l'ensemble des états de cet $AFD$  à $Q=\{0,1,...$ $,n-1\}$ et le sommet de départ $q_0=0$. Ainsi, la formule $\phi^S_n$ n'a plus qu'à en encoder les transitions $\delta$ et les états finaux $F$ (l'alphabet $\Sigma$ est annoncé par l'enseignant). Afin de représenter ces deux ensembles, nous allons introduire les variables boléennes $f_q$ et $d_{p,a,q}$ avec $a\in\Sigma$ et $p,q\in Q$. La variable $f_q$ vraie signifie que $q$ est un état final et $d_{p,a,q}$ vraie signifie que la transition $\delta(p,a)$ existe et transitionne vers $q$. De plus, vu que l'on cherche à encoder un AFD, et non un AFN, il faut imposer les conditions suivantes à nos variables, afin de respecter la définition \ref{deter}.
+\noindent Etant donné $n$, on peut à l'avance fixer l'ensemble des états de cet $AFD$  à $Q=\{0,1,...$ $,n-1\}$ et le sommet de départ $q_0=0$. Ainsi, la formule $\phi^S_n$ n'a plus qu'à en encoder les transitions $\delta$ et les états finaux $F$ (l'alphabet $\Sigma$ est annoncé par l'enseignant). Afin de représenter ces deux ensembles, nous allons introduire les variables boléennes $f_q$ et $d_{p,a,q}$ avec $a\in\Sigma$ et $p,q\in Q$. La variable $f_q$ vraie signifie que $q$ est un état final et $d_{p,a,q}$ vraie signifie que la transition $\delta(p,a)$ existe et transitionne vers $q$. De plus, vu que l'on cherche à encoder un AFD, et non un AFN, il faut imposer des conditions à nos variables, afin de respecter la définition \ref{deter}. Ces conditions s'obtiennent par la formule
 \begin{equation}
 \label{booldeter1}
 \begin{aligned} \bigwedge _{p \in Q}~ \bigwedge _{a \in \varSigma }~ \bigwedge _{q, q' \in Q, q \ne q'}~ \lnot d_{p, a, q} \vee \lnot d_{p, a, q'} \end{aligned}
 \end{equation}
+qui assure qu'un unique état $q$ peut être atteint depuis un sommet $p$ en lisant le mot $a$. Ainsi, il est possible pour l'élève de construire un AFD $\mathcal{A}_\mathfrak{M}$ à partir d'un modèle $\mathfrak{M}$ satisfaisant $\phi_n^{AFD}=(\ref{booldeter1})$.
+\begin{defi}
+Soit $\mathfrak{M}$ un modèle satisfaisant $\phi_n=(\ref{booldeter1})$, alors on peut construire $\mathcal{A}_\mathfrak{M}=(Q,\Sigma,\delta,q_0,F)$ avec $Q$ et $q_0$ fixés, $\Sigma$ annoncé par l'enseignant, $\delta(p,a)=q$ pour tout $\mathfrak{M}(d_{p,a,q})=$ vrai, et $F=\{q\in Q$ $|$ $\mathfrak{M}(f_q)=$ vrai $\}$
+\end{defi}
+\noindent Il reste maintenant à rendre cet AFD cohérent avec $S$. Pour cela, il est nécessaire que $\mathcal{A}_\mathfrak{M}$ accepte ou rejette tous les mots de $S$ définis par l'ensemble $W=Pos\cup Neg\cup Ante(Ex)$ $\cup$ $Ante(Uni)$ (où, pour un contre-exemple d'implication $X=(u,\mathcal{A})$, on a $Ante(X)=u$). Nous allons donc introduire une nouvelle variable boléenne $x_{u,q}$, pour laquelle $x_{u,q}=$ vrai signifie que $\mathcal{A}_\mathfrak{M}$ atteint l'état $q\in Q$ en lisant le mot $u\in Pref(W)$.\\
+
+\noindent Nous pouvons déjà introduire la formule
 \begin{equation}
-\label{booldeter2}
+\label{boolW1}
+\begin{aligned} x_{\varepsilon , q_0} \end{aligned}
+\end{equation}
+laquelle indique que n'importe quel parcours de $\mathcal{A}_\mathfrak{M}$ commence par l'état $q_0$ et la formule
+\begin{equation}
+\label{boolWtotal}
 \begin{aligned} \bigwedge _{p \in Q}~ \bigwedge _{a \in \varSigma }~ \bigvee _{q \in Q}~ d_{p, a, q} \end{aligned}
 \end{equation}
-Ainsi, il est possible pour l'élève de construire un AFD $\mathcal{A}_\mathfrak{M}$ à partir d'un modèle $\mathfrak{M}$ satisfaisant $\phi_n=(\ref{booldeter1})\land(\ref{booldeter2})$.
-\begin{defi}
-Soit $\mathfrak{M}$ un modèle satisfaisant $\phi_n=(\ref{booldeter1})\land(\ref{booldeter2})$, alors on peut construire $\mathcal{A}_\mathfrak{M}=(Q,\Sigma,\delta,q_0,F)$ avec $Q$ et $q_0$ fixés, $\Sigma$ annoncé par l'enseignant, $\delta(p,a)=q$ pour tout $\mathfrak{M}(d_{p,a,q})=$ vrai, et $F=\{q\in Q$ $|$ $\mathfrak{M}(f_q)=$ vrai $\}$
-\end{defi}
-\noindent Il reste maintenant à rendre cet AFD cohérent avec $S$.
+qui indique que la fonction transition est totale, autrement dit que $\forall p\in Q, a\in\Sigma, \exists q\in Q, \delta(p,a)=q$. Cette condition est nécessaire dans notre objectif de produire un AFD $\mathcal{A}_\mathfrak{M}$ qui encode tous les préfixes des mots de $W$.\\
 
+\noindent Ensuite, la formule suivante
+\begin{equation}
+\label{boolW2}
+\begin{aligned} \bigwedge _{u \in Pref (W)}~ \bigwedge _{q \ne q' \in Q}~ \lnot x_{u, q} \vee \lnot x_{u,q'} \end{aligned}
+\end{equation}
+assure que pour chaque mot $u$ de l'ensemble des préfixe des mots de l'échantillon $S$, il existe au plus un état $q$ tel que $x_{u,q}=$ vrai.
+Et la formule
+\begin{equation}
+\label{boolW3}
+\begin{aligned} \bigwedge _{ua \in Pref (W)}~ \bigwedge _{p,q \in Q}~ (x_{u, p} \wedge d_{p, a, q}) \rightarrow x_{ua, q} \end{aligned}
+\end{equation}
+décris la manière dont un parcours de l'automate $\mathcal{A}_\mathfrak{M}$ par un mot $ua\in Pref(W)$ fonctionne. Si un état $p$ est atteint en lisant le mot $u$, et qu'une transition $\delta(p,a)=q$ existe (i.e. la variable $d_{p,a,q}=$ vraie) alors l'état $q$ sera atteint en lisant le mot $ua$.\\
+
+\noindent La conjonction de ces quatre formules $\phi^W_n=(\ref{boolW1})\land(\ref{boolWtotal})\land(\ref{boolW2})\land(\ref{boolW3})$ nous permet ainsi de produire un AFD $\mathcal{A}_\mathfrak{M}$ qui permettra d'accepter ou de rejetter tous les mots de $W$.\\
+
+\noindent Pour rendre un AFD $\mathcal{A}_\mathfrak{M}$ construit à partir d'un modèle $\mathfrak{M}$ de $\phi_n=\phi_n^{AFD}\land\phi^W_n$ cohérent avec $S$, il reste maintenant à définir des formules boléennes $\phi_n^{Pos}$, $\phi_n^{Neg}$, $\phi_n^{Ex}$ et $\phi_n^{Uni}$ qui assureront le respect des conditions de la définition \ref{consistency}.\\
+
+\noindent La formule suivante pour $\phi_n^{Pos}$ 
+\begin{equation}
+\label{boolPos}
+\begin{aligned} \bigwedge_{u\in Pos} \bigwedge_{q\in Q} x_{u,q} \rightarrow f_q \end{aligned}
+\end{equation} 
+permet de s'assurer que les mots de $Pos$ sont acceptés par $\mathcal{A}_\mathfrak{M}$. En effet, si $x_{u,q}=$ vrai, alors $q$ est l'état atteint lors de la lecture du mot $u$ par $\mathcal{A}_\mathfrak{M}$. Par cette formule, une valeur $x_{u,q}=$ vrai impliquera $f_q=$ vrai et donc $q$ sera un état final, ce qui permettra d'accepter $u$. Nous avons donc bien $Pos\subseteq \mathcal{L}(\mathcal{A}_\mathfrak{M})$\\
+
+\noindent A l'inverse, la formule suivante pour $\phi_n^{Neg}$ 
+\begin{equation}
+\label{boolNeg}
+\begin{aligned} \bigwedge_{u\in Neg} \bigwedge_{q\in Q} x_{u,q} \rightarrow \neg f_q \end{aligned}
+\end{equation} 
+assurera, par un raisonnement similaire, que les mots de $Neg$ seront rejetés par $\mathcal{A}_\mathfrak{M}$, et donc que $\mathcal{L}(\mathcal{A}_\mathfrak{M})\cap Neg=\emptyset$.
+
+\newpage
 \section{Algorithmes}
 \subsection{Complexité}
 
-
-
-
+$\mathcal{A}_\mathfrak{M}$
 
 
 
