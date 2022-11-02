@@ -977,60 +977,88 @@ Afin de construire un $AFD$ cohérent avec un échantillon $S$ donné, une nouve
 \label{booldeter1}
 \begin{aligned} \bigwedge _{p \in Q}~ \bigwedge _{a \in \varSigma }~ \bigwedge _{q, q' \in Q, q \ne q'}~ \lnot d_{p, a, q} \vee \lnot d_{p, a, q'} \end{aligned}
 \end{equation}
-qui assure qu'un unique état $q$ peut être atteint depuis un sommet $p$ en lisant le mot $a$. Ainsi, il est possible pour l'élève de construire un AFD $\mathcal{A}_\mathfrak{M}$ à partir d'un modèle $\mathfrak{M}$ satisfaisant $\phi_n^{AFD}=(\ref{booldeter1})$.
+qui assure qu'un unique état $q$ peut être atteint depuis un sommet $p$ en lisant le mot $a$. A cela, nous allons ajouter la formule 
+\begin{equation}
+\label{booldeter2}
+\begin{aligned} \bigwedge _{p \in Q}~ \bigwedge _{a \in \varSigma }~ \bigvee _{q \in Q}~ d_{p, a, q} \end{aligned}
+\end{equation}
+qui indique que la fonction transition est totale, autrement dit que $\forall p\in Q, a\in\Sigma, \exists q\in Q, \delta(p,a)=q$. Bien que cela ne soit pas nécessaire pour encoder une fonction de transition déterministe, cela sera nécessaire pour les formules que nous allons définir par la suite.
+
+\noindent Ainsi, il est possible pour l'élève de construire un AFD $\mathcal{A}_\mathfrak{M}$ à partir d'un modèle $\mathfrak{M}$ satisfaisant $\phi_n^{AFD}=(\ref{booldeter1})\land(\ref{booldeter2})$.
 \begin{defi}
-Soit $\mathfrak{M}$ un modèle satisfaisant $\phi_n=(\ref{booldeter1})$, alors on peut construire $\mathcal{A}_\mathfrak{M}=(Q,\Sigma,\delta,q_0,F)$ avec $Q$ et $q_0$ fixés, $\Sigma$ annoncé par l'enseignant, $\delta(p,a)=q$ pour tout $\mathfrak{M}(d_{p,a,q})=$ vrai, et $F=\{q\in Q$ $|$ $\mathfrak{M}(f_q)=$ vrai $\}$
+Soit $\mathfrak{M}$ un modèle satisfaisant $\phi_n=(\ref{booldeter1})\land(\ref{booldeter2})$, alors on peut construire $\mathcal{A}_\mathfrak{M}=(Q,\Sigma,\delta,q_0,F)$ avec $Q$ et $q_0$ fixés, $\Sigma$ annoncé par l'enseignant, $\delta(p,a)=q$ pour tout $\mathfrak{M}(d_{p,a,q})=$ vrai, et $F=\{q\in Q$ $|$ $\mathfrak{M}(f_q)=$ vrai $\}$
 \end{defi}
-\noindent Il reste maintenant à rendre cet AFD cohérent avec $S$. Pour cela, il est nécessaire que $\mathcal{A}_\mathfrak{M}$ accepte ou rejette tous les mots de $S$ définis par l'ensemble $W=Pos\cup Neg\cup Ante(Ex)$ $\cup$ $Ante(Uni)$ (où, pour un contre-exemple d'implication $X=(u,\mathcal{A})$, on a $Ante(X)=u$). Nous allons donc introduire une nouvelle variable boléenne $x_{u,q}$, pour laquelle $x_{u,q}=$ vrai signifie que $\mathcal{A}_\mathfrak{M}$ atteint l'état $q\in Q$ en lisant le mot $u\in Pref(W)$.\\
+Il reste maintenant à rendre cet AFD cohérent avec $S$. Pour cela, il est nécessaire que $\mathcal{A}_\mathfrak{M}$ accepte ou rejette tous les mots de $S$ définis par l'ensemble $W=Pos\cup Neg\cup Ante(Ex)$ $\cup$ $Ante(Uni)$ (où, pour un contre-exemple d'implication $i=(u,\mathcal{A})$, on a $Ante(i)=u$). Nous allons donc introduire une nouvelle variable boléenne $x_{u,q}$, pour laquelle $x_{u,q}=$ vrai signifie que $\mathcal{A}_\mathfrak{M}$ atteint l'état $q\in Q$ en lisant le mot $u\in Pref(W)$.\\
 
 \noindent Nous pouvons déjà introduire la formule
 \begin{equation}
 \label{boolW1}
 \begin{aligned} x_{\varepsilon , q_0} \end{aligned}
 \end{equation}
-laquelle indique que n'importe quel parcours de $\mathcal{A}_\mathfrak{M}$ commence par l'état $q_0$ et la formule
-\begin{equation}
-\label{boolWtotal}
-\begin{aligned} \bigwedge _{p \in Q}~ \bigwedge _{a \in \varSigma }~ \bigvee _{q \in Q}~ d_{p, a, q} \end{aligned}
-\end{equation}
-qui indique que la fonction transition est totale, autrement dit que $\forall p\in Q, a\in\Sigma, \exists q\in Q, \delta(p,a)=q$. Cette condition est nécessaire dans notre objectif de produire un AFD $\mathcal{A}_\mathfrak{M}$ qui encode tous les préfixes des mots de $W$.\\
-
-\noindent Ensuite, la formule suivante
+laquelle indique que n'importe quel parcours de $\mathcal{A}_\mathfrak{M}$ commence par l'état $q_0$. Ensuite, la formule
 \begin{equation}
 \label{boolW2}
 \begin{aligned} \bigwedge _{u \in Pref (W)}~ \bigwedge _{q \ne q' \in Q}~ \lnot x_{u, q} \vee \lnot x_{u,q'} \end{aligned}
 \end{equation}
-assure que pour chaque mot $u$ de l'ensemble des préfixe des mots de l'échantillon $S$, il existe au plus un état $q$ tel que $x_{u,q}=$ vrai.
-Et la formule
+assure que pour chaque mot $u$ de l'ensemble des préfixe des mots de l'échantillon $S$, il existe au plus un état $q$ tel que $x_{u,q}=$ vrai. D'ailleurs, cet état $q$ est garanti d'exister par la formule \ref{booldeter2} introduite précédemment.
+
+\noindent Pour finir, la formule
 \begin{equation}
 \label{boolW3}
 \begin{aligned} \bigwedge _{ua \in Pref (W)}~ \bigwedge _{p,q \in Q}~ (x_{u, p} \wedge d_{p, a, q}) \rightarrow x_{ua, q} \end{aligned}
 \end{equation}
 décris la manière dont un parcours de l'automate $\mathcal{A}_\mathfrak{M}$ par un mot $ua\in Pref(W)$ fonctionne. Si un état $p$ est atteint en lisant le mot $u$, et qu'une transition $\delta(p,a)=q$ existe (i.e. la variable $d_{p,a,q}=$ vraie) alors l'état $q$ sera atteint en lisant le mot $ua$.\\
 
-\noindent La conjonction de ces quatre formules $\phi^W_n=(\ref{boolW1})\land(\ref{boolWtotal})\land(\ref{boolW2})\land(\ref{boolW3})$ nous permet ainsi de produire un AFD $\mathcal{A}_\mathfrak{M}$ qui permettra d'accepter ou de rejetter tous les mots de $W$.\\
+\noindent La conjonction de ces trois formules $\phi^W_n=(\ref{boolW1})\land(\ref{boolW2})\land(\ref{boolW3})$ nous permet ainsi de produire un AFD $\mathcal{A}_\mathfrak{M}$ qui permettra d'accepter ou de rejetter tous les mots de $W$.\\
 
 \noindent Pour rendre un AFD $\mathcal{A}_\mathfrak{M}$ construit à partir d'un modèle $\mathfrak{M}$ de $\phi_n=\phi_n^{AFD}\land\phi^W_n$ cohérent avec $S$, il reste maintenant à définir des formules boléennes $\phi_n^{Pos}$, $\phi_n^{Neg}$, $\phi_n^{Ex}$ et $\phi_n^{Uni}$ qui assureront le respect des conditions de la définition \ref{consistency}.\\
 
-\noindent La formule suivante pour $\phi_n^{Pos}$ 
+\noindent Premièrement, la formule suivante pour $\phi_n^{Pos}$ 
 \begin{equation}
 \label{boolPos}
 \begin{aligned} \bigwedge_{u\in Pos} \bigwedge_{q\in Q} x_{u,q} \rightarrow f_q \end{aligned}
 \end{equation} 
-permet de s'assurer que les mots de $Pos$ sont acceptés par $\mathcal{A}_\mathfrak{M}$. En effet, si $x_{u,q}=$ vrai, alors $q$ est l'état atteint lors de la lecture du mot $u$ par $\mathcal{A}_\mathfrak{M}$. Par cette formule, une valeur $x_{u,q}=$ vrai impliquera $f_q=$ vrai et donc $q$ sera un état final, ce qui permettra d'accepter $u$. Nous avons donc bien $Pos\subseteq \mathcal{L}(\mathcal{A}_\mathfrak{M})$\\
+permet de s'assurer que les mots de $Pos$ sont acceptés par $\mathcal{A}_\mathfrak{M}$. En effet, si $x_{u,q}=$ vrai, alors $q$ est l'état atteint lors de la lecture du mot $u$ par $\mathcal{A}_\mathfrak{M}$. Par cette formule, une valeur $x_{u,q}=$ vrai impliquera $f_q=$ vrai et donc $q$ sera un état final, ce qui permettra d'accepter $u$. Nous avons donc bien que si $\mathfrak{M}\models \phi_n^{Pos}\land\phi_n^W\land\phi_n^{AFD}$, alors $Pos\subseteq \mathcal{L}(\mathcal{A}_\mathfrak{M})$\\
 
 \noindent A l'inverse, la formule suivante pour $\phi_n^{Neg}$ 
 \begin{equation}
 \label{boolNeg}
 \begin{aligned} \bigwedge_{u\in Neg} \bigwedge_{q\in Q} x_{u,q} \rightarrow \neg f_q \end{aligned}
 \end{equation} 
-assurera, par un raisonnement similaire, que les mots de $Neg$ seront rejetés par $\mathcal{A}_\mathfrak{M}$, et donc que $\mathcal{L}(\mathcal{A}_\mathfrak{M})\cap Neg=\emptyset$.
+assurera, par un raisonnement similaire, que les mots de $Neg$ seront rejetés par $\mathcal{A}_\mathfrak{M}$, et donc que si $\mathfrak{M}\models \phi_n^{Neg}\land\phi_n^W\land\phi_n^{AFD}$, alors $\mathcal{L}(\mathcal{A}_\mathfrak{M})\cap Neg=\emptyset$.\\
 
+\noindent Ensuite, afin de que la formule pour $\phi_n^{Uni}$ assure que pour tout contre-exemple d'implication universelle $i_{Uni}=(u,\mathcal{A}) \in Uni$, avec $\mathcal{A}=(Q^\mathcal{A},\Sigma,q_0^\mathcal{A},\delta^\mathcal{A},F^\mathcal{A})$, si $\mathcal{A}_\mathfrak{M}$ accepte $u$, alors il doit aussi accepter tous les $v\in\mathcal{L}(\mathcal{A})$, nous allons définir des variables boléennes $y_{q,q^\mathcal{A}}$ telles que $y_{q,q^\mathcal{A}}=$ $vrai$ indique qu'il existe un mot $v\in\Sigma^*$ pour lequel un parcours de $\mathcal{A}_\mathfrak{M}$ par $v$ se termine sur l'état $q\in Q$ et un parcours de $\mathcal{A}$ par ce même $v$ se termine sur l'état $q^\mathcal{A}\in Q^\mathcal{A}$. Autrement formulé, ces variables vont nous aider à déterminer les paires d'états atteintes par un parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par $v$. 
+
+\noindent Soit $i_{Uni}=(u,\mathcal{A}) \in Uni$, un contre-exemple d'implication universelle, avec $\mathcal{A}=(Q^\mathcal{A},\Sigma,q_0^\mathcal{A},\delta^\mathcal{A},F^\mathcal{A})$, cette définition est donnée par
+\begin{equation}
+\label{booluni1}
+y_{q_0,q_0^\mathcal{A}}
+\end{equation}
+qui indique que tout parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ commence sur la paire d'état $(q_0,q_0^\mathcal{A})$, et 
+\begin{equation}
+\label{booluni2}
+\begin{aligned}
+\bigwedge_{p,q\in Q}~ \bigwedge_{(p^\mathcal{A},a,q^\mathcal{A})\in\delta^\mathcal{A}}~ (y_{p,p^\mathcal{A}}\land d_{p,a,q})\rightarrow y_{q,q^\mathcal{A}}
+\end{aligned}
+\end{equation}
+qui, de manière analogue à la formule \ref{boolW3}, indique qui si une paire d'états $(p,p^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte par le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot de $\Sigma^*$, alors pour toutes transitions $\delta^\mathcal{A}(p^\mathcal{A},a)=q^\mathcal{A}$, s'il y a une transition $\delta(p,a)=q$ dans $\mathcal{A}_\mathfrak{M}$ (ce qui est toujours le cas par \ref{booldeter2}), alors on peut transitionner via $a\in\Sigma$ vers la paire d'états $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ et donc $y_{q,q^\mathcal{A}}=$ $vrai$.\\
+
+\noindent Grâce à cette définition de $y_{q,q^\mathcal{A}}$, on peut assurer, par la formule 
+\begin{equation}
+\label{booluni3}
+\begin{aligned} \bigl ( \bigvee _{q \in Q}~ x_{u, q} \wedge f_q \bigr ) \rightarrow \bigl ( \bigwedge _{q \in Q}~ \bigwedge _{q^\mathcal{A} \in F^\mathcal A}~ y_{q, q^\mathcal{A}} \rightarrow f_q \bigr ) \end{aligned}
+\end{equation}
+que si un état final est atteint dans $\mathcal{A}_\mathfrak{M}$ en lisant le mot $u$, alors le parcours de $\mathcal{A}_\mathfrak{M}$ pour chaque mot de $\mathcal{L}(\mathcal{A})$ mène aussi sur un état final de $\mathcal{A}_\mathfrak{M}$.\\
+
+\noindent En construisant une formule $\phi_{n,i}^{Uni}=(\ref{booluni1})\land(\ref{booluni2})\land(\ref{booluni3})$ pour chaque contre-exemple d'implication universelle $i\in Uni$, on obtient la définition de la formule $\phi_n^{Uni}=\bigwedge_{i\in (Uni)}\phi^{Uni}_{n,i}$.
+
+\noindent Par la construction que l'on vient de décrire, on a bien que si $\mathfrak{M}\models \phi_n^{Uni}\land\phi_n^W\land\phi_n^{AFD}$, alors $\forall (u,\mathcal{A})\in Uni, u\in\mathcal{L}(\mathcal{\mathcal{A}_\mathfrak{M}})\implies  \mathcal{L}(\mathcal{A})\subseteq \mathcal{L}(\mathcal{\mathcal{A}_\mathfrak{M}})$
 \newpage
 \section{Algorithmes}
 \subsection{Complexité}
 
 $\mathcal{A}_\mathfrak{M}$
+
 
 
 
