@@ -972,7 +972,7 @@ Afin de construire un $AFD$ cohérent avec un échantillon $S$ donné, une nouve
 
 \noindent Autrement formulé, l'objectif de $\phi^S_n$ est d'encoder un $AFD$ $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ où $|Q|=n$ et cohérent avec $S$.\\
 
-\noindent Etant donné $n$, on peut à l'avance fixer l'ensemble des états de cet $AFD$  à $Q=\{0,1,...$ $,n-1\}$ et le sommet de départ $q_0=0$. Ainsi, la formule $\phi^S_n$ n'a plus qu'à en encoder les transitions $\delta$ et les états finaux $F$ (l'alphabet $\Sigma$ est annoncé par l'enseignant). Afin de représenter ces deux ensembles, nous allons introduire les variables boléennes $f_q$ et $d_{p,a,q}$ avec $a\in\Sigma$ et $p,q\in Q$. La variable $f_q$ vraie signifie que $q$ est un état final et $d_{p,a,q}$ vraie signifie que la transition $\delta(p,a)$ existe et transitionne vers $q$. De plus, vu que l'on cherche à encoder un AFD, et non un AFN, il faut imposer des conditions à nos variables, afin de respecter la définition \ref{deter}. Ces conditions s'obtiennent par la formule
+\noindent Etant donné $n$, on peut à l'avance fixer l'ensemble des états de cet $AFD$  à $Q=\{0,1,...$ $,n-1\}$ et le sommet de départ $q_0=0$. Ainsi, la formule $\phi^S_n$ n'a plus qu'à en encoder les transitions $\delta$ et les états finaux $F$ (pour rappel, $\Sigma$ est connu à l'avance par l'élève). Afin de représenter ces deux ensembles, nous allons introduire les variables boléennes $f_q$ et $d_{p,a,q}$ avec $a\in\Sigma$ et $p,q\in Q$. La variable $f_q=$ $vrai$ signifie que $q$ est un état final de $\mathcal{A}$ et $d_{p,a,q}=$ $vrai$ signifie que la transition $\delta(p,a)$ existe et transitionne vers $q$. De plus, vu que l'on cherche à encoder un AFD, et non un AFN, il faut imposer des conditions à nos variables, afin de respecter la définition \ref{deter}. Ces conditions s'obtiennent par la formule
 \begin{equation}
 \label{booldeter1}
 \begin{aligned} \bigwedge _{p \in Q}~ \bigwedge _{a \in \varSigma }~ \bigwedge _{q, q' \in Q, q \ne q'}~ \lnot d_{p, a, q} \vee \lnot d_{p, a, q'} \end{aligned}
@@ -982,32 +982,33 @@ qui assure qu'un unique état $q$ peut être atteint depuis un sommet $p$ en lis
 \label{booldeter2}
 \begin{aligned} \bigwedge _{p \in Q}~ \bigwedge _{a \in \varSigma }~ \bigvee _{q \in Q}~ d_{p, a, q} \end{aligned}
 \end{equation}
-qui indique que la fonction transition est totale, autrement dit que $\forall p\in Q, a\in\Sigma, \exists q\in Q, \delta(p,a)=q$. Bien que cela ne soit pas nécessaire pour encoder une fonction de transition déterministe, cela sera nécessaire pour les formules que nous allons définir par la suite.
+qui indique que la fonction de transition est totale, autrement dit que $\forall p\in Q, a\in\Sigma, \exists q\in Q, \delta(p,a)=q$. Bien que cela ne soit pas nécessaire pour encoder une fonction de transition déterministe, cela sera nécessaire pour les formules que nous allons définir par la suite.
 
 \noindent Ainsi, il est possible pour l'élève de construire un AFD $\mathcal{A}_\mathfrak{M}$ à partir d'un modèle $\mathfrak{M}$ satisfaisant $\phi_n^{AFD}=(\ref{booldeter1})\land(\ref{booldeter2})$.
 \begin{defi}
-Soit $\mathfrak{M}$ un modèle satisfaisant $\phi_n=(\ref{booldeter1})\land(\ref{booldeter2})$, alors on peut construire $\mathcal{A}_\mathfrak{M}=(Q,\Sigma,\delta,q_0,F)$ avec $Q$ et $q_0$ fixés, $\Sigma$ annoncé par l'enseignant, $\delta(p,a)=q$ pour tout $\mathfrak{M}(d_{p,a,q})=$ vrai, et $F=\{q\in Q$ $|$ $\mathfrak{M}(f_q)=$ vrai $\}$
+Soit $\mathfrak{M}$ un modèle satisfaisant $\phi_n=(\ref{booldeter1})\land(\ref{booldeter2})$, alors on peut construire $\mathcal{A}_\mathfrak{M}=(Q,\Sigma,\delta,q_0,F)$ avec $Q$, $q_0$ et $\Sigma$ fixés, $\delta(p,a)=q$ pour tout $\mathfrak{M}(d_{p,a,q})=$ vrai, et $F=\{q\in Q$ $|$ $\mathfrak{M}(f_q)=$ vrai $\}$
 \end{defi}
-Il reste maintenant à rendre cet AFD cohérent avec $S$. Pour cela, il est nécessaire que $\mathcal{A}_\mathfrak{M}$ accepte ou rejette tous les mots de $S$ définis par l'ensemble $W=Pos\cup Neg\cup Ante(Ex)$ $\cup$ $Ante(Uni)$ (où, pour un contre-exemple d'implication $i=(u,\mathcal{A})$, on a $Ante(i)=u$). Nous allons donc introduire une nouvelle variable boléenne $x_{u,q}$, pour laquelle $x_{u,q}=$ vrai signifie que $\mathcal{A}_\mathfrak{M}$ atteint l'état $q\in Q$ en lisant le mot $u\in Pref(W)$.\\
+Il reste maintenant à rendre cet AFD cohérent avec $S$. Pour cela, il est nécessaire que $\mathcal{A}_\mathfrak{M}$ accepte ou rejette tous les mots de $S$, définis par l'ensemble $W=Pos\cup Neg\cup Ante(Ex)$ $\cup$ $Ante(Uni)$ (où, pour un contre-exemple d'implication $i=(u,\mathcal{A})$, on a $Ante(i)=u$). Nous allons donc introduire une nouvelle variable boléenne $x_{u,q}$ pour laquelle $x_{u,q}=$ $vrai$ signifie que $\mathcal{A}_\mathfrak{M}$ atteint l'état $q\in Q$ en lisant le mot $u$ et utiliser cette variable pour décrire le parcours de $\mathcal{A}_\mathfrak{M}$ par les mots de l'ensemble des préfixe de $W$.\\
 
 \noindent Nous pouvons déjà introduire la formule
 \begin{equation}
 \label{boolW1}
 \begin{aligned} x_{\varepsilon , q_0} \end{aligned}
 \end{equation}
-laquelle indique que n'importe quel parcours de $\mathcal{A}_\mathfrak{M}$ commence par l'état $q_0$. Ensuite, la formule
+laquelle indique que n'importe quel parcours de $\mathcal{A}_\mathfrak{M}$ commence par l'état $q_0$.\\ 
+Ensuite, la formule
 \begin{equation}
 \label{boolW2}
 \begin{aligned} \bigwedge _{u \in Pref (W)}~ \bigwedge _{q \ne q' \in Q}~ \lnot x_{u, q} \vee \lnot x_{u,q'} \end{aligned}
 \end{equation}
-assure que pour chaque mot $u$ de l'ensemble des préfixe des mots de l'échantillon $S$, il existe au plus un état $q$ tel que $x_{u,q}=$ vrai. D'ailleurs, cet état $q$ est garanti d'exister par la formule \ref{booldeter2} introduite précédemment.
+assure que pour chaque mot $u$ de l'ensemble des préfixe des mots de l'échantillon $S$, il existe au plus un état $q$ tel que $x_{u,q}=$ $vrai$. D'ailleurs, cet état $q$ est garanti d'exister par la formule \ref{booldeter2} introduite précédemment.
 
 \noindent Pour finir, la formule
 \begin{equation}
 \label{boolW3}
 \begin{aligned} \bigwedge _{ua \in Pref (W)}~ \bigwedge _{p,q \in Q}~ (x_{u, p} \wedge d_{p, a, q}) \rightarrow x_{ua, q} \end{aligned}
 \end{equation}
-décris la manière dont un parcours de l'automate $\mathcal{A}_\mathfrak{M}$ par un mot $ua\in Pref(W)$ fonctionne. Si un état $p$ est atteint en lisant le mot $u$, et qu'une transition $\delta(p,a)=q$ existe (i.e. la variable $d_{p,a,q}=$ vraie) alors l'état $q$ sera atteint en lisant le mot $ua$.\\
+décris la manière dont un parcours de l'automate $\mathcal{A}_\mathfrak{M}$ par un mot $ua\in Pref(W)$ fonctionne. Si un état $p$ est atteint en lisant le mot $u$, et qu'une transition $\delta(p,a)=q$ existe (i.e. la variable $d_{p,a,q}=$ $vrai$) alors l'état $q$ sera atteint en lisant le mot $ua$.\\
 
 \noindent La conjonction de ces trois formules $\phi^W_n=(\ref{boolW1})\land(\ref{boolW2})\land(\ref{boolW3})$ nous permet ainsi de produire un AFD $\mathcal{A}_\mathfrak{M}$ qui permettra d'accepter ou de rejetter tous les mots de $W$.\\
 
@@ -1018,7 +1019,7 @@ décris la manière dont un parcours de l'automate $\mathcal{A}_\mathfrak{M}$ pa
 \label{boolPos}
 \begin{aligned} \bigwedge_{u\in Pos} \bigwedge_{q\in Q} x_{u,q} \rightarrow f_q \end{aligned}
 \end{equation} 
-permet de s'assurer que les mots de $Pos$ sont acceptés par $\mathcal{A}_\mathfrak{M}$. En effet, si $x_{u,q}=$ vrai, alors $q$ est l'état atteint lors de la lecture du mot $u$ par $\mathcal{A}_\mathfrak{M}$. Par cette formule, une valeur $x_{u,q}=$ vrai impliquera $f_q=$ vrai et donc $q$ sera un état final, ce qui permettra d'accepter $u$. Nous avons donc bien que si $\mathfrak{M}\models \phi_n^{Pos}\land\phi_n^W\land\phi_n^{AFD}$, alors $Pos\subseteq \mathcal{L}(\mathcal{A}_\mathfrak{M})$\\
+permet de s'assurer que les mots de $Pos$ sont acceptés par $\mathcal{A}_\mathfrak{M}$. En effet, si $x_{u,q}=$ $vrai$, alors $q$ est l'état atteint lors de la lecture du mot $u$ par $\mathcal{A}_\mathfrak{M}$. Par cette formule, une valeur $x_{u,q}=$ $vrai$ impliquera $f_q=$ $vrai$ et donc $q$ sera un état final, ce qui permettra d'accepter $u$. Nous avons donc bien que si $\mathfrak{M}\models \phi_n^{Pos}\land\phi_n^W\land\phi_n^{AFD}$, alors $Pos\subseteq \mathcal{L}(\mathcal{A}_\mathfrak{M})$\\
 
 \noindent A l'inverse, la formule suivante pour $\phi_n^{Neg}$ 
 \begin{equation}
@@ -1041,23 +1042,78 @@ qui indique que tout parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\m
 \bigwedge_{p,q\in Q}~ \bigwedge_{(p^\mathcal{A},a,q^\mathcal{A})\in\delta^\mathcal{A}}~ (y_{p,p^\mathcal{A}}\land d_{p,a,q})\rightarrow y_{q,q^\mathcal{A}}
 \end{aligned}
 \end{equation}
-qui, de manière analogue à la formule \ref{boolW3}, indique qui si une paire d'états $(p,p^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte par le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot de $\Sigma^*$, alors pour toutes transitions $\delta^\mathcal{A}(p^\mathcal{A},a)=q^\mathcal{A}$, s'il y a une transition $\delta(p,a)=q$ dans $\mathcal{A}_\mathfrak{M}$ (ce qui est toujours le cas par \ref{booldeter2}), alors on peut transitionner via $a\in\Sigma$ vers la paire d'états $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ et donc $y_{q,q^\mathcal{A}}=$ $vrai$.\\
+qui, de manière analogue à la formule \ref{boolW3}, indique qui si une paire d'états $(p,p^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte par le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot de $\Sigma^*$, alors pour toutes transitions $\delta^\mathcal{A}(p^\mathcal{A},a)=q^\mathcal{A}$, s'il y a une transition $\delta(p,a)=q$ dans $\mathcal{A}_\mathfrak{M}$ (ce qui est toujours le cas par \ref{booldeter2} pour $a\in\Sigma$), alors on peut transitionner via $a$ vers la paire d'états $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ et donc $y_{q,q^\mathcal{A}}=$ $vrai$.\\
 
 \noindent Grâce à cette définition de $y_{q,q^\mathcal{A}}$, on peut assurer, par la formule 
 \begin{equation}
 \label{booluni3}
 \begin{aligned} \bigl ( \bigvee _{q \in Q}~ x_{u, q} \wedge f_q \bigr ) \rightarrow \bigl ( \bigwedge _{q \in Q}~ \bigwedge _{q^\mathcal{A} \in F^\mathcal A}~ y_{q, q^\mathcal{A}} \rightarrow f_q \bigr ) \end{aligned}
 \end{equation}
-que si un état final est atteint dans $\mathcal{A}_\mathfrak{M}$ en lisant le mot $u$, alors le parcours de $\mathcal{A}_\mathfrak{M}$ pour chaque mot de $\mathcal{L}(\mathcal{A})$ mène aussi sur un état final de $\mathcal{A}_\mathfrak{M}$.\\
+que si un état final est atteint dans $\mathcal{A}_\mathfrak{M}$ en lisant le mot $u$, alors le parcours de $\mathcal{A}_\mathfrak{M}$ pour chaque mot de $\mathcal{L}(\mathcal{A})$ mène aussi à un état final de $\mathcal{A}_\mathfrak{M}$.\\
 
 \noindent En construisant une formule $\phi_{n,i}^{Uni}=(\ref{booluni1})\land(\ref{booluni2})\land(\ref{booluni3})$ pour chaque contre-exemple d'implication universelle $i\in Uni$, on obtient la définition de la formule $\phi_n^{Uni}=\bigwedge_{i\in (Uni)}\phi^{Uni}_{n,i}$.
 
-\noindent Par la construction que l'on vient de décrire, on a bien que si $\mathfrak{M}\models \phi_n^{Uni}\land\phi_n^W\land\phi_n^{AFD}$, alors $\forall (u,\mathcal{A})\in Uni, u\in\mathcal{L}(\mathcal{\mathcal{A}_\mathfrak{M}})\implies  \mathcal{L}(\mathcal{A})\subseteq \mathcal{L}(\mathcal{\mathcal{A}_\mathfrak{M}})$
+\noindent Par la construction que l'on vient de décrire, on a bien que si $\mathfrak{M}\models \phi_n^{Uni}\land\phi_n^W\land\phi_n^{AFD}$, alors $\forall (u,\mathcal{A})\in Uni, u\in\mathcal{L}(\mathcal{\mathcal{A}_\mathfrak{M}})\implies  \mathcal{L}(\mathcal{A})\subseteq \mathcal{L}(\mathcal{\mathcal{A}_\mathfrak{M}})$\\
+
+\noindent Cependant, il est important de noter que les variables $y_{q,q^\mathcal{A}}$ ne décrivent pas exactement le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par les mots de $\mathcal{L}(\mathcal{A})$. En effet, étant donné que $\mathcal{A}$ est non-déterministe, une transition $(p^\mathcal{A},\epsilon,q^\mathcal{A})\in\delta^\mathcal{A}$ pourrait exister, ce qui rendrait la prémisse de la formule \ref{booluni2} fausse car $\mathcal{A}_\mathfrak{M}$ est déterministe et donc ne possède pas de transitions via $\epsilon$. L'implication aura donc pour conséquence $y_{q,q^\mathcal{A}}=$ $vrai$ sans qu'un mot $v$ existe tel que le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par $v$ se termine sur la paire d'états $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$.\\
+La formule $\phi_n^{Uni}$ reste cependant correcte. En effet, dans l'objectif d'accepter tous les mots $v\in\mathcal{L}(\mathcal{A})$, il n'est pas nécessaire de savoir s'ils existent. Par contre, afin que la formule $\phi_n^{Ex}$ que nous allons construire par la suite assure bien que, pour un contre-exemple d'implication existentielle $i_{Ex}=(u,\mathcal{A})\in Ex$, si $u\in\mathcal{L}(\mathcal{A}_\mathfrak{M})$, alors il existe au moins un $v\in\mathcal{L}(\mathcal{A})$ tel que $v\in\mathcal{L}(\mathcal{A}_\mathfrak{M})$, il n'est plus suffisant de se baser sur les variables $y_{q,q^\mathcal{A}}$ car elle n'assurent pas l'existence d'un tel mot. Nous allons devoir procéder de manière plus robuste.\\
+
+\noindent Soit $i_{Ex}=(u,\mathcal{A})\in Ex$ un contre-exemple d'implication existentiel, avec $\mathcal{A}=(Q^\mathcal{A},\Sigma,q_0^\mathcal{A},\delta^\mathcal{A},F^\mathcal{A})$, nous allons maintenant introduire une dernière variable boléenne $z_{q,q^\mathcal{A},\mathnormal{l}}$ avec $q\in Q$, $q^\mathcal{A}\in Q^\mathcal{A}$ et $\mathnormal{l}\in \{0,...$ $,k\}$, $k\in\mathbb{N}$ pour laquelle $z_{q,q^\mathcal{A},\mathnormal{l}}=$ $vrai$ indique qu'il existe un mot $v\in\Sigma^*$ de longueur $|v|=\mathnormal{l}$ tel que le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par $v$ se termine sur la paire d'états $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$.\\
+
+\noindent Afin que le nombre de variable nécessaire soit finit, il faut déterminer une valeur maximale pour $\mathnormal{l}$. Il faut donc trouver la plus petite longueur maximale de mot de $\Sigma^*$ pour laquelle $z_{q,q^\mathcal{A},\mathnormal{l}}$ permet de décrire tous les parcours en  parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$. Nous allons déterminer cette valeur sur base d'une simple observation : si, lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot $v\in\Sigma$ un état $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteint deux fois, alors le facteur $w\in\Sigma^*$ de $v$ entre cette répétition peut être retiré de $v$ sans que $z_{q,q^\mathcal{A},\mathnormal{l}}$ ne perde d'information. Ainsi, la valeur maximale pour $\mathnormal{l}$ est la longueur maximale de mot telle que lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par ce mot, chaque paire d'état $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte au plus une fois. Cette valeur sera donc donnée par $k=|Q||Q^\mathcal{A}|-1=n|Q^\mathcal{A}|-1$\\
+
+Maintenant que nous avons réussi à limiter le nombre de ces variables, passons à leur définition.\\
+Pour commencer, la formule  
+\begin{equation}
+\label{boolex1}
+\begin{aligned}
+z_{q_0,q_0^\mathcal{A},0}
+\end{aligned}
+\end{equation}
+permet d'indiquer, de manière similaire aux formules \ref{boolW1} et \ref{booluni1}, qu'un parcours en parallèle $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ commencera sur la paire d'états $(q_0,q_0^\mathcal{A})\in Q\times Q^\mathcal{A}$.\\
+Ajouté à cela, la formule 
+\begin{equation}
+\label{boolex2}
+\begin{aligned}
+\bigwedge_{(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}\setminus \{(q_0,q_0^\mathcal{A})\}}~ \neg z_{q,q^\mathcal{A},0}
+\end{aligned}
+\end{equation}
+assure que toutes les autres variables $z_{q,q^\mathcal{A},0}=$ $faux$ car le seul parcours valide par le mot $\epsilon$ (i.e. par un mot de longueur $0$) est celui qui amène à la paire d'états initiaux comme décrit par \ref{boolex1}.\\
+Ensuite, la formule
+\begin{equation}
+\label{boolex3}
+\begin{aligned}
+\bigwedge_{p,q\in Q}~ \bigwedge_{(p^\mathcal{A},a,q^\mathcal{A})\in\delta^\mathcal{A}}~ \bigwedge_{\mathnormal{l}\in\{0,... ,k-1\}}~ (z_{p,p^\mathcal{A}, \mathnormal{l}}\land d_{p,a,q})\rightarrow z_{q,q^\mathcal{A},\mathnormal{l}+1}
+\end{aligned}
+\end{equation}
+décrit, de manière analogue à \ref{boolW2} et \ref{booluni2}, que si la paire d'état $(p,p^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot de longueur $\mathnormal{l}$, et qu'il existe les transitions $\delta (p,a)=q$ et $\delta^\mathcal{A}(p^\mathcal{A},a)=q^\mathcal{A}$ avec $q\in Q$ et $q^\mathcal{A}\in Q^\mathcal{A}$, alors on atteint la paire d'états $(q,q^\mathcal{A})$ par le parcours d'un mot de longueur $\mathnormal{l}+1$ et donc $z_{q,q^\mathcal{A},\mathnormal{l}+1}=$ $vrai$.\\
+Pour finir, afin d'assurer l'existence de ce mot de longueur $\mathnormal{l}+1$, la formule 
+\begin{equation}
+\label{boolex4}
+\begin{aligned}
+\bigl ( \bigwedge_{q\in Q}~ \bigwedge_{q^\mathcal{A}\in Q^\mathcal{A}}~ \bigwedge_{\mathnormal{l}\in\{0,... ,k-1\}}~ z_{q,q^\mathcal{A},\mathnormal{l}+1} \bigr ) \rightarrow \bigr ( \bigvee_{p\in Q}~ \bigvee_{(p^\mathcal{A},a,q^\mathcal{A})\in\delta^\mathcal{A}}~ d_{p,a,q}\land z_{p,p^\mathcal{A},\mathnormal{l}} \bigr )
+\end{aligned}
+\end{equation}
+empêche $z_{q,q^\mathcal{A},\mathnormal{l}+1}=$ $vrai$ s'il n'y a pas de paire d'états $(p,p^\mathcal{A})$ atteinte par un mot de longueur $\mathnormal{l}$ tel que $z_{p,p^\mathcal{A},\mathnormal{l}}=$ $vrai$ ou qu'il existe pas les transitions $\delta (p,a)=q$ et $\delta^\mathcal{A}(p^\mathcal{A},a)=q^\mathcal{A}$.\\
+
+\noindent Grâce à cette définition de $z_{q,q^\mathcal{A},\mathnormal{l}}$, on peut assurer, par la formule
+\begin{equation}
+\label{boolex5}
+\begin{aligned}
+\bigl ( \bigvee_{q\in Q}~ x_{u,q}\land f_q \bigr ) \rightarrow \bigl ( \bigvee_{q\in Q}~ \bigvee_{q^\mathcal{A}\in Q^\mathcal{A}}~ \bigvee_{\mathnormal{l}\in\{0,...,k\}}~ z_{q,q^\mathcal{A},\mathnormal{l}}\land f_q \bigr )
+\end{aligned}
+\end{equation}
+que, si un mot $u$ est accepté par $\mathcal{A}_\mathfrak{M}$, alors au moins un des mots $v\in\mathcal{L}(\mathcal{A})$ menant à un état final dans $\mathcal{A}$, mènera à un état final dans $\mathcal{A}_\mathfrak{M}$ et sera donc accepté.\\
+
+\noindent En construisant une formule $\phi_{n,i}^{Ex}=(\ref{boolex1})\land(\ref{boolex2})\land(\ref{boolex3})\land(\ref{boolex4})\land(\ref{boolex5})$ pour chaque contre-exemple d'implication existentiel $i\in Ex$, on obtient la définition de la formule $\phi^{Ex}_n=\bigwedge_{i\in(Ex)}\phi_{n,i}^{Ex}$.\\
+Par la construction de cette formule, on a bien que si $\mathfrak{M}\models\phi_n^{Ex}\land\phi^{W}_n\land\phi^{AFD}_n$, alors $\forall(u,\mathcal{A})\in Ex, u\in\mathcal{L}(\mathcal{A})\implies \mathcal{L}(\mathcal{A}_\mathfrak{M})\cap\mathcal{L}(\mathcal{A})\neq\emptyset$\\
+
+Ainsi, nous obtenons une formule $\phi^S_n=\phi_n^{AFD}\land\phi_n^{W}\land\phi_n^{Pos}\land\phi_n^{Neg}\land\phi_n^{Ex}\land\phi_n^{Uni}$ dont un modèle $\mathfrak{M}$ permettra de construire un $AFD$ $\mathcal{A}_\mathfrak{M}$ à $n$ états et cohérent avec l'échantillon $S$. 
 \newpage
 \section{Algorithmes}
 \subsection{Complexité}
 
-$\mathcal{A}_\mathfrak{M}$
+
 
 
 
