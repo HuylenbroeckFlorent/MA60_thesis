@@ -1289,6 +1289,29 @@ La fermeture universelle nécessite aussi trois étapes. L'enseignant commence p
 \end{algorithmic}
 \end{algorithm}
 
+\newpage
+\noindent Pourquoi a-t'on besoin de $y_{q,q^\mathcal{A}}$ et $z_{q,q^\mathcal{A},\mathnormal{l}}$ si\\
+
+
+\noindent Soit $(u,\mathcal{A})$ contre-exemple universel et $n$ nombre d'état de l'AFD à conjecturer. \textbf{Si $\mathcal{L}(\mathcal{A})$ est fini}, en supposant qu'on a construit $x_u,q$ pour les mots de $Pref(\mathcal{L}(\mathcal{A}))$ en plus de $Pref(W)$.
+\begin{equation}
+\begin{aligned}
+\bigl ( \bigvee_{p\in Q}~ x_{u,p}\land f_p \bigr ) \implies \bigl ( \bigwedge_{v\in\mathcal{L}(\mathcal{A}), |v|<=n|Q^\mathcal{A}|}~ x_{v,q}\implies f_q \bigr )
+\end{aligned}
+\end{equation}
+
+\noindent Soit $(u,\mathcal{A})$ contre-exemple existentiel et $n$ nombre d'état de l'AFD à conjecturer. \textbf{Si $\mathcal{L}(\mathcal{A})$ est fini}, en supposant qu'on a construit $x_u,q$ pour les mots de $Pref(\mathcal{L}(\mathcal{A}))$ en plus de $Pref(W)$.
+\begin{equation}
+\begin{aligned}
+\bigl ( \bigvee_{p\in Q}~ x_{u,p}\land f_p \bigr ) \implies \bigl ( \bigvee_{v\in\mathcal{L}(\mathcal{A}), |v|<=n|Q^\mathcal{A}|}~ x_{v,q}\implies f_q \bigr )
+\end{aligned}
+\end{equation}\\
+
+\noindent ?
+
+Si $\mathcal{L}(\mathcal{A})$ infini alors je comprends l'utilité de $y$.
+
+
 
 
 

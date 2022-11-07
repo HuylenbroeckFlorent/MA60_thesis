@@ -5,6 +5,7 @@ import transducer.*;
 public class Main{
 	public static void main(String[] args){
 		int k = 2;
+		char[] alphabet = {'e','s','l'};
 		RegExp v0 = new RegExp("sl*");
 		RegExp v1 = new RegExp("el*");
 		RegExp i = new RegExp("sl{"+(k-1)+"}l+");
@@ -35,6 +36,14 @@ public class Main{
 		// Automaton w = new RegExp("(sl{"+(k-1)+"}l+)|(el{"+(k)+"}l+)").toAutomaton();
 		// System.out.println(sp.checkIfWinningSet(w, s));
 
-		System.out.println(Learner.pref(new HashSet<String>(Arrays.asList("Florent", "Charlotte"))));
+		Learner learner = new Learner(alphabet);
+		Automaton w;
+		boolean isWinningSet = false;
+		do{
+			w = learner.conjecture();
+			isWinningSet = sp.checkIfWinningSet(w, learner.s);
+		}while(!isWinningSet);
+
+		System.out.println(w);
 	}
 }

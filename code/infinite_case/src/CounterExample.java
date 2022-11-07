@@ -24,7 +24,7 @@ public class CounterExample{
             return SpecialOperations.getFiniteStrings(a);
         }
         else{
-            return new Set<String>();
+            return new HashSet<String>();
         }
     }
 
