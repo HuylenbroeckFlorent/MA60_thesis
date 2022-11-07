@@ -688,10 +688,10 @@ Une \emph{arène infinie} est une arène $A=(V_0, V_1, E)$ pour laquelle on auto
 
 \section{Alphabets, automates et transducteurs}
 Un \emph{alphabet} $\Sigma$ est un ensemble fini, non vide, de symboles. Un \emph{mot} de longueur $n\in\mathbb{N}$ sur l'alphabet $\Sigma$ est une séquence de symboles $u=u_1u_2...u_n$ avec $\forall i\in\mathbb{N}, u_i\in \Sigma$. Le mot vide est noté $\epsilon$.\\
-La \emph{concaténation} de deux mots $u=u_1u_2...u_n$ et $v=v_1v_2...v_m$ ($n,m\in\mathbb{N}$) est le mot $w=u\cdot v=u_1u_2...u_nv_1v_2...v_m$ de longueur $n+m$. L'ensemble $\Sigma^*$ contient tous les mots possibles sur l'alphabet $\Sigma$.\\
+La \emph{concaténation} de deux mots $u=u_1u_2...u_n$ et $v=v_1v_2...v_m$, avec $n,m\in\mathbb{N}$ est le mot $w=u\cdot v=u_1u_2...u_nv_1v_2...v_m$ de longueur $n+m$. L'ensemble $\Sigma^*$ contient tous les mots possibles sur l'alphabet $\Sigma$.\\
 Un \emph{facteur} $v\in\Sigma^*$ d'un mot $u\in\Sigma^*$ est un mot tel que $\exists w_1,w_2\in\Sigma^*,w_1vw_2=u$.\\
 Un \emph{préfixe} $v\in\Sigma^*$ d'un mot $u\in\Sigma^*$ est un mot tel que $\exists w\in\Sigma^*, vw=u$.\\
-Un sous ensemble $L\subseteq \Sigma^*$ est appelé un langage.
+Un sous-ensemble $L\subseteq \Sigma^*$ est appelé un langage.
 \begin{defi}
 L'ensemble des préfixes d'un langage $L\subseteq\Sigma^*$ est l'ensemble $Pref(L)=\{u\in\Sigma^*$ $|$ $\exists v\in\Sigma^*, uv\in L\}$.
 \end{defi}
@@ -700,7 +700,7 @@ L'ensemble des préfixes d'un langage $L\subseteq\Sigma^*$ est l'ensemble $Pref(
 \begin{itemize}
 	\item $Q$ est un ensemble fini, non vide, d'états.
 	\item $\Sigma$ est l'alphabet lu par l'automate.
-	\item $\delta$ est une fonction $Q\times\Sigma\to Q$ appelée \emph{fonction de transition} de l'automate. L'expression $\delta(q_1,u)=q_2$ indique que l'automate transitionne de l'état $q_1$ à l'état $q_2$ quand le mot $u\in\Sigma^*$ est lu en entrée.
+	\item $\delta$ est une fonction $Q\times\Sigma\to Q$ appelée \emph{fonction de transition} de l'automate. L'expression $\delta(q_1,u)=q_2$ indique que l'automate transitionne de l'état $q_1$ à l'état $q_2$ quand le mot $u\in\Sigma^*$ est lu depuis l'état $q_1$.
 	\item $q_0\subseteq Q$ est l'ensemble des états initiaux.
 	\item $F\subseteq Q$ est l'ensemble des états finaux.
 \end{itemize}
@@ -708,13 +708,13 @@ L'ensemble des préfixes d'un langage $L\subseteq\Sigma^*$ est l'ensemble $Pref(
 \label{deter}
 Un automate $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ est \emph{déterministe} si $\forall q,p_1,p_2\in Q, a\in\Sigma^*, \delta(q,a)=p_1$ et $\delta(q,a)=p_2$ implique que $p_1=p_2$.
 \end{defi}
-Un automate fini qui n'est pas déterministe est appelé \emph{automate fini non déterministe (AFD)}.\\
+Un automate fini qui n'est pas déterministe est appelé \emph{automate fini non déterministe (AFN)}.\\
 
 \noindent Un \emph{parcours} d'un automate par un mot $u=u_1u_2...u_n$, $n\in\mathbb{N}$ est une séquence d'états $q_0q_1...q_n$ telle que $\forall i\in\mathbb{N}, \delta(q_i,u_i)=q_{i+1}$. Un mot $u$ est \emph{accepté} par un automate $\mathcal{A}$ si le parcours de l'automate par ce mot se termine sur un état final $q\in F$. L'ensemble des mots acceptés par un automate forme le langage $\mathcal{L}(\mathcal{A})$ de cet automate. Un langage $L$ est dit \emph{régulier} s'il existe un automate fini $\mathcal{A}$ tel que $\mathcal{L}(\mathcal{A})=L$.\\
 
 
 \noindent Enfin, un \emph{transducteur} est un automate fini non déterministe $\mathcal{T}=(Q,\hat{\Sigma},\delta,q_0,F)$ où $\hat{\Sigma}=(\Sigma\cup\{\epsilon\})\times(\Gamma\cup\{\epsilon\})$ avec $\Sigma$ et $\Gamma$ deux alphabets. Un parcours d'un transducteur ne se fait pas par un mot mais par une paire de mots $(u,v)$ avec $u\in\Sigma^*$ et $v\in\Gamma^*$ afin de produire une séquence $q_0q_1...q_n$, $n\in\mathbb{N}$ telle que $\forall i\in\mathbb{N}, \delta(q_i,(u_i,v_i))=q_{i+1}$. Les mots $u$ et $v$ peuvent être de longueur différente car $\epsilon$ est inclu aux deux alphabets.\\
-Un transducteur, en acceptant des paires de mots, permet de définir une \emph{relation} $R$ entre deux langages. L'ensemble des paires de mots acceptées par un transducteur forme la relation $\mathcal{R}(\mathcal{T})$ de ce transducteur. Une relation est dite \emph{régulière} s'il exite un transducteur $\mathcal{T}$ tel que $\mathcal{R}(\mathcal{T})=R$.
+Un transducteur, en acceptant des paires de mots, permet de définir une \emph{relation} $R$ entre deux langages. L'ensemble des paires de mots acceptées par un transducteur forme la relation $\mathcal{R}(\mathcal{T})$ de ce transducteur. Une relation est dite \emph{régulière} s'il existe un transducteur $\mathcal{T}$ tel que $\mathcal{R}(\mathcal{T})=R$.
 \begin{defi}[Image d'une relation]
 Soit $\mathcal{T}$ un transducteur acceptant la relation $R$ sur $\hat{\Sigma}=(\Sigma\cup\{\epsilon\})\times(\Gamma\cup\{\epsilon\})$ et $\mathcal{A}$ un AFN, alors\\ $\mathcal{R}(\mathcal{T})(\mathcal{L}(\mathcal{A}))=\{v\in\Gamma^*$ $|$ $\exists u\in\Sigma^*, (u,v)\in\mathcal{R}(\mathcal{T})\}$ est l'image du langage $\mathcal{L}(\mathcal{A})$ par la relation $R$.
 \end{defi}
@@ -723,7 +723,7 @@ Soit $\mathcal{T}=(Q,\hat{\Sigma},\delta,q_0,F)$ un transducteur acceptant la re
 \end{defi}
 
 \section{Exemple de jeu de sûreté infini}
-Afin d'illustrer le cas infini, nous allons considérer l'arène infinie simple représentée à la figure \ref{fig:infinite-arena}. Il s'agit d'un tableau infini, à une dimension, fermé à gauche. Chaque sommet est décrit par le numéro du joueur à qui il appartient, et un nombre $k\in\mathbb{N}$. Il existe un sommet appartenant à chaque joueur pour chaque valeur possible de $k$ et ceux-ci sont arrangé dans l'ordre croissant de cette valeur, en alternant les sommets de $j_0$ et $j_1$. L'ensemble $F$ est représenté par les sommets grisés. Il est décrit par une certaine valeur non nulle de $k$, à partir de laquelle tous les sommets font partie de $F$ (à la figure \ref{fig:infinite-arena}, $k=2$).
+Afin d'illustrer le cas infini, nous allons considérer l'arène infinie simple représentée à la figure \ref{fig:infinite-arena}. Il s'agit d'un tableau infini, à une dimension, fermé à gauche. Chaque sommet est décrit par le numéro du joueur à qui il appartient, et un nombre $k\in\mathbb{N}$. Il existe un sommet appartenant à chaque joueur pour chaque valeur possible de $k$ et ceux-ci sont arrangés dans l'ordre croissant de cette valeur, en alternant les sommets de $j_0$ et $j_1$. L'ensemble $F$ est représenté par les sommets grisés. Il est décrit par une certaine valeur non nulle de $k$, à partir de laquelle tous les sommets font partie de $F$ (à la figure \ref{fig:infinite-arena}, $k=2$).
 
 \begin{figure}[H]
 \centering
@@ -764,7 +764,7 @@ Afin d'illustrer le cas infini, nous allons considérer l'arène infinie simple 
 \caption{Exemple d'arène infinie}
 \label{fig:infinite-arena}
 \end{figure}
-\noindent Nous appelerons le jeu joué sur cette arène $\mathfrak{G}_k$. Les règles du jeu sont différentes pour cet exemple. Les joueurs bougent le pion chacun à leur tour. Le joueur $j_0$ ne peut déplacer le pion que vers la droite ou ne pas le déplacer du tout, et le joueur $j_1$ ne peut le déplacer que vers la gauche (s'il n'est pas arrivé au bout de l'arène) ou ne pas le déplacer. Au début de la partie, le pion est placé sur un sommet appartenant à $F$, et le joueur $j_0$ commence. Les objectifs des joueurs restent les mêmes, $j_0$ veut rester dans $F$ tandis que $j_1$ essaie d'en sortir. Cet exemple est simple car le joueur $j_0$ peut gagner, peu importe $F$, en choisissant de bouger le pion à droite à chaque coup. Il reste néanmoins intéressant à résoudre.
+\noindent Nous appellerons le jeu joué sur cette arène $\mathfrak{G}_k$. Les règles du jeu sont différentes pour cet exemple. Les joueurs bougent le pion chacun à leur tour. Le joueur $j_0$ ne peut déplacer le pion que vers la droite ou ne pas le déplacer du tout, et le joueur $j_1$ ne peut le déplacer que vers la gauche (s'il n'est pas arrivé au bout de l'arène) ou ne pas le déplacer. Au début de la partie, le pion est placé sur un sommet appartenant à $F$, et le joueur $j_0$ commence. Les objectifs des joueurs restent les mêmes, $j_0$ veut rester dans $F$ tandis que $j_1$ essaie d'en sortir. Cet exemple est simple car le joueur $j_0$ peut gagner, peu importe $F$, en choisissant de bouger le pion à droite à chaque coup. Il reste néanmoins intéressant à résoudre.
 
 \section{Jeux de sûreté rationnels}
 Un jeu de sûreté rationnel est une représentation symbolique d'un jeu de sûreté, basée sur les langages rationnels et les relations rationnelles.
@@ -906,7 +906,7 @@ Un \emph{jeu de sûreté rationnel} sur l'alphabet $\Sigma$ est un jeu $\mathfra
 
 
 \section{Apprentissage}\label{sectionapprentissage}
-Résoudre un jeu de sûreté rationnel consiste à produire un AFD qui acceptera tous les mots représentant les sommets de l'ensemble gagnant $W_0$. Afin de produire un tel automate, nous allons utiliser le principe d'\emph{apprentissage}. Cet apprentissage à lieu entre un \emph{enseignant}, lequel est en connaisance du jeu de sûreté que l'on veut résoudre, et un \emph{élève}, cherchant à en apprendre l'AFD décrivant l'ensemble gagnant. On suppose que l'alphabet utilisé est connu par les deux partis avant que l'apprentissage commence.\\
+Résoudre un jeu de sûreté rationnel consiste à produire un AFD qui acceptera tous les mots représentant les sommets de l'ensemble gagnant $W_0$. Afin de produire un tel automate, nous allons utiliser le principe d'\emph{apprentissage}. Cet apprentissage à lieu entre un \emph{enseignant}, lequel est en connaissance du jeu de sûreté que l'on veut résoudre, et un \emph{élève}, cherchant à en apprendre l'AFD décrivant l'ensemble gagnant. On suppose que l'alphabet utilisé est connu à l'avance par les deux partis\\
 
 Avant de commencer l'apprentissage, \cite{NeiderAutomaton} suggère d'apporter quelques précisions à la définition \ref{finitewinningset} d'ensemble gagnant.
 \begin{defi}
@@ -920,15 +920,15 @@ Soit $\mathfrak{G}=(A,I,F)$ un jeu, avec $A=(V_0, V_1, E)$, l'\emph{ensemble gag
 \end{itemize}
 Où \emph{Succ($v$)} est la fonction retournant les successeurs du sommet $v$.
 \end{defi}
-L'apprentissage se fait à l'intérieur d'une boucle de type \emph{CEGIS} (Counter-example guided inductive synthesis, ou synthèse inductive guidée par le contre-exemple). A chaque itération de cette boucle, l'élève conjecture un AFD $\mathcal{C}$ et l'enseignant vérifie à l'aide de la définition \ref{infinitewinningset} si $\mathcal{L}(\mathcal{C})$ est un ensemble gagnant. Si $\mathcal{L}(\mathcal{C})$ est un ensemble gagnant, alors l'enseignant répond "\emph{oui}" et l'apprentissage s'arrête. Sinon, l'enseignant retourne un \emph{contre-exemple} pour une des règles non respectées de la définition \ref{infinitewinningset} et l'apprentissage se poursuit dans l'itération suivante. Plus formellement, la définition suivante établi le protocole de vérification par l'enseignant :
+L'apprentissage se fait à l'intérieur d'une boucle de type \emph{CEGIS} (Counter-example guided inductive synthesis, ou synthèse inductive guidée par le contre-exemple). A chaque itération de cette boucle, l'élève conjecture un AFD $\mathcal{C}$ et l'enseignant vérifie à l'aide de la définition \ref{infinitewinningset} si $\mathcal{L}(\mathcal{C})$ est un ensemble gagnant. Si c'est le cas l'enseignant répond "\emph{oui}" et l'apprentissage s'arrête. Sinon, l'enseignant retourne un \emph{contre-exemple} pour une des règles non respectées de la définition \ref{infinitewinningset} et l'apprentissage se poursuit dans l'itération suivante. Plus formellement, la définition suivante établit le protocole de vérification par l'enseignant :
 \begin{defi}{Enseignant pour jeux de sûreté rationnels\\}
 \label{teacher}
 Soit $\mathfrak{G}_\Sigma=(A_\Sigma, I, F)$, un jeu de sûreté rationnel sur $\Sigma$, avec $A_\Sigma=(V_0,V_1,E)$. Soit un AFD $\mathcal{C}$. Un enseignant pour $\mathfrak{G}_\Sigma$ confronté à $\mathcal{C}$ va effectuer les vérifications suivantes :\\
 \begin{itemize}
 \item (1) Si $I\nsubseteq \mathcal{L}(\mathcal{C})$, alors l'enseignant retourne un \emph{contre-exemple positif} $u\in I\setminus \mathcal{L}(\mathcal{C})$. Sinon,
 \item (2) Si $\mathcal{L}(\mathcal{C}) \nsubseteq F$, alors l'enseignant retourne un \emph{contre-exemple négatif} $u\in \mathcal{L}(\mathcal{C})\setminus F$. Sinon, 
-\item (3) Si $\exists u\in \mathcal{L}(\mathcal{C})\cap V_0,$ $Succ(u)\cap \mathcal{L}(\mathcal{C})=\emptyset$ alors l'enseignant choisi ce $u$ et retourne un \emph{contre-exemple d'implication existentielle} $(u, \mathcal{A})\in \Sigma^* \times AFN_\Sigma$ où $\mathcal{L}(\mathcal{A})=Succ(u)$. Sinon, 
-\item (4) Si $\exists u\in \mathcal{L}(\mathcal{C})\cap V_1,$ $Succ(u)\nsubseteq \mathcal{L}(\mathcal{C})$, alors l'enseignant choisi ce $u$ et retourne un \emph{contre-exemple d'implication universelle} $(u, \mathcal{A})\in \Sigma^* \times AFN_\Sigma$ où $\mathcal{L}(\mathcal{A})=Succ(u)$.
+\item (3) Si $\exists u\in \mathcal{L}(\mathcal{C})\cap V_0,$ $Succ(u)\cap \mathcal{L}(\mathcal{C})=\emptyset$ alors l'enseignant choisit ce $u$ et retourne un \emph{contre-exemple d'implication existentielle} $(u, \mathcal{A})\in \Sigma^* \times AFN_\Sigma$ où $\mathcal{L}(\mathcal{A})=Succ(u)$. Sinon, 
+\item (4) Si $\exists u\in \mathcal{L}(\mathcal{C})\cap V_1,$ $Succ(u)\nsubseteq \mathcal{L}(\mathcal{C})$, alors l'enseignant choisit ce $u$ et retourne un \emph{contre-exemple d'implication universelle} $(u, \mathcal{A})\in \Sigma^* \times AFN_\Sigma$ où $\mathcal{L}(\mathcal{A})=Succ(u)$.
 \end{itemize}
 Où 
 \begin{itemize}
@@ -938,24 +938,23 @@ Où
 \item Un \emph{contre-exemple d'implication existentielle} $(u, \mathcal{A})$ signifie que si $\mathcal{C}$ accepte $u$, alors au moins un mot $v \in \mathcal{L}(\mathcal{A})$ doit, lui aussi, être accepté, et cela n'a pas été respecté.
 \item Un \emph{contre-exemple d'implication universelle} $(u, \mathcal{A})$ signifie que si $\mathcal{C}$ accepte $u$, alors tous les mots $v \in \mathcal{L}(\mathcal{A})$ doivent, eux aussi, être acceptés, et cela n'a pas été respecté.\\
 \end{itemize}
-
 \noindent Si les 4 vérifications ne retournent pas de contre-exemples, alors l'enseignant répond "\emph{oui}".\\
 L'ordre des vérifications n'a pas d'importance.
 \end{defi}
 Afin de se souvenir de ces contre-exemples, l'élève les enregistre dans un \emph{échantillon}, lequel est un 4-uple $S=(Pos, Neg, Ex, Uni)$ composé de 4 ensembles finis. L'ensemble $Pos$ (resp. $Neg$) $\subset\Sigma^*$ contient les contre-exemples positifs (resp. négatifs), et l'ensemble $Ex$ (resp. $Uni$) $\subset(\Sigma^*\times AFN_\Sigma)$ contient les contre-exemples d'implication existentielle (resp. universelle).
 \begin{defi}
-Un échantillon $S=(Pos, Neg, Ex, Uni)$ est \emph{sans contradicitions} si \begin{enumerate}
+Un échantillon $S=(Pos, Neg, Ex, Uni)$ est \emph{sans contradictions} si \begin{enumerate}
 \item $Pos\cap Neg=\emptyset$.\\ 
-Si $Pos$ et $Neg$ ne sont pas disjoints, alors les mots $u\in Pos\cap Neg$ devraient à la fois être acceptés et rejetés par l'élève.
+Si $Pos$ et $Neg$ ne sont pas disjoints, alors les mots $u\in Pos\cap Neg$ devraient à la fois être acceptés et rejetés par l'ensemble gagnant.
 \item La fermeture transitive (alternée) des contre-exemples d'implication de $Ex$ et $Uni$ ne contient pas de paire de mots $(u,v)$ telle que $u\in Pos \land v\in Neg$.\\
-Si un telle paire existe, alors à nouveau, le mot $v$ devrait à la fois être accepté et rejeté par l'élève.
+Si un telle paire existe, alors à nouveau, le mot $v$ devrait à la fois être accepté et rejeté par l'ensemble gagnant.
 
 \end{enumerate}
 \end{defi}
 \noindent Ainsi, l'élève devra s'assurer que les AFD qu'il soumet à l'enseignant sont \emph{cohérents} avec l'échantillon $S$.
 \begin{defi}
 \label{consistency}
-Soit $\mathcal{C}$ un $AFD$, $S=(Pos, Neg, Ex, Uni)$ un echantillon sans contradictions. On dit que $\mathcal{C}$ est \emph{cohérent} avec $S$ si
+Soit $\mathcal{C}$ un $AFD$, $S=(Pos, Neg, Ex, Uni)$ un échantillon sans contradictions. On dit que $\mathcal{C}$ est \emph{cohérent} avec $S$ si
 \begin{itemize}
 \item $Pos\subseteq \mathcal{L}(\mathcal{C})$
 \item $Neg\cap \mathcal{L}(\mathcal{C})=\emptyset$
@@ -965,14 +964,14 @@ Soit $\mathcal{C}$ un $AFD$, $S=(Pos, Neg, Ex, Uni)$ un echantillon sans contrad
 \end{defi}
 \noindent La section suivante va maintenant pouvoir décrire la manière dont l'élève peut conjecturer un $AFD$ cohérent avec un échantillon $S$.
 \section{Résolution par la programmation logique}\label{prolog}
-Afin de construire un $AFD$ cohérent avec un échantillon $S$ donné, une nouvelle étape de symbolisation va être nécessaire. Cette fois-ci, il s'agit de traduire le problème rationel en une série de formules boléennes propositionnelles et de résoudre les problèmes de satisfaisabilité (\emph{problème SAT}) résultants. Il sera ensuite possible de traduire les \emph{modèles} (assignations de variables boléennes rendant la formule vraie) de ce problème SAT en ensemble gagnant pour le jeu de sûreté.
+Afin de construire un $AFD$ cohérent avec un échantillon $S$ donné, une nouvelle étape de symbolisation va être nécessaire. Cette fois-ci, il s'agit de traduire le problème rationnel en une série de formules boléennes propositionnelles et de résoudre les problèmes de satisfaisabilité (\emph{problème SAT}) résultants. Il sera ensuite possible de traduire les \emph{modèles} (assignations de variables boléennes rendant la formule vraie) de ce problème SAT en ensemble gagnant pour le jeu de sûreté.
 
 \begin{defi}{Elève pour les jeux de sureté rationnels\\}
 \label{learner}
 Soit $\mathfrak{G}_\Sigma=(A_\Sigma, I, F)$, un jeu de sûreté rationnel sur $\Sigma$, avec $A_\Sigma=(V_0,V_1,E)$ et $S=(Pos,Neg,Uni,Ex)$ un échantillon. Afin d'apprendre un AFD $\mathcal{C}$ à soumettre à l'enseignant, l'élève pour $\mathfrak{G}_\Sigma$ va créer une série de formules boléennes $\phi^S_n$ pour une valeur incrémentale de $n\in\mathbb{N}_0$ et telle que :
 \begin{itemize}
 \item La formule $\phi^S_n$ est satisfaisable si et seulement si il existe un AFD qui possède $n$ sommets et qui est cohérent avec $S$.
-\item Un modèle $\mathfrak{M}$ de $\phi^S_n$ contient assez d'information pour construire un AFD $\mathcal{A}_\mathfrak{M}$ à $n$ sommet et cohérent avec $S$.
+\item Un modèle $\mathfrak{M}$ de $\phi^S_n$ contient assez d'information pour construire un AFD $\mathcal{A}_\mathfrak{M}$ à $n$ sommets cohérent avec $S$.
 \end{itemize}
 \noindent Autrement formulé, l'objectif de $\phi^S_n$ est d'encoder un $AFD$ $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ où $|Q|=n$ et cohérent avec $S$.\\
 L'élève soumettra à l'enseignant un AFD $\mathcal{C}$ minimal, c.-à-d. construit à partir du modèle $\mathfrak{M}\models \phi_n^S$ pour la plus petite valeur de $n$ possible.
@@ -988,10 +987,11 @@ qui assure qu'au plus un état $q$ peut être atteint depuis un état $p$ en lis
 \label{booldeter2}
 \begin{aligned} \bigwedge _{p \in Q}~ \bigwedge _{a \in \varSigma }~ \bigvee _{q \in Q}~ d_{p, a, q} \end{aligned}
 \end{equation}
-qui indique que la fonction de transition est totale, autrement dit que $\forall p\in Q, a\in\Sigma, \exists q\in Q, \delta(p,a)=q$. Bien que cela ne soit pas nécessaire pour encoder une fonction de transition déterministe, cela sera nécessaire pour les formules que nous allons définir par la suite.
+qui indique que la fonction de transition est totale, autrement dit que $\forall p\in Q, a\in\Sigma, \exists q\in Q, \delta(p,a)=q$. Bien que cela ne soit pas nécessaire pour encoder une fonction de transition déterministe, cela sera intéressant pour les formules que nous allons définir par la suite.
 
 \noindent Ainsi, il est possible pour l'élève de construire un AFD $\mathcal{A}_\mathfrak{M}=(Q,\Sigma,q_0,\delta,F)$ à partir d'un modèle $\mathfrak{M}$ satisfaisant $\phi_n^{AFD}=(\ref{booldeter1})\land(\ref{booldeter2})$.
 \begin{defi}
+\label{translate}
 Soit $\mathfrak{M}$ un modèle satisfaisant $\phi_n=(\ref{booldeter1})\land(\ref{booldeter2})$, alors on peut construire un AFD $\mathcal{A}_\mathfrak{M}=(Q,\Sigma,\delta,q_0,F)$ avec $Q$, $q_0$ et $\Sigma$ fixés, $\delta(p,a)=q$ pour tout $\mathfrak{M}(d_{p,a,q})=$ vrai, et $F=\{q\in Q$ $|$ $\mathfrak{M}(f_q)=$ vrai $\}$\\
 Où $\mathfrak{M}(x)$ correspond à la valeur de x dans le modèle $\mathfrak{M}$.
 \end{defi}
@@ -1008,14 +1008,14 @@ Ensuite, la formule
 \label{boolW2}
 \begin{aligned} \bigwedge _{u \in Pref (W)}~ \bigwedge _{q \ne q' \in Q}~ \neg (x_{u, q} \land x_{u,q'}) \end{aligned}
 \end{equation}
-assure que pour chaque mot $u$ de l'ensemble des préfixe des mots de l'échantillon $S$, il existe au plus un état $q$ tel que $x_{u,q}=$ $vrai$. D'ailleurs, cet état $q$ est garanti d'exister par la formule \ref{booldeter2} introduite précédemment.
+assure que pour chaque mot $u$ de l'ensemble des préfixes des mots de l'échantillon $S$, il existe au plus un état $q$ tel que $x_{u,q}=$ $vrai$. D'ailleurs, cet état $q$ est garanti d'exister par la formule \ref{booldeter2} introduite précédemment.
 
 \noindent Pour finir, la formule
 \begin{equation}
 \label{boolW3}
 \begin{aligned} \bigwedge _{ua \in Pref (W)}~ \bigwedge _{p,q \in Q}~ (x_{u, p} \wedge d_{p, a, q}) \rightarrow x_{ua, q} \end{aligned}
 \end{equation}
-décris la manière dont un parcours de l'automate $\mathcal{A}_\mathfrak{M}$ par un mot $ua\in Pref(W)$ fonctionne. Si un état $p$ est atteint en lisant le mot $u$, et qu'une transition $\delta(p,a)=q$ existe (la variable $d_{p,a,q}=$ $vrai$) alors l'état $q$ sera atteint en lisant le mot $ua$ et donc $x_{ua,q}=$ $vrai$.\\
+décrit la manière dont un parcours de l'automate $\mathcal{A}_\mathfrak{M}$ par un mot $ua\in Pref(W)$ fonctionne. Si un état $p$ est atteint en lisant le mot $u$, et qu'une transition $\delta(p,a)=q$ existe (la variable $d_{p,a,q}=$ $vrai$) alors l'état $q$ sera atteint en lisant le mot $ua$ et donc $x_{ua,q}=$ $vrai$.\\
 
 \noindent La conjonction de ces trois formules $\phi^W_n=(\ref{boolW1})\land(\ref{boolW2})\land(\ref{boolW3})$ nous permet ainsi de produire un AFD $\mathcal{A}_\mathfrak{M}$ qui permettra d'accepter ou de rejetter (i.e. d'être parcouru par) tous les mots de $W$.\\
 
@@ -1035,7 +1035,7 @@ permet de s'assurer que les mots de $Pos$ sont acceptés par $\mathcal{A}_\mathf
 \end{equation} 
 assurera, par un raisonnement similaire, que les mots de $Neg$ seront rejetés par $\mathcal{A}_\mathfrak{M}$, et donc que si $\mathfrak{M}\models \phi_n^{Neg}\land\phi_n^W\land\phi_n^{AFD}$, alors $\mathcal{L}(\mathcal{A}_\mathfrak{M})\cap Neg=\emptyset$.\\
 
-\noindent Ensuite, afin de que la formule pour $\phi_n^{Uni}$ assure que pour tout contre-exemple d'implication universelle $i_{Uni}=(u,\mathcal{A}) \in Uni$, avec $\mathcal{A}=(Q^\mathcal{A},\Sigma,q_0^\mathcal{A},\delta^\mathcal{A},F^\mathcal{A})$, si $\mathcal{A}_\mathfrak{M}$ accepte $u$, alors il doit aussi accepter tous les $v\in\mathcal{L}(\mathcal{A})$, nous allons définir des variables boléennes $y_{q,q^\mathcal{A}}$ telles que $y_{q,q^\mathcal{A}}=$ $vrai$ indique qu'il existe un mot $v\in\Sigma^*$ pour lequel un parcours de $\mathcal{A}_\mathfrak{M}$ par $v$ se termine sur l'état $q\in Q$ et un parcours de $\mathcal{A}$ par ce même $v$ se termine sur l'état $q^\mathcal{A}\in Q^\mathcal{A}$. Autrement formulé, ces variables vont nous aider à déterminer les paires d'états atteintes par un parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par $v$. 
+\noindent Ensuite, afin que la formule pour $\phi_n^{Uni}$ assure que pour tout contre-exemple d'implication universelle $i_{Uni}=(u,\mathcal{A}) \in Uni$, avec $\mathcal{A}=(Q^\mathcal{A},\Sigma,q_0^\mathcal{A},\delta^\mathcal{A},F^\mathcal{A})$, si $\mathcal{A}_\mathfrak{M}$ accepte $u$, alors il doit aussi accepter tous les $v\in\mathcal{L}(\mathcal{A})$, nous allons définir des variables boléennes $y_{q,q^\mathcal{A}}$ telles que $y_{q,q^\mathcal{A}}=$ $vrai$ indique qu'il existe un mot $v\in\Sigma^*$ pour lequel un parcours de $\mathcal{A}_\mathfrak{M}$ par $v$ se termine sur l'état $q\in Q$ et un parcours de $\mathcal{A}$ par ce même $v$ se termine sur l'état $q^\mathcal{A}\in Q^\mathcal{A}$. Autrement formulé, ces variables vont nous aider à déterminer les paires d'états atteintes par un parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par $v$. 
 
 \noindent Soit $i_{Uni}=(u,\mathcal{A}) \in Uni$, un contre-exemple d'implication universelle, avec $\mathcal{A}=(Q^\mathcal{A},\Sigma,q_0^\mathcal{A},\delta^\mathcal{A},F^\mathcal{A})$, cette définition est donnée par
 \begin{equation}
@@ -1049,7 +1049,7 @@ qui indique que tout parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\m
 \bigwedge_{p,q\in Q}~ \bigwedge_{(p^\mathcal{A},a,q^\mathcal{A})\in\delta^\mathcal{A}}~ (y_{p,p^\mathcal{A}}\land d_{p,a,q})\rightarrow y_{q,q^\mathcal{A}}
 \end{aligned}
 \end{equation}
-qui, de manière analogue à la formule \ref{boolW3}, indique qui si une paire d'états $(p,p^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte par le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot de $\Sigma^*$, alors pour toutes transitions $\delta^\mathcal{A}(p^\mathcal{A},a)=q^\mathcal{A}$, s'il y a une transition $\delta(p,a)=q$ dans $\mathcal{A}_\mathfrak{M}$ (ce qui est toujours le cas par \ref{booldeter2} pour $a\in\Sigma$), alors on peut transitionner via $a$ vers la paire d'états $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ et donc $y_{q,q^\mathcal{A}}=$ $vrai$.\\
+qui, de manière analogue à la formule \ref{boolW3}, indique que si une paire d'états $(p,p^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte par le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot de $\Sigma^*$, alors pour toutes transitions $\delta^\mathcal{A}(p^\mathcal{A},a)=q^\mathcal{A}$, s'il y a une transition $\delta(p,a)=q$ dans $\mathcal{A}_\mathfrak{M}$ (ce qui est toujours le cas par \ref{booldeter2} pour $a\in\Sigma\setminus\epsilon$), alors on peut transitionner via $a$ vers la paire d'états $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ et donc $y_{q,q^\mathcal{A}}=$ $vrai$.\\
 
 \noindent Grâce à cette définition de $y_{q,q^\mathcal{A}}$, on peut assurer, par la formule 
 \begin{equation}
@@ -1065,9 +1065,9 @@ que si un état final est atteint dans $\mathcal{A}_\mathfrak{M}$ en lisant le m
 \noindent Cependant, il est important de noter que les variables $y_{q,q^\mathcal{A}}$ ne décrivent pas exactement le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par les mots de $\mathcal{L}(\mathcal{A})$. En effet, étant donné que $\mathcal{A}$ est non-déterministe, une transition $\delta^\mathcal{A}(p^\mathcal{A},\epsilon)=q^\mathcal{A}$ pourrait exister, ce qui rendrait la prémisse de la formule \ref{booluni2} fausse car $\mathcal{A}_\mathfrak{M}$ est déterministe et donc ne possède pas de transitions pour $\epsilon$. L'implication aura donc pour conséquence $y_{q,q^\mathcal{A}}=$ $vrai$ sans qu'un mot $v$ existe tel que le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par $v$ se termine sur la paire d'états $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$.\\
 La formule $\phi_n^{Uni}$ reste cependant correcte. En effet, dans l'objectif d'accepter tous les mots $v\in\mathcal{L}(\mathcal{A})$, il n'est pas nécessaire de savoir s'ils existent. Par contre, afin que la formule $\phi_n^{Ex}$ que nous allons construire par la suite assure bien que, pour un contre-exemple d'implication existentielle $i_{Ex}=(u,\mathcal{A})\in Ex$, si $u\in\mathcal{L}(\mathcal{A}_\mathfrak{M})$, alors il existe au moins un $v\in\mathcal{L}(\mathcal{A})$ tel que $v\in\mathcal{L}(\mathcal{A}_\mathfrak{M})$, il n'est plus suffisant de se baser sur les variables $y_{q,q^\mathcal{A}}$ car elle n'assurent pas l'existence d'un tel mot. Nous allons devoir procéder de manière plus robuste.\\
 
-\noindent Soit $i_{Ex}=(u,\mathcal{A})\in Ex$ un contre-exemple d'implication existentiel, avec $\mathcal{A}=(Q^\mathcal{A},\Sigma,q_0^\mathcal{A},\delta^\mathcal{A},F^\mathcal{A})$, nous allons maintenant introduire une dernière variable boléenne $z_{q,q^\mathcal{A},\mathnormal{l}}$ avec $q\in Q$, $q^\mathcal{A}\in Q^\mathcal{A}$ et $\mathnormal{l}\in \{0,...$ $,k\}$, $k\in\mathbb{N}$ pour laquelle $z_{q,q^\mathcal{A},\mathnormal{l}}=$ $vrai$ indique qu'il existe un mot $v\in\Sigma^*$ de longueur $|v|=\mathnormal{l}$ tel que le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par $v$ se termine sur la paire d'états $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$.\\
+\noindent Soit $i_{Ex}=(u,\mathcal{A})\in Ex$ un contre-exemple d'implication existentielle, avec $\mathcal{A}=(Q^\mathcal{A},\Sigma,q_0^\mathcal{A},\delta^\mathcal{A},F^\mathcal{A})$, nous allons maintenant introduire une dernière variable boléenne $z_{q,q^\mathcal{A},\mathnormal{l}}$ avec $q\in Q$, $q^\mathcal{A}\in Q^\mathcal{A}$ et $\mathnormal{l}\in \{0,...$ $,k\}$, $k\in\mathbb{N}$ pour laquelle $z_{q,q^\mathcal{A},\mathnormal{l}}=$ $vrai$ indique qu'il existe un mot $v\in\Sigma^*$ de longueur $|v|=\mathnormal{l}$ tel que le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par $v$ se termine sur la paire d'états $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$.\\
 
-\noindent Afin que le nombre de variable nécessaire soit finit, il faut déterminer une valeur maximale pour $\mathnormal{l}$. Il faut donc trouver la plus petite longueur maximale de mot de $\Sigma^*$ pour laquelle $z_{q,q^\mathcal{A},\mathnormal{l}}$ permet de décrire tous les parcours en  parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$. Nous allons déterminer cette valeur sur base d'une simple observation : si, lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot $v\in\Sigma$ un état $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteint deux fois, alors le facteur $w\in\Sigma^*$ de $v$ entre cette répétition peut être retiré de $v$ sans que $z_{q,q^\mathcal{A},\mathnormal{l}}$ ne perde d'information. Ainsi, la valeur maximale pour $\mathnormal{l}$ est la longueur maximale de mot telle que, lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par ce mot, chaque paire d'état $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte au plus une fois. Cette valeur sera donc donnée par $k=|Q||Q^\mathcal{A}|-1=n|Q^\mathcal{A}|-1$\\
+\noindent Afin que le nombre de variable nécessaire soit fini, il faut déterminer une valeur maximale pour $\mathnormal{l}$. Il faut donc trouver la plus petite longueur maximale de mot de $\Sigma^*$ pour laquelle $z_{q,q^\mathcal{A},\mathnormal{l}}$ permet de décrire tous les parcours en  parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$. Nous allons déterminer cette valeur sur base d'une simple observation : si, lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot $v\in\Sigma$ un état $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteint deux fois, alors le facteur $w\in\Sigma^*$ de $v$ entre cette répétition peut être retiré de $v$ sans que $z_{q,q^\mathcal{A},\mathnormal{l}}$ ne perde d'information. Ainsi, la valeur maximale pour $\mathnormal{l}$ est la longueur maximale de mot telle que, lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par ce mot, chaque paire d'état $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte au plus une fois. Cette valeur sera donc donnée par $k=|Q||Q^\mathcal{A}|-1=n|Q^\mathcal{A}|-1$\\
 
 Maintenant que nous avons réussi à limiter le nombre de ces variables, passons à leur définition.\\
 Pour commencer, la formule  
@@ -1093,7 +1093,7 @@ Ensuite, la formule
 \bigwedge_{p,q\in Q}~ \bigwedge_{(p^\mathcal{A},a,q^\mathcal{A})\in\delta^\mathcal{A}}~ \bigwedge_{\mathnormal{l}\in\{0,... ,k-1\}}~ (z_{p,p^\mathcal{A}, \mathnormal{l}}\land d_{p,a,q})\rightarrow z_{q,q^\mathcal{A},\mathnormal{l}+1}
 \end{aligned}
 \end{equation}
-décrit, de manière analogue à \ref{boolW2} et \ref{booluni2}, que si la paire d'état $(p,p^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot de longueur $\mathnormal{l}$, et qu'il existe les transitions $\delta (p,a)=q$ et $\delta^\mathcal{A}(p^\mathcal{A},a)=q^\mathcal{A}$ avec $q\in Q$ et $q^\mathcal{A}\in Q^\mathcal{A}$, alors on atteint la paire d'états $(q,q^\mathcal{A})$ par le parcours d'un mot de longueur $\mathnormal{l}+1$ et donc $z_{q,q^\mathcal{A},\mathnormal{l}+1}=$ $vrai$.\\
+décrit, de manière analogue à \ref{boolW2} et \ref{booluni2}, que si la paire d'états $(p,p^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot de longueur $\mathnormal{l}$, et qu'il existe les transitions $\delta (p,a)=q$ et $\delta^\mathcal{A}(p^\mathcal{A},a)=q^\mathcal{A}$ avec $q\in Q$ et $q^\mathcal{A}\in Q^\mathcal{A}$, alors on atteint la paire d'états $(q,q^\mathcal{A})$ par le parcours d'un mot de longueur $\mathnormal{l}+1$ et donc $z_{q,q^\mathcal{A},\mathnormal{l}+1}=$ $vrai$.\\
 Pour finir, afin d'assurer l'existence de ce mot de longueur $\mathnormal{l}+1$, la formule 
 \begin{equation}
 \label{boolex4}
@@ -1112,17 +1112,17 @@ empêche $z_{q,q^\mathcal{A},\mathnormal{l}+1}=$ $vrai$ s'il n'y a pas de paire 
 \end{equation}
 que, si un mot $u$ est accepté par $\mathcal{A}_\mathfrak{M}$, alors au moins un des mots $v\in\mathcal{L}(\mathcal{A})$ menant à un état final dans $\mathcal{A}$, mènera à un état final dans $\mathcal{A}_\mathfrak{M}$ et sera donc accepté par ce dernier.\\
 
-\noindent En construisant une formule $\phi_{n,i}^{Ex}=(\ref{boolex1})\land(\ref{boolex2})\land(\ref{boolex3})\land(\ref{boolex4})\land(\ref{boolex5})$ pour chaque contre-exemple d'implication existentiel $i\in Ex$, on obtient la définition de la formule $\phi^{Ex}_n=\bigwedge_{i\in(Ex)}\phi_{n,i}^{Ex}$.\\
+\noindent En construisant une formule $\phi_{n,i}^{Ex}=(\ref{boolex1})\land(\ref{boolex2})\land(\ref{boolex3})\land(\ref{boolex4})\land(\ref{boolex5})$ pour chaque contre-exemple d'implication existentielle $i\in Ex$, on obtient la définition de la formule $\phi^{Ex}_n=\bigwedge_{i\in(Ex)}\phi_{n,i}^{Ex}$.\\
 Par la construction de cette formule, on a bien que si $\mathfrak{M}\models\phi_n^{Ex}\land\phi^{W}_n\land\phi^{AFD}_n$, alors $\forall(u,\mathcal{A})\in Ex, u\in\mathcal{L}(\mathcal{A})\implies \mathcal{L}(\mathcal{A}_\mathfrak{M})\cap\mathcal{L}(\mathcal{A})\neq\emptyset$\\
 
-Ainsi, nous obtenons une formule $\phi^S_n=\phi_n^{AFD}\land\phi_n^{W}\land\phi_n^{Pos}\land\phi_n^{Neg}\land\phi_n^{Ex}\land\phi_n^{Uni}$ dont un modèle $\mathfrak{M}$ contiendra assez d'informations pour construire un $AFD$ $\mathcal{A}_\mathfrak{M}$ à $n$ états et cohérent avec l'échantillon $S$.\\
+Ainsi, nous obtenons une formule $\phi^S_n=\phi_n^{AFD}\land\phi_n^{W}\land\phi_n^{Pos}\land\phi_n^{Neg}\land\phi_n^{Ex}\land\phi_n^{Uni}$ dont un modèle $\mathfrak{M}$ contiendra assez d'information pour construire un $AFD$ $\mathcal{A}_\mathfrak{M}$ à $n$ états et cohérent avec l'échantillon $S$.\\
 
-Tous les outils nécessaires à l'aprentissage étant maintenant définis, la section suivante va détailler l'échange entre l'enseignant et l'élève menant à la construction de l'ensemble gagnant d'un problème de sûreté.
+Tous les outils nécessaires à l'apprentissage étant maintenant définis, la section suivante va détailler l'échange entre l'enseignant et l'élève menant à la construction de l'ensemble gagnant d'un problème de sûreté.
 \newpage
 \section{Algorithmes}
 Nous allons maintenant décrire les algorithmes qui vont permettre l'apprentissage d'un ensemble gagnant pour les jeux de sûreté. 
 Cette description débutera par des algorithmes généraux, peu détaillés, lesquels seront au fur et à mesure décomposés afin d'être expliqué plus en profondeur.\\
-Soit un jeu de sûreté rationel $\mathfrak{G}_\Sigma=(A_\Sigma, \mathcal{A}_I, \mathcal{A}_F)$ sur $\Sigma$, avec $A_\Sigma=(\mathcal{A}_{V_0}, \mathcal{A}_{V_1}, \mathcal{T}_E)$ que nous allons fixer pour le reste de cette section, l'algorithme \ref{alginifnitemain} décris, de manière générale, l'échange entre l'élève et l'enseignant pour $\mathfrak{G}_\Sigma$.
+Soit un jeu de sûreté rationel $\mathfrak{G}_\Sigma=(A_\Sigma, \mathcal{A}_I, \mathcal{A}_F)$ sur $\Sigma$, avec $A_\Sigma=(\mathcal{A}_{V_0}, \mathcal{A}_{V_1}, \mathcal{T}_E)$ que nous allons fixer pour le reste de cette section, l'algorithme \ref{alginifnitemain} décrit, de manière générale, l'échange entre l'élève et l'enseignant pour $\mathfrak{G}_\Sigma$.
 \begin{algorithm}[H]
 \caption{Apprentissage}\label{alginifnitemain}
 \hspace*{\algorithmicindent} 
@@ -1153,7 +1153,7 @@ Soit un jeu de sûreté rationel $\mathfrak{G}_\Sigma=(A_\Sigma, \mathcal{A}_I, 
 \hspace*{\algorithmicindent} 
 \begin{tabular}{lll}
 	\textbf{Entrées} & \textbf{S} : &L'échantillon (sans contradictions) actuel pour l'apprentissage.\\
-	\textbf{Sortie} &\multicolumn{2}{l}{Un AFD $\mathcal{A}_S$ minimal cohérent avec $S$.}\\
+	\textbf{Sortie} &\multicolumn{2}{l}{Un AFD minimal cohérent avec $S$.}\\
 \end{tabular}\\
 \begin{algorithmic}[1]
 \State $n\gets 0$
@@ -1162,7 +1162,7 @@ Soit un jeu de sûreté rationel $\mathfrak{G}_\Sigma=(A_\Sigma, \mathcal{A}_I, 
 	\State $\phi_n^S\gets learner.constructSAT(S,n)$
 	\State $\mathfrak{M} \gets learner.solveSAT(\phi_n^S)$\Comment $\mathfrak{M}$ n'existe peut-être pas
 \Until{$\mathfrak{M}\models \phi_n^S$}
-\State $\mathcal{A}_\mathfrak{M}\gets learner.translatemodel(\mathfrak{M})$
+\State $\mathcal{A}_\mathfrak{M}\gets learner.translatemodel(\mathfrak{M},n)$
 \State\Return $\mathcal{A}_\mathfrak{M}$
 \end{algorithmic}
 \end{algorithm}
@@ -1227,14 +1227,48 @@ La manière dont l'enseignant effectue les vérifications de la définition \ref
 \end{algorithm}
 \noindent La méthode $anyword(\mathcal{A})$ retourne un mot au hasard de $\mathcal{A}$.\\
 
-Afin de vérifier que $\mathcal{C}$ est un ensemble gagnant pour le jeu $\mathfrak{G}_\Sigma$, l'enseignant va construire diverses AFN lesquelles vont permettre de vérifier individuellement les 4 règles de la définiton \ref{infinitewinningset}.\\
+Afin de vérifier que $\mathcal{C}$ est un ensemble gagnant pour le jeu $\mathfrak{G}_\Sigma$, l'enseignant va construire divers AFN lesquels vont permettre de vérifier individuellement les 4 règles de la définition \ref{infinitewinningset}.\\
 
 Pour les sommets initiaux, l'enseignant calcule un AFN $\mathcal{B}_I$ tel que $\mathcal{L}(\mathcal{B}_I)=\mathcal{L}(\mathcal{A}_I)\setminus\mathcal{L}(\mathcal{C})$. Si $\mathcal{L}(\mathcal{B}_I)\neq\emptyset$, cela signifie qu'il y a au moins un sommet initial qui ne fait pas partie de l'ensemble gagnant. Dans ce cas, l'enseignant construit un contre-exemple positif en prenant n'importe quel mot de $\mathcal{L}(\mathcal{B}_I)$ et le retourne.\\
 Pour les sommets sûrs, l'enseignant calcule l'AFN $\mathcal{B}_F$ tel que $\mathcal{L}(\mathcal{B}_F)=\mathcal{L}(\mathcal{C})\setminus\mathcal{L}(\mathcal{A}_F)$. Si $\mathcal{L}(\mathcal{B}_F)\neq\emptyset$, alors c'est qu'au moins un sommet de $W_0$ n'est pas inclu dans $F$. Dans ce cas, l'enseignant construit un contre-exemple négatif en prenant n'importe quel mot de $\mathcal{L}(\mathcal{B}_F)$ et le retourne.\\
-En ce qui concerne la fermeture existentielle, plusieurs AFN sont nécessaires. Premièrement, l'enseignant calcule l'AFN $\mathcal{B}_{E1}$ qui est l'image de $\mathcal{C}$ par la relation inverse $\mathcal{R}(\mathcal{T}_E)^{-1}$. Ainsi, $\mathcal{L}(\mathcal{B}_{E1})$ contient tous les sommets qui ont un successeur dans $\mathcal{L}(\mathcal{C})$. Ensuite, $\mathcal{B}_{E2}$ est construit de manière que $\mathcal{L}(\mathcal{B}_{E2})=\mathcal{L}(\mathcal{A}_{V_0})\setminus\mathcal{L}(\mathcal{B}_{E1})$. On aura donc que $\mathcal{B}_{E2}$ contient tous les sommets appartenant à $j_0$ qui n'ont pas de successeur dans $\mathcal{C}$. Pour finir, afin d'obtenir tous les sommets de $j_0$ qui sont dans $\mathcal{C}$ mais qui n'ont eux-même pas de successeurs dans $\mathcal{C}$, l'enseignant construit l'AFN $\mathcal{B}_E$ tel que $\mathcal{L}(\mathcal{B}_E)=\mathcal{L}(\mathcal{C})\cap\mathcal{L}(\mathcal{B}_{E2})$. Si $\mathcal{L}(\mathcal{B}_E)\neq\emptyset$, alors il existe un sommet de $j_0$ qui contredit la fermeture existentielle. L'enseignant construit un contre-exemple d'implication existentielle en prenant un mot $u\in\mathcal{L}(\mathcal{B}_E)$ et en calculant $\mathcal{A}=\mathcal{R}(\mathcal{T}_E)(\{u\})$, l'image de ce mot par la relation $\mathcal{R}(\mathcal{T}_E)$. Il retourne ainsi $(u,\mathcal{A})$ signifiant que le mot $u$ a été accepté sans qu'au moins un de ses successeurs (les mots de $\mathcal{L}(\mathcal{A})$) n'ait été accepté.\\
-La fermeture universelle nécessite aussi trois étapes. L'enseignant commence par calculer l'automate $\mathcal{B}_{U1}=(\mathcal{A}_{V_0}\cup\mathcal{A}_{V_1})\setminus\mathcal{C}$, l'AFN qui décrit tous les sommets de $\mathfrak{G}_\Sigma$ qui ne sont pas dans $\mathcal{C}$. Ensuite, en prenant l'image de $\mathcal{B}_{U1}$ par la relation inverse $\mathcal{R}(\mathcal{T}_E)^{-1}$, l'enseignant obtient $\mathcal{B}_{U2}$ qui décrit tous les sommets ayant au moins un successeur qui n'appartient pas à $\mathcal{C}$. Enfin, l'intersection de $\mathcal{B}_{U2}$ et de $\mathcal{C}$ permet d'obtenir tous les sommets de $\mathcal{C}$ qui ont au moins un successeur hors de $\mathcal{C}$. En ajoutant l'intersection avec $\mathcal{A}_{V_1}$, on obtient l'AFN $\mathcal{B}_U$ qui décrit tous les sommets du joueur $j_1$ qui ont un successeur hors de $\mathcal{C}$. Si $\mathcal{L}(\mathcal{B}_U)\neq\emptyset$, chaque mot $u\in\mathcal{L}(\mathcal{B}_U)$ contredit la fermeture universelle. L'enseignant construit et retourne donc un contre-exemple d'implication universel $(u,\mathcal{A})$ en prenant un de ces mots $u$ et $\mathcal{A}$ son image par la relation $\mathcal{R}(\mathcal{T}_E)$.\\
+En ce qui concerne la fermeture existentielle, plusieurs AFN sont nécessaires. Premièrement, l'enseignant calcule l'AFN $\mathcal{B}_{E1}$ qui est l'image de $\mathcal{C}$ par la relation inverse $\mathcal{R}(\mathcal{T}_E)^{-1}$. Ainsi, $\mathcal{L}(\mathcal{B}_{E1})$ contient tous les sommets qui ont un successeur dans $\mathcal{L}(\mathcal{C})$. Ensuite, $\mathcal{B}_{E2}$ est construit de manière que $\mathcal{L}(\mathcal{B}_{E2})=\mathcal{L}(\mathcal{A}_{V_0})\setminus\mathcal{L}(\mathcal{B}_{E1})$. On aura donc que $\mathcal{B}_{E2}$ contient tous les sommets appartenant à $j_0$ qui n'ont pas de successeur dans $\mathcal{C}$. Pour finir, afin d'obtenir tous les sommets de $j_0$ qui sont dans $\mathcal{C}$ mais qui n'ont eux-mêmes pas de successeurs dans $\mathcal{C}$, l'enseignant construit l'AFN $\mathcal{B}_E$ tel que $\mathcal{L}(\mathcal{B}_E)=\mathcal{L}(\mathcal{C})\cap\mathcal{L}(\mathcal{B}_{E2})$. Si $\mathcal{L}(\mathcal{B}_E)\neq\emptyset$, alors il existe un sommet de $j_0$ qui contredit la fermeture existentielle. L'enseignant construit un contre-exemple d'implication existentielle en prenant un mot $u\in\mathcal{L}(\mathcal{B}_E)$ et en calculant $\mathcal{A}=\mathcal{R}(\mathcal{T}_E)(\{u\})$, l'image de ce mot par la relation $\mathcal{R}(\mathcal{T}_E)$. Il retourne ainsi $(u,\mathcal{A})$ signifiant qu'un sommet $u$ appartenant à $j_0$ est inclu dans l'ensemble gagnant sans qu'au moins un de ses successeurs (les mots de $\mathcal{L}(\mathcal{A})$) n'ait été accepté.\\
+La fermeture universelle nécessite aussi trois étapes. L'enseignant commence par calculer l'automate $\mathcal{B}_{U1}=(\mathcal{A}_{V_0}\cup\mathcal{A}_{V_1})\setminus\mathcal{C}$, l'AFN qui décrit tous les sommets de $\mathfrak{G}_\Sigma$ qui ne sont pas dans $\mathcal{C}$. Ensuite, en prenant l'image de $\mathcal{B}_{U1}$ par la relation inverse $\mathcal{R}(\mathcal{T}_E)^{-1}$, l'enseignant obtient $\mathcal{B}_{U2}$ qui décrit tous les sommets ayant au moins un successeur qui n'appartient pas à $\mathcal{C}$. Enfin, l'intersection de $\mathcal{B}_{U2}$ et de $\mathcal{C}$ permet d'obtenir tous les sommets de $\mathcal{C}$ qui ont au moins un successeur hors de $\mathcal{C}$. En ajoutant l'intersection avec $\mathcal{A}_{V_1}$, on obtient l'AFN $\mathcal{B}_U$ qui décrit tous les sommets du joueur $j_1$ qui ont un successeur hors de $\mathcal{C}$. Si $\mathcal{L}(\mathcal{B}_U)\neq\emptyset$, chaque mot $u\in\mathcal{L}(\mathcal{B}_U)$ contredit la fermeture universelle. L'enseignant construit et retourne donc un contre-exemple d'implication universelle $(u,\mathcal{A})$ en prenant un de ces mots $u$ et $\mathcal{A}$ son image par la relation $\mathcal{R}(\mathcal{T}_E)$.Ce contre-exemple signifie qu'un sommet $u$ appartenant à $j_1$ est inclu dans l'ensemble gagnant sans que tous ses successeurs y soient inclus.\\
 
 \noindent Si aucun contre-exemple n'a été retourné, alors $\mathcal{C}$ décrit $W_0$.
+
+\begin{algorithm}[H]
+\caption{teacher.translate}\label{alginfinitetranslate}
+\hspace*{\algorithmicindent} 
+\begin{tabular}{lll}
+	\textbf{Entrées} & \textbf{$\mathfrak{M}$} : &Un modèle contenant assez d'information\\
+	&&pour construire un AFD\\
+	&\textbf{n} :&Le nombre d'états dans l'AFD à construire.\\
+	\textbf{Sortie} &\multicolumn{2}{l}{Un AFD à $n$ états correspondant à $\mathfrak{M}$}\\
+\end{tabular}\\
+\begin{algorithmic}[1]
+\State $Q\gets[]$
+\For{$i$ allant de $0$ à $n-1$}
+	\State initialiser le sommet $q_i$
+	\State ajouter $q_i$ dans $Q$
+\EndFor
+\State $q_0\gets Q[0]$
+\State $\delta\gets[]$
+\For{chaque variable $d_{p,a,q}$ dans $\mathfrak{M}$}
+	\If{$\mathfrak{M}(d_{p,a,q})=$ $vrai$}
+		\State ajouter $(Q[p],a,Q[q])$ dans $\delta$
+	\EndIf
+\EndFor
+\State $F\gets[]$
+\For{chaque variable $f_q$ dans $\mathfrak{M}$}
+	\If{$\mathfrak{M}(f_q)=$ $vrai$}
+		\State ajouter $Q[q]$ dans $F$
+	\EndIf
+\EndFor
+\State $\mathcal{A}\gets(Q,\Sigma,q_0,\delta,F)$
+\State\Return $\mathcal{A}$
+\end{algorithmic}
+\end{algorithm}
+
 
 
 \newpage

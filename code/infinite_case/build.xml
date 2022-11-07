@@ -4,13 +4,22 @@
 
 	<target name="build" depends="clean">
 		<mkdir dir="${build}"/>
-		<javac srcdir="${src}" destdir="${build}" includeantruntime="false"/>
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+			<classpath>
+				<fileset dir="lib">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
 	</target>
 
 	<target name="run" depends="build">
 		<java classname="Main">
 			<classpath>
 				<pathelement location="${build}"/>
+				<fileset dir="lib">
+					<include name="**/*.jar"/>
+				</fileset>
 			</classpath>
 		</java>
 	</target>

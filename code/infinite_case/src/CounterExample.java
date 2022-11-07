@@ -1,3 +1,5 @@
+import java.util.*;
+
 import transducer.*;
 
 public class CounterExample{
@@ -15,6 +17,15 @@ public class CounterExample{
 
     public Automaton getA(){
         return a;
+    }
+
+    public Set<String> getAWords(){
+        if (SpecialOperations.isFinite(a)){
+            return SpecialOperations.getFiniteStrings(a);
+        }
+        else{
+            return new Set<String>();
+        }
     }
 
     public String toString(){

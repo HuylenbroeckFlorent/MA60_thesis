@@ -31,6 +31,36 @@ public class Sample{
         ex.add(new CounterExample(u, a));
     }
 
+    public Set<String> W(){
+        Set<String> ret = new HashSet();
+        ret.addAll(pos);
+        ret.addAll(neg);
+        for(CounterExample e : ex){
+            ret.add(e.getU());
+        }
+        for(CounterExample u : uni){
+            ret.add(u.getU());
+        }
+
+        return ret;
+    }
+
+    public ArrayList<String> getPos(){
+        return pos;
+    }
+
+    public ArrayList<String> getNeg(){
+        return neg;
+    }
+
+    public ArrayList<CounterExample> getEx(){
+        return ex;
+    }
+
+    public ArrayList<CounterExample> getUni(){
+        return uni;
+    }
+
     public String toString(){
         String ret = "";
         ret += "====== pos: "+pos.toString()+"\n";

@@ -34,5 +34,7 @@ public class Main{
 		// Sample s = new Sample();
 		// Automaton w = new RegExp("(sl{"+(k-1)+"}l+)|(el{"+(k)+"}l+)").toAutomaton();
 		// System.out.println(sp.checkIfWinningSet(w, s));
+
+		System.out.println(Learner.pref(new HashSet<String>(Arrays.asList("Florent", "Charlotte"))));
 	}
 }
