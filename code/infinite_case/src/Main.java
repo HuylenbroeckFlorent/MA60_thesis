@@ -35,15 +35,21 @@ public class Main{
 		// Sample s = new Sample();
 		// Automaton w = new RegExp("(sl{"+(k-1)+"}l+)|(el{"+(k)+"}l+)").toAutomaton();
 		// System.out.println(sp.checkIfWinningSet(w, s));
-
+		int loop = 0;
 		Learner learner = new Learner(alphabet);
 		Automaton w;
 		boolean isWinningSet = false;
 		do{
+			System.out.println("\n\n==== TRY "+(loop++)+" ====");
 			w = learner.conjecture();
+			System.out.println("CONJECTURED : ");
+			System.out.println(w);
 			isWinningSet = sp.checkIfWinningSet(w, learner.s);
-		}while(!isWinningSet);
+			System.out.println("SAMPLE : ");
+			System.out.println(learner.s);
+		}while(!isWinningSet && loop<100);
 
+		System.out.println("Winning set found :");
 		System.out.println(w);
 	}
 }

@@ -8,26 +8,34 @@ public class Sample{
     ArrayList<CounterExample> ex;
     ArrayList<CounterExample> uni;
 
+    int size;
+
     public Sample(){
         pos = new ArrayList();
         neg = new ArrayList();
         ex = new ArrayList();
         uni = new ArrayList();
+
+        size=0;
     }
 
     public void addPos(String pos){
+        size++;
         this.pos.add(pos);
     }
 
     public void addNeg(String neg){
+        size++;
         this.neg.add(neg);
     }
 
     public void addEx(String u, Automaton a){
+        size++;
         ex.add(new CounterExample(u, a));
     }
 
     public void addUni(String u, Automaton a){
+        size++;
         ex.add(new CounterExample(u, a));
     }
 
