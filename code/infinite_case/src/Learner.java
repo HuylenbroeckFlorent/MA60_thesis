@@ -1,10 +1,8 @@
 import java.util.*;
 import java.util.stream.*;
 
-import org.sat4j.*;
-import org.sat4j.specs.*;
-import org.sat4j.core.*;
-import org.sat4j.minisat.*;
+import com.microsoft.z3.*;
+import com.microsoft.z3.enumerations.*;
 
 import transducer.*;
 
@@ -19,9 +17,9 @@ public class Learner{
 	public Sample s;
 
 	private PrefixTree w;
-	private int[] f;
-	private int[][][] d;
-	private int[][] x;
+	private BoolExpr[] f;
+	private BoolExpr[][][] d;
+	private BoolExpr[][] x;
 
 	public Learner(char[] alphabet){
 		n=1;
@@ -39,37 +37,38 @@ public class Learner{
 	public Automaton conjecture(){
 
 		n--;
-		ISolver solver = SolverFactory.newDefault();
-		IProblem problem = solver;
-		int[] model;
-		boolean satis = false;
+		Context context = new Context();
+		Status status = Status.UNSATISFIABLE;
+		Solver solver = context.mkSolver();
+		Model model;
 		do{
 			n++;
 			System.out.println("n = "+n);
-			solver = SolverFactory.newDefault();
-			if(!constructSAT(solver, s, n)){
-				continue;
-			}
-			solver.setTimeout(3600);
-			problem = solver;
-			try{
-				satis = problem.isSatisfiable();
-			}catch(TimeoutException te){
-				System.out.println("ERROR Timeout");
-			}
-		}while(!satis);
+			solver = constructSAT(context, s, n);
+			//System.out.println(solver);
+			status = solver.check();
+			// if(status == Status.UNSATISFIABLE){
+			// 	BoolExpr[] unsat = solver.getUnsatCore();
+			// 	System.out.println(unsat.length);
+			// 	for(BoolExpr be : unsat){
+			// 		System.out.println("UNSAT : "+be);
+			// 	}
+			// }
+		}while(status!=Status.SATISFIABLE);
 
-
-		model = problem.model();
+		model = solver.getModel();
 		return translateModel(model);
 	}
 
-	public boolean constructSAT(ISolver solver, Sample s, int n){
+	public Solver constructSAT(Context context, Sample s, int n){
 
-		// Number to be mapped to each variable, to retrieve from model.
-		int varID=1;
+		// Solver
+		Solver solver = context.mkSolver();
 
-		// Prefix tree for x variables
+		// Number to be mapped to each variable, to retrieve from model. Since we do not use SAT4J anymore, we can start at 0
+		int varID=0;
+
+		// Prefix tree for x variables (TODO find a way to not initialize everytime)
 		w = new PrefixTree(alphabetSize);
 
 		// Counter-examples with infinite language
@@ -114,26 +113,22 @@ public class Learner{
 		System.out.println("Prefix tree size = "+w.size);
 
 		// Declare boolean var arrays
-		f = new int[n];
-		d = new int [n][alphabetSize][n];
-		x = new int[w.size][n];
-
-		// Compute max var for solver
-		final int MAXVAR = n+(n*alphabetSize*n)+(w.size*n);
-
-		// Init solver
-		solver.newVar(MAXVAR);
+		f = new BoolExpr[n];
+		d = new BoolExpr[n][alphabetSize][n];
+		x = new BoolExpr[w.size][n];
 
 		// Init f variables
 		for(int q=0; q<n; q++){
-			f[q]=varID++;
+			//f[q]= context.mkBoolConst(Integer.toString(varID++));
+			f[q] = context.mkBoolConst("f"+Integer.toString(q));
 		}
 
 		// Init d variables
 		for(int p=0; p<n; p++){
 			for(int a=0; a<alphabetSize; a++){
 				for(int q=0; q<n; q++){
-					d[p][a][q]=varID++;
+					//d[p][a][q]=context.mkBoolConst(Integer.toString(varID++));
+					d[p][a][q]=context.mkBoolConst("d "+Integer.toString(p)+" "+invertedMap.get(a)+" "+Integer.toString(q));
 				}
 			}
 		}
@@ -141,55 +136,42 @@ public class Learner{
 		// Init x variables
 		for(int u=0; u<w.size; u++){
 			for(int q=0; q<n; q++){
-				x[u][q]=varID++;
+				//x[u][q]=context.mkBoolConst(Integer.toString(varID++));
+				x[u][q]=context.mkBoolConst("x "+Integer.toString(u)+" "+Integer.toString(q));
 			}
 		}
 
-		// Setting constraints on f
-
 		// at least one f
-		try{
-			solver.addClause(new VecInt(f));
-		}catch(ContradictionException e){
-			System.out.println("ERROR on constraint f at least one");
-			return false;
+		BoolExpr at_least_one_f = context.mkFalse();
+		for(int q=0; q<n; q++){
+			at_least_one_f = context.mkOr(at_least_one_f, f[q]);
 		}
+		//solver.add(at_least_one_f);
+
+		
 
 		// Setting constraints on d
 		for(int p=0; p<n; p++){
 			for(int a=0; a<alphabetSize; a++){
-
-				// Total
-				try{
-					solver.addClause(new VecInt(d[p][a]));
-				}catch(ContradictionException e){
-					System.out.println("ERROR on constraint d total");
-					return false;
-				}
 				
-
-				// Deterministic
-				for(int q1=0; q1<n; q1++){
-					for(int q2=q1+1; q2<n; q2++){
-						try{
-							solver.addClause(new VecInt(new int[] {-d[p][a][q1], -d[p][a][q2]}));
-						}catch(ContradictionException e){
-							System.out.println("ERROR on constraint d deterministic");
-							return false;
-						}
+				// total function
+				BoolExpr total = context.mkFalse();
+				for(int q=0; q<n; q++){
+					total = context.mkOr(total, d[p][a][q]);
+					for(int q2=q+1; q2<n; q2++){
+						solver.add(context.mkNot(context.mkAnd(d[p][a][q], d[p][a][q2])));
 					}
 				}
+				solver.add(total);
 			}
 		}
 
 		// Setting constraints on x and f
 
 		// initial state
-		try{
-			solver.addClause(new VecInt(new int[] {x[w.initial.id][0]}));
-		}catch(ContradictionException e){
-			System.out.println("ERROR on constraint x initial");
-			return false;
+		solver.add(x[w.initial.id][0]);
+		for(int q=1; q<n; q++){
+			solver.add(context.mkNot(x[w.initial.id][q]));
 		}
 
 		ArrayList<Node> prefixes = new ArrayList();
@@ -201,13 +183,10 @@ public class Learner{
 			prefixes.remove(0);
 
 			// determinism-ish 
-			for(int q1=0; q1<n; q1++){
-				for(int q2=q1+1; q2<n; q2++){
-					try{
-						solver.addClause(new VecInt(new int[] {-x[prefix.id][q1], -x[prefix.id][q2]}));
-					}catch(ContradictionException e){
-						System.out.println("ERROR on constraint x deterministic-ish");
-						return false;
+			if(prefix.id>0){
+				for(int q1=0; q1<n; q1++){
+					for(int q2=q1+1; q2<n; q2++){
+						solver.add(context.mkNot(context.mkAnd(x[prefix.id][q1], x[prefix.id][q2])));
 					}
 				}
 			}
@@ -219,12 +198,7 @@ public class Learner{
 
 					for(int p=0; p<n; p++){
 						for(int q=0; q<n; q++){
-							try{
-								solver.addClause(new VecInt(new int[] {-x[prefix.id][p], -d[p][a][q], x[prefix.children[a].id][q]}));
-							}catch(ContradictionException e){
-								System.out.println("ERROR on constraint x transitions");
-								return false;
-							}
+							solver.add(context.mkImplies(context.mkAnd(x[prefix.id][p], d[p][a][q]), x[prefix.children[a].id][q]));
 						}
 					}
 
@@ -233,47 +207,69 @@ public class Learner{
 				}
 			}
 
+			// prefix has univseral consequences
+			if(prefix.uni!=null){
+
+				BoolExpr uni_ante = context.mkFalse();
+				for(int p=0; p<n; p++){
+					uni_ante = context.mkOr(context.mkAnd(x[prefix.id][p], f[p]));
+				}
+
+				BoolExpr uni_cons = context.mkTrue();
+				for(Node u : prefix.uni){
+					for(int q=0; q<n; q++){
+						uni_cons = context.mkAnd(uni_cons, context.mkImplies(x[u.id][q], f[q]));
+					}
+				}
+				solver.add(context.mkImplies(uni_ante, uni_cons));
+			}
+
+			// prefix has existential consequences
+			if(prefix.ex!=null){
+
+				BoolExpr ex_ante = context.mkFalse();
+				for(int p=0; p<n; p++){
+					ex_ante = context.mkOr(context.mkAnd(x[prefix.id][p], f[p]));
+				}
+
+				BoolExpr ex_cons = context.mkFalse();
+				for(Node e : prefix.uni){
+					for(int q=0; q<n; q++){
+						ex_cons = context.mkOr(ex_cons, context.mkImplies(x[e.id][q], f[q]));
+					}
+				}
+				solver.add(context.mkImplies(ex_ante, ex_cons));
+			}
+
 			// accept or reject
 			if(prefix.accept>0){
 				for(int q=0; q<n; q++){
-					try{
-						solver.addClause(new VecInt(new int[] {-x[prefix.id][q], f[q]}));
-					}catch(ContradictionException e){
-						System.out.println("ERROR on constraint f accepted");
-						return false;
-					}
+					solver.add(context.mkAnd(x[prefix.id][q], f[q]));
 				}
 			}
 			else if(prefix.accept<0){
 				for(int q=0; q<n; q++){
-					try{
-						solver.addClause(new VecInt(new int[] {-x[prefix.id][q], -f[q]}));
-					}catch(ContradictionException e){
-						System.out.println("ERROR on constraint f rejected");
-						return false;
-					}
+					solver.add(context.mkAnd(x[prefix.id][q], context.mkNot(f[q])));
 				}
 			}
 
 
 		}
-
-		// deterministic-ish
-		return true;
+		return solver;
 
 	}
 
-	private Automaton translateModel(int[] model){
+	private Automaton translateModel(Model model){
 
 		System.out.println("  == MODEL ==");
-		System.out.println(Arrays.toString(model));
+		System.out.println(model);
 		System.out.println();
 
 		Map<Integer, State> states = new HashMap();
 
 		for(int i=0; i<n; i++){
 			State tmp = new State();
-			if(model[f[i]-1]>0){
+			if(model.eval(f[i], true).getBoolValue().equals(Z3_lbool.Z3_L_TRUE)){
 			 	tmp.setAccept(true);
 			}
 			else{
@@ -288,7 +284,7 @@ public class Learner{
 		for(int p=0; p<n; p++){
 			for(int a=0; a<alphabetSize; a++){
 				for(int q=0; q<n; q++){
-					if(model[d[p][a][q]-1]>0){
+					if(model.eval(d[p][a][q],true).getBoolValue().equals(Z3_lbool.Z3_L_TRUE)){
 						Transition tmp = new Transition(invertedMap.get(a), states.get(q));
 						states.get(p).addTransition(tmp);
 					}
