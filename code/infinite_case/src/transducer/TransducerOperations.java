@@ -171,7 +171,7 @@ public class TransducerOperations{
 
 	private static void imageRec(State current, State as, TransducerState tas){
 
-		if (as.isAccept()){
+		if (as.isAccept() && tas.isAccept()){
 			current.setAccept(true);
 		}
 
@@ -219,5 +219,12 @@ public class TransducerOperations{
 				imageRec(next, as, tast.getDest());
 			}
 		}
+	}
+
+	public static Automaton intersection(TransducerAutomaton ta, Automaton a){
+		Automaton ret = new Automaton();
+		a.expandSingleton();
+
+		return new Automaton();
 	}
 }

@@ -104,7 +104,7 @@ public class Automaton implements Serializable, Cloneable {
 	static int minimization = MINIMIZE_HOPCROFT;
 	
 	/** Initial state of this automaton. */
-	State initial;
+	public State initial;
 	
 	/** If true, then this automaton is definitely deterministic 
 	 (i.e., there are no choices for any run, but a run may crash). */
@@ -322,7 +322,7 @@ public class Automaton implements Serializable, Cloneable {
 	/** 
 	 * Assigns consecutive numbers to the given states. 
 	 */
-	static void setStateNumbers(Set<State> states) {
+	public static void setStateNumbers(Set<State> states) {
 		if (states.size() == Integer.MAX_VALUE)
 			throw new IllegalArgumentException("number of states exceeded Integer.MAX_VALUE");
 		int number = 0;
@@ -471,7 +471,7 @@ public class Automaton implements Serializable, Cloneable {
 	/** 
 	 * Returns a sorted array of transitions for each state (and sets state numbers). 
 	 */
-	static Transition[][] getSortedTransitions(Set<State> states) {
+	public static Transition[][] getSortedTransitions(Set<State> states) {
 		setStateNumbers(states);
 		Transition[][] transitions = new Transition[states.size()][];
 		for (State s : states)

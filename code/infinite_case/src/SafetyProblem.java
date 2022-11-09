@@ -4,8 +4,10 @@ public class SafetyProblem{
 
 	private Automaton aV0, aV1, aI, aF;
 	private TransducerAutomaton tE;
+	private char[] alphabet;
 
-	public SafetyProblem(Automaton aV0, Automaton aV1, Automaton aI, Automaton aF, TransducerAutomaton tE){
+	public SafetyProblem(char[] alphabet, Automaton aV0, Automaton aV1, Automaton aI, Automaton aF, TransducerAutomaton tE){
+		this.alphabet=alphabet;
 		this.aV0=aV0;
 		this.aV1=aV1;
 		this.aI=aI;
@@ -24,6 +26,10 @@ public class SafetyProblem{
 		aF.reduce();
 		aF.minimize();
 	}
+
+	// public static SafetyProblem linearGame(int k){
+		
+	// }
 
 	public Automaton getAV0(){
 		return aV0;
@@ -47,10 +53,11 @@ public class SafetyProblem{
 
 	/**
 	 * Checks if the given Automaton represents the winning set of given safety problem 
+	 * Add a counter example to the sample if a check fails
 	 *
-	 * @param sp SafetyProblem object to symbolizes the rational safety problem
 	 * @param cdfa Automaton conjectured by the learner 
-	 * @return Boolean, true if the Automaton represents the winning set for sp.
+	 * @param s Sample object to store the current counter-examples.
+	 * @return Boolean, true if the Automaton represents the winning set for sp. False if a counter-example was added to the sample.
 	 */
 	public Boolean checkIfWinningSet(Automaton cdfa, Sample s){
 		// Initial vertices

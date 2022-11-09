@@ -36,7 +36,7 @@ public class Sample{
 
     public void addUni(String u, Automaton a){
         size++;
-        ex.add(new CounterExample(u, a));
+        uni.add(new CounterExample(u, a));
     }
 
     public Set<String> W(){
@@ -71,15 +71,23 @@ public class Sample{
 
     public String toString(){
         String ret = "";
-        ret += "====== pos: "+pos.toString()+"\n";
-        ret += "====== neg: "+neg.toString()+"\n";
+        ret += "====== pos: ";
+        if(pos.size()>0){
+            ret += pos.toString();
+        }
+        ret += "\n";
+        ret += "====== neg: ";
+        if(neg.size()>0){
+            ret += neg.toString();
+        }
+        ret += "\n";
         ret += "====== ex:  \n";
         for (CounterExample ce : ex){
-            ret+=ce.toString()+"\n";
+            ret+="ex-"+ce.toString()+"\n";
         }
         ret += "====== uni: \n";
         for (CounterExample ce : uni){
-            ret+=ce.toString()+"\n";
+            ret+="uni-"+ce.toString()+"\n";
         }
 
         return ret;

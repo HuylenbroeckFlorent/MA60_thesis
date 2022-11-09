@@ -19,7 +19,7 @@ public class Main{
 		map.put("e","l0");
 
 		RegExp e = new RegExp("(ac*d?)|(bc*e?)");
-		SafetyProblem sp = new SafetyProblem(v0.toAutomaton(), v1.toAutomaton(), i.toAutomaton(), f.toAutomaton(), e.toTransducer(map));
+		SafetyProblem sp = new SafetyProblem(alphabet, v0.toAutomaton(), v1.toAutomaton(), i.toAutomaton(), f.toAutomaton(), e.toTransducer(map));
 
 
 		// System.out.println(TransducerOperations.run(te, "slll", "elll"));
@@ -47,7 +47,7 @@ public class Main{
 			isWinningSet = sp.checkIfWinningSet(w, learner.s);
 			System.out.println("SAMPLE : ");
 			System.out.println(learner.s);
-		}while(!isWinningSet && loop<100);
+		}while(!isWinningSet);
 
 		System.out.println("Winning set found :");
 		System.out.println(w);
