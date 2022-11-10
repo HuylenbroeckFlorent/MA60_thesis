@@ -60,6 +60,7 @@ public class SafetyProblem{
 	 * @return Boolean, true if the Automaton represents the winning set for sp. False if a counter-example was added to the sample.
 	 */
 	public Boolean checkIfWinningSet(Automaton cdfa, Sample s){
+		
 		// Initial vertices
 		Automaton a1 = BasicOperations.minus(aI, cdfa);
 		if (!(BasicOperations.isEmpty(a1))){
@@ -75,9 +76,24 @@ public class SafetyProblem{
 		}
 
 		// Existential closure
+		// System.out.println("CHECKING FOR EXISTENTIAL CLOSURE");
+		// System.out.println("- INVERTED TE : ");
+		// System.out.println(TransducerOperations.invert(tE));
+		// System.out.println("- CDFA :");
+		// System.out.println(cdfa.toString());
 		Automaton a3a = TransducerOperations.image(TransducerOperations.invert(tE), cdfa);
+		// System.out.println("IMAGE PRODUCED :");
+		// System.out.println(a3a.toString());
+		// System.out.println("- REMOVING IMAGE FROM :");
+		// System.out.println(aV0.toString());
+		// System.out.println("PRODUCED :");
 		Automaton a3b = BasicOperations.minus(aV0, a3a);
+		// System.out.println(a3b.toString());
+		// System.out.println("- INTERSECTION WITH : ");
+		// System.out.println(cdfa.toString());
 		Automaton a3c = BasicOperations.intersection(cdfa, a3b);
+		// System.out.println("PRODUCED : ");
+		// System.out.println(a3c.toString());
 		if (!(BasicOperations.isEmpty(a3c))){
 			String u = BasicOperations.getShortestExample(a3c, true);
 			s.addEx(u, TransducerOperations.image(tE, new RegExp(u).toAutomaton()));

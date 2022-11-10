@@ -4,7 +4,9 @@ import transducer.*;
 
 public class Main{
 	public static void main(String[] args){
-		int k = 2;
+
+		Boolean verbose = false;
+		int k = 1;
 		char[] alphabet = {'e','s','l'};
 		RegExp v0 = new RegExp("sl*");
 		RegExp v1 = new RegExp("el*");
@@ -40,13 +42,20 @@ public class Main{
 		Automaton w;
 		boolean isWinningSet = false;
 		do{
-			System.out.println("\n\n==== TRY "+(loop++)+" ====");
 			w = learner.conjecture();
-			System.out.println("CONJECTURED : ");
-			System.out.println(w);
 			isWinningSet = sp.checkIfWinningSet(w, learner.s);
-			System.out.println("SAMPLE : ");
-			System.out.println(learner.s);
+
+			if(verbose){
+				System.out.println("\n\n==== TRY "+(loop++)+" ====");
+				
+				System.out.println("CONJECTURED : ");
+				System.out.println(w);
+				
+				System.out.println("SAMPLE : ");
+				System.out.println(learner.s);
+				
+			}
+			
 		}while(!isWinningSet);
 
 		System.out.println("Winning set found :");

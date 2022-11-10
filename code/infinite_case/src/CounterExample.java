@@ -31,4 +31,18 @@ public class CounterExample{
     public String toString(){
         return "u: "+u+"\nDFA: \n"+a.toString()+"\n";
     }
+
+    public boolean equals(Object o){
+        if(o == this){
+            return true;
+        }
+
+        if(!(o instanceof CounterExample)){
+            return false;
+        }
+
+        CounterExample ce = (CounterExample) o;
+
+        return this.u.equals(ce.getU()) && this.a.equals(ce.getA());
+    }
 }

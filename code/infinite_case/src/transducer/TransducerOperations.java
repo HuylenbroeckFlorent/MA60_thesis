@@ -171,7 +171,7 @@ public class TransducerOperations{
 
 	private static void imageRec(State current, State as, TransducerState tas){
 
-		if (as.isAccept() && tas.isAccept()){
+		if (as.isAccept() && tas.isAccept()){  // <----------- CHANGED THIS
 			current.setAccept(true);
 		}
 
@@ -186,9 +186,8 @@ public class TransducerOperations{
 						imageRec(current, ast.getDest(), tast.getDest());
 					}else{
 						if(ast.getDest().equals(as)){
-							Set<Transition> ct = current.getTransitions();
 							Transition tmp = new Transition(p.getV(), current);
-							if (!(ct.contains(tmp))){
+							if (!(current.getTransitions().contains(tmp))){
 								current.addTransition(tmp);
 								imageRec(current, as, tast.getDest());
 							}
@@ -205,26 +204,17 @@ public class TransducerOperations{
 		for (TransducerTransition tast : tas.getEpsilonTransitions()){
 
 			TransducerPair p = tast.getPair();
-			if(p.getU() == '0'){
-				State next = new State();
-				for (Transition tmp : current.getTransitions()){
-					if(tmp.getMin() == p.getV() && (
-															(tmp.getDest().isAccept() && tast.getDest().isAccept())
-														||
-															(!tmp.getDest().isAccept() && !tast.getDest().isAccept())
-													))
-						next = tmp.getDest();
-				}
-				current.addTransition(new Transition(p.getV(), next));
-				imageRec(next, as, tast.getDest());
+			State next = new State();
+			for (Transition tmp : current.getTransitions()){
+				if(tmp.getMin() == p.getV())// && (
+											//			(tmp.getDest().isAccept() && tast.getDest().isAccept())
+											//		||
+											//			(!tmp.getDest().isAccept() && !tast.getDest().isAccept())
+											//	))
+					next = tmp.getDest();
 			}
+			current.addTransition(new Transition(p.getV(), next));
+			imageRec(next, as, tast.getDest());
 		}
-	}
-
-	public static Automaton intersection(TransducerAutomaton ta, Automaton a){
-		Automaton ret = new Automaton();
-		a.expandSingleton();
-
-		return new Automaton();
 	}
 }

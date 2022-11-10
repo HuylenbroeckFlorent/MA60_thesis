@@ -13,13 +13,13 @@ public class PrefixTree{
 		size = 0;
 		this.alphabetSize=alphabetSize;
 		this.map=map;
-		initial = new Node(alphabetSize, size++, 0);
+		initial = new Node(alphabetSize, size++, 0, "-");
 	}
 
 	/**
 	* Adds word if it doesn't exist already
 	*/
-	public Node addWord(String s,  int accept, Automaton cu, Automaton ce){
+	public Node addWord(String s,  int accept){
 
 		Node current=initial;
 
@@ -32,7 +32,7 @@ public class PrefixTree{
 					current = next;
 				}
 				else{
-					next = new Node(alphabetSize, size++, 0);
+					next = new Node(alphabetSize, size++, 0, s.substring(0,i+1));
 					current.children[c] = next;
 					current.childrenCount++;
 					current = next;
@@ -42,24 +42,10 @@ public class PrefixTree{
 		if(accept!=0 && current.accept==0){
 			current.setAccept(accept);
 		}
-		if(cu!=null){
-			Set<Node> cons = new HashSet();
-			for(String word : SpecialOperations.getFiniteStrings(cu)){
-				cons.add(addWord(word, 0, null, null));
-			}
-			current.setUni(cons);
-		}
-		if(ce!=null){
-			Set<Node> cons = new HashSet();
-			for(String word : SpecialOperations.getFiniteStrings(ce)){
-				cons.add(addWord(word, 0, null, null));
-			}
-			current.setEx(cons);
-		}
 		return current;
 	}
 
-	public Node getWord(String s){
+	public Node getNode(String s){
 		Node current = initial;
 		for(int i=0; i<s.length(); i++){
 			int c = map.get(s.charAt(i));
@@ -71,5 +57,21 @@ public class PrefixTree{
 			}
 		}
 		return current;
+	}
+
+	public String getWord(int id){
+		ArrayList<Node> nodes = new ArrayList();
+		Node current = initial;
+		while(current.id != id){
+			for(Node node : current.children){
+				if(node!=null)
+					nodes.add(node);
+			}
+			if(!nodes.isEmpty()){
+				current = nodes.get(0);
+				nodes.remove(0);
+			}
+		}
+		return current.word;
 	}
 }

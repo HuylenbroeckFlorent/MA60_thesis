@@ -23,6 +23,9 @@ public class Learner{
 	private BoolExpr[][][] y;
 	private BoolExpr[][][][] z;
 
+	private boolean debug=false;
+	private boolean verbose=false;
+
 	public Learner(char[] alphabet){
 		n=1;
 		this.alphabet=alphabet;
@@ -45,20 +48,31 @@ public class Learner{
 		Model model;
 		do{
 			n++;
-			System.out.println("n = "+n);
+			if(verbose)
+				System.out.println("n = "+n);
 			solver = constructSAT(context, s, n);
-			//System.out.println(solver);
-			status = solver.check();
-			// if(status == Status.UNSATISFIABLE){
-			// 	BoolExpr[] unsat = solver.getUnsatCore();
-			// 	System.out.println(unsat.length);
-			// 	for(BoolExpr be : unsat){
-			// 		System.out.println("UNSAT : "+be);
-			// 	}
-			// }
+			if(debug){
+				System.out.println(solver);
+				status = solver.check();
+				if(status == Status.UNSATISFIABLE){
+					BoolExpr[] unsat = solver.getUnsatCore();
+					System.out.println(unsat.length);
+					for(BoolExpr be : unsat){
+						System.out.println("UNSAT : "+be);
+					}
+				}
+				String line = new Scanner(System.in).nextLine();
+			}
+			else{
+				status = solver.check();
+			}
+			
 		}while(status!=Status.SATISFIABLE);
 
 		model = solver.getModel();
+		if(debug){
+			System.out.println(model);
+		}
 		return translateModel(model);
 	}
 
@@ -73,54 +87,35 @@ public class Learner{
 		// Prefix tree for x variables (TODO find a way to not initialize everytime)
 		w = new PrefixTree(alphabetSize, map);
 
-		// Counter-examples with infinite language
-		ArrayList<CounterExample> infiniteUni = new ArrayList(); 
-		ArrayList<CounterExample> infiniteEx = new ArrayList(); 
-
-
 		// Add all u from pos in prefixtree and set them as to be accepted
 		for(String pos : s.getPos()){
-			w.addWord(pos, 1, null, null);
+			w.addWord(pos, 1);
 		}
 
 		// Add all u from pos in prefixtree and set them as to be rejected
 		for(String neg : s.getNeg()){
-			w.addWord(neg, -1, null, null);
+			w.addWord(neg, -1);
 		}
-
-		// Add all u antecedent from uni in prefixtree, and if language is finite, add all word from langage too (less computation of y variables)
-		// for(CounterExample cu : s.getUni()){
-		// 	Automaton a = cu.getA();
-		// 	if(a.isFinite()){
-		// 		w.addWord(cu.getU(), map, 0, a, null);
-		// 	}
-		// 	else{
-		// 		System.out.println("/!\\ /!\\ infinite universal counter-example : \n"+cu.toString());
-		// 		infiniteUni.add(cu);
-		// 	}
-		// }
 
 		for(CounterExample cu : s.getUni()){
-			w.addWord(cu.getU(), 0, null, null);
+			w.addWord(cu.getU(), 0);
 		}
-
-		// Add all u antecedent from ex in prefixtree, and if language is finite, add all word from langage too (less computation of z variables)
-		// for(CounterExample ce : s.getEx()){
-		// 	Automaton a = ce.getA();
-		// 	if(a.isFinite()){
-		// 		w.addWord(ce.getU(), 0, null, a);
-		// 	}
-		// 	else{
-		// 		System.out.println("/!\\ /!\\ infinite existential counter-example : \n"+ce.toString());
-		// 		infiniteEx.add(ce);
-		// 	}
-		// }
 
 		for(CounterExample ce : s.getEx()){
-			w.addWord(ce.getU(), 0, null, null);
+			w.addWord(ce.getU(), 0);
+			Automaton a = ce.getA();
+			if(a.isFinite()){
+				for(String word : a.getFiniteStrings()){
+					w.addWord(word, 0);
+				}
+			}
+			else{
+
+			}
 		}
 
-		System.out.println("Prefix tree size = "+w.size);
+		if(verbose)
+			System.out.println("Prefix tree size = "+w.size);
 
 		// Declare boolean var arrays
 		f = new BoolExpr[n];
@@ -132,8 +127,10 @@ public class Learner{
 
 		// Init f variables
 		for(int q=0; q<n; q++){
-			f[q]= context.mkBoolConst(Integer.toString(varID++));
-			//f[q] = context.mkBoolConst("f"+Integer.toString(q));
+			if(!debug)
+				f[q]= context.mkBoolConst(Integer.toString(varID++));
+			else
+				f[q] = context.mkBoolConst("f"+Integer.toString(q));
 		}
 
 
@@ -141,8 +138,10 @@ public class Learner{
 		for(int p=0; p<n; p++){
 			for(int a=0; a<alphabetSize; a++){
 				for(int q=0; q<n; q++){
-					d[p][a][q]=context.mkBoolConst(Integer.toString(varID++));
-					//d[p][a][q]=context.mkBoolConst("d "+Integer.toString(p)+" "+invertedMap.get(a)+" "+Integer.toString(q));
+					if(!debug)
+						d[p][a][q]=context.mkBoolConst(Integer.toString(varID++));
+					else
+						d[p][a][q]=context.mkBoolConst("d "+Integer.toString(p)+" "+invertedMap.get(a)+" "+Integer.toString(q));
 				}
 			}
 		}
@@ -150,8 +149,10 @@ public class Learner{
 		// Init x variables
 		for(int u=0; u<w.size; u++){
 			for(int q=0; q<n; q++){
-				x[u][q]=context.mkBoolConst(Integer.toString(varID++));
-				//x[u][q]=context.mkBoolConst("x "+Integer.toString(u)+" "+Integer.toString(q));
+				if(!debug)
+					x[u][q]=context.mkBoolConst(Integer.toString(varID++));
+				else
+					x[u][q]=context.mkBoolConst("x "+w.getWord(u)+" "+Integer.toString(q));
 			}
 		}
 
@@ -167,7 +168,10 @@ public class Learner{
 				y[u] = new BoolExpr[n][na];
 				for(int p=0; p<n; p++){
 					for(int p2=0; p2<na; p2++){
-						y[u][p][p2] = context.mkBoolConst(Integer.toString(varID++));
+						if(!debug)
+							y[u][p][p2] = context.mkBoolConst(Integer.toString(varID++));
+						else
+							y[u][p][p2] = context.mkBoolConst("y "+Integer.toString(p)+" "+Integer.toString(p2));
 					}
 				}
 
@@ -198,7 +202,7 @@ public class Learner{
 				// accept uni
 				BoolExpr accept_uni_ante = context.mkFalse();
 				BoolExpr accept_uni_cons = context.mkTrue();
-				int uante = w.getWord(cu.getU()).id;
+				int uante = w.getNode(cu.getU()).id;
 				for(int q=0; q<n; q++){
 					accept_uni_ante = context.mkOr(accept_uni_ante, context.mkAnd(x[uante][q], f[q]));
 					for(State fa : cua.getAcceptStates()){
@@ -229,7 +233,10 @@ public class Learner{
 				for(int p=0; p<n; p++){
 					for(int p2=0; p2<na; p2++){
 						for(int l=0; l<l_max; l++){
-							z[e][p][p2][l] = context.mkBoolConst(Integer.toString(varID++));
+							if(!debug)
+								z[e][p][p2][l] = context.mkBoolConst(Integer.toString(varID++));
+							else
+								z[e][p][p2][l] = context.mkBoolConst("z "+Integer.toString(p)+" "+Integer.toString(p2)+" "+Integer.toString(l));
 						}
 					}
 				}
@@ -240,10 +247,11 @@ public class Learner{
 				// constraint initial
 				solver.add(z[e][0][cea.initial.number][0]); // (q_O,q_A0) only valid run for |word| = 0
 				for(State state : ceas){
-					if(state.number == cea.initial.number){
-						continue;
-					}
-					for(int q=1; q<n; q++){
+
+					for(int q=0; q<n; q++){
+						if(state.number == cea.initial.number && q==0){
+							continue;
+						}
 						solver.add(context.mkNot(z[e][q][state.number][0])); // Every other (q,q_A) not valid run for |word|=0
 					}
 				}
@@ -251,9 +259,7 @@ public class Learner{
 				for(State state : ceas){
 
 					// constraint transitions
-					Set<Transition> transitions = state.getTransitions();
-
-					for(Transition transition : transitions){ // dA(pA,a,qA)
+					for(Transition transition : state.getTransitions()){ // dA(pA,a,qA)
 
 						int a = map.get(transition.getMin());
 
@@ -275,13 +281,14 @@ public class Learner{
 						for(int l=1; l<l_max; l++){ // l in 1,...,k
 
 							BoolExpr reverse_transition = context.mkFalse();
+							Boolean hadtransitions = false;
 
 							for(State state2 : ceas){ // p_A in Q_A
 
 								for(Transition transition : state2.getTransitions()){
 
-									if(transition.getDest().equals(state)){
-
+									if(transition.getDest().number == state.number){
+										hadtransitions = true;
 										int a = map.get(transition.getMin()); // a
 
 										for(int p=0; p<n; p++){ // p in Q
@@ -292,7 +299,12 @@ public class Learner{
 								}
 
 							}
-							solver.add(context.mkImplies(z[e][q][state.number][l], reverse_transition));
+							if(hadtransitions){
+								solver.add(context.mkImplies(z[e][q][state.number][l], reverse_transition));
+							}
+							else{
+							 	solver.add(context.mkNot(z[e][q][state.number][l]));
+							}
 						}
 					}
 				}
@@ -300,7 +312,7 @@ public class Learner{
 				// accept ex
 				BoolExpr accept_ex_ante = context.mkFalse();
 				BoolExpr accept_ex_cons = context.mkFalse();
-				int eante = w.getWord(ce.getU()).id;
+				int eante = w.getNode(ce.getU()).id;
 				for(int q=0; q<n; q++){ // q in Q
 					accept_ex_ante = context.mkOr(accept_ex_ante, context.mkAnd(x[eante][q], f[q]));
 					for(State fa : cea.getAcceptStates()){ // qA in F_A
@@ -313,15 +325,8 @@ public class Learner{
 			}
 		}
 
-		System.out.println("nVar="+varID);
-
-		// // at least one f (DO NOT SEEM NECESSARY)
-		// BoolExpr at_least_one_f = context.mkFalse();
-		// for(int q=0; q<n; q++){
-		// 	at_least_one_f = context.mkOr(at_least_one_f, f[q]);
-		// }
-		// //solver.add(at_least_one_f);
-
+		if(verbose)
+			System.out.println("nVar="+varID);
 
 		// Setting constraints on d
 		for(int p=0; p<n; p++){
@@ -357,13 +362,13 @@ public class Learner{
 			prefixes.remove(0);
 
 			// determinism-ish 
-			if(prefix.id>0){
+			//if(prefix.id>0){
 				for(int q1=0; q1<n; q1++){
 					for(int q2=q1+1; q2<n; q2++){
 						solver.add(context.mkNot(context.mkAnd(x[prefix.id][q1], x[prefix.id][q2])));
 					}
 				}
-			}
+			//}
 
 			// transitions
 			for(int a=0; a<alphabetSize; a++){
@@ -399,10 +404,6 @@ public class Learner{
 
 	private Automaton translateModel(Model model){
 
-		// System.out.println("MODEL :");
-		// System.out.println(model);
-		// System.out.println();
-
 		Map<Integer, State> states = new HashMap();
 
 		for(int i=0; i<n; i++){
@@ -413,6 +414,7 @@ public class Learner{
 			else{
 				tmp.setAccept(false);
 			}
+			tmp.number=i;
 			states.put(i, tmp);
 		}
 
@@ -430,7 +432,8 @@ public class Learner{
 			}
 		}
 
-		conjectured.minimize();
+		if(!debug)
+			conjectured.minimize();
 
 		return conjectured;
 	}

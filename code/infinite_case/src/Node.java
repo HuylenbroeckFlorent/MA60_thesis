@@ -8,14 +8,13 @@ public class Node{
 
 	int childrenCount;
 
-	// Used to link a word to it's counter-exemple consequences$
-	Set<Node> uni;
-	Set<Node> ex;
+	String word;
 
-	public Node(int alphabetSize, int id, int accept){
+	public Node(int alphabetSize, int id, int accept, String word){
 		children = new Node[alphabetSize];
 		childrenCount = 0;
 		this.id=id;
+		this.word=word;
 		setAccept(accept);
 	}
 
@@ -29,14 +28,6 @@ public class Node{
 		else{
 			this.accept=0;
 		}
-	}
-
-	public void setUni(Set<Node> uni){
-		this.uni=uni;
-	}
-
-	public void setEx(Set<Node> ex){
-		this.ex=ex;
 	}
 
 	public String toString(){

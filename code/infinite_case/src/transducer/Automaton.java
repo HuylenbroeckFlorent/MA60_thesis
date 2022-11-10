@@ -580,7 +580,7 @@ public class Automaton implements Serializable, Cloneable {
 			b.append("\n");
 		} else {
 			Set<State> states = getStates();
-			setStateNumbers(states);
+			//setStateNumbers(states);
 			b.append("initial state: ").append(initial.number).append("\n");
 			for (State s : states)
 				b.append(s.toString());

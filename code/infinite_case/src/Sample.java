@@ -20,23 +20,45 @@ public class Sample{
     }
 
     public void addPos(String pos){
-        size++;
-        this.pos.add(pos);
+        if(!(this.pos.contains(pos))){
+            size++;
+            this.pos.add(pos);
+        }
+        else{
+            System.out.println("/!\\ Duplicate POS");
+        }
     }
 
     public void addNeg(String neg){
-        size++;
-        this.neg.add(neg);
+        if(!(this.neg.contains(neg))){
+            size++;
+            this.neg.add(neg);
+        }
+        else{
+            System.out.println("/!\\ Duplicate NEG");
+        }
     }
 
     public void addEx(String u, Automaton a){
-        size++;
-        ex.add(new CounterExample(u, a));
+        CounterExample cex = new CounterExample(u, a);
+        if(!(this.ex.contains(cex))){
+            size++;
+            ex.add(cex);
+        }
+        else{
+            System.out.println("/!\\ Duplicate EX");
+        }
     }
 
     public void addUni(String u, Automaton a){
-        size++;
-        uni.add(new CounterExample(u, a));
+        CounterExample cuni = new CounterExample(u, a);
+        if(!(this.uni.contains(cuni))){
+            size++;
+            uni.add(cuni);
+        }
+        else{
+            System.out.println("/!\\ Duplicate UNI");
+        }
     }
 
     public Set<String> W(){
