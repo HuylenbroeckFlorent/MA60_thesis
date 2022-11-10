@@ -1,34 +1,52 @@
 package transducer;
 
+/**
+* Transition object for TransducerAutomaton object.
+*
+* @author HUYLENBROECK Florent
+*/
 public class TransducerTransition implements Comparable{
+
+	/**
+	* The pair of character used by this transiton.
+	*/
 	TransducerPair p;
+
+	/**
+	* The destination of this transition.
+	*/
 	TransducerState to;
 
 	/** 
-	 * Constructs a new singleton interval transition. 
-	 * @param p transition Pair
-	 * @param to destination state
+	 * Constructor. 
+	 *
+	 * @param p TransducerPair used by this transition. 
+	 * @param to TransducerState. Destination state.
 	 */
 	public TransducerTransition(TransducerPair p, TransducerState to){
 		this.p = p;
 		this.to = to;
 	}
 
-	/** Returns the pair of this transition. */
+
+	/** 
+	* Returns the pair of this transition. 
+	*
+	* @return TransducerPair of this transition.
+	*/
 	public TransducerPair getPair() {
 		return p;
 	}
 
+	/**
+	* Returns the destination state of this transition.
+	*
+	* @return TransducerState. Destination state.
+	*/
 	public TransducerState getDest(){
 		return to;
 	}
 
-	/** 
-	 * Checks for equality.
-	 * @param obj object to compare with
-	 * @return true if <code>obj</code> is a transition with same 
-	 *         character interval and destination state as this transition.
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof TransducerTransition) {
@@ -38,19 +56,6 @@ public class TransducerTransition implements Comparable{
 			return false;
 	}
 
-	/** 
-	 * Returns hash code.
-	 * The hash code is based on the character interval (not the destination state).
-	 * @return hash code
-	 */
-	@Override
-	public int hashCode() {
-		return p.hashcode(); // return min * 2 + max * 3;
-	}
-
-	/** 
-	 * Returns a string describing this state. Normally invoked via 
-	 */
 	@Override
 	public String toString() {
 		String b = "";

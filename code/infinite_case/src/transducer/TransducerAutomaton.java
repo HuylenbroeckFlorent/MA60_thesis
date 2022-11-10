@@ -2,17 +2,35 @@ package transducer;
 
 import java.util.*;
 
+/**
+* Transducer object. Acts like an Automaton from dk.brics.automaton package except it runs pair of words.
+* This does not support Automaton operations except the ones overriden in TransducerOperations class.
+*
+* @author HUYLENBROECK Florent.
+*/
 public class TransducerAutomaton extends Automaton{
 
+	/**
+	* Initial state.
+	*/
 	TransducerState initial;
 
+	/*
+	* Default constructor.
+	*/
 	public TransducerAutomaton(){
 		initial = new TransducerState();
 	}
 
+	/**
+	* Constructor. Uses an existing Automaton and a map to parse single characters into pairs of characters.
+	* For epsilons, a special character '-' is used.
+	*
+	* @param a Automaton whose states use singles characters.
+	* @param map HashMap<String, String>. 	Keys of the map are the single characters used in the Automaton.
+	*										Values are Strings that can be parsed to obtain two characters that will consititute the pairs for the transitions of this Transducer.
+	*/
 	public TransducerAutomaton(Automaton a, HashMap<String, String> map){
-		TransducerState ret = new TransducerState();
-
 		Set<State> created = new HashSet<State>();
 		LinkedList<State> worklist = new LinkedList<State>();
 
@@ -76,34 +94,29 @@ public class TransducerAutomaton extends Automaton{
 		}	
 	}
 
+	/**
+	* Returns the initial state of this transducer.
+	*
+	* @return TransducerState initial state of this transducer.
+	*/
 	public TransducerState getInitialState(){
 		return this.initial;
 	}
 
+	/**
+	* Sets the initial state of this transducer.
+	*
+	* @param ts TransducerState state to set as initial state of this transducer.
+	*/
 	public void setInitialState(TransducerState ts){
 		this.initial = ts;
 	}
 
 	/**
-	 * Returns a string representation of this automaton.
-	 */
-	@Override
-	public String toString() {
-		String b = "";
-
-		Set<TransducerState> states = getTransducerStates();
-		// setStateNumbers(states);
-		b += "initial state: " + initial.getId()+"\n";
-		for (TransducerState s : states)
-			b += s.toString();
-
-		return b;
-	}
-
-	/** 
-	 * Returns the set of states that are reachable from the initial state.
-	 * @return set of {@link State} objects
-	 */
+	* Returns all the states of this transducer.
+	*
+	* @return Set<TransducerState>, the set of states of this transducer.
+	*/
 	public Set<TransducerState> getTransducerStates() {
 
 		Set<TransducerState> visited = new HashSet<TransducerState>();
@@ -124,6 +137,11 @@ public class TransducerAutomaton extends Automaton{
 		return visited;
 	}
 
+	/**
+	* Returns the transitions of this transducer.
+	*
+	* @return Set<TransducerTransition>, the set of transitions of this transducer.
+	*/
 	public Set<TransducerTransition> getTransducerTransitions(){
 		Set<TransducerState> states = getTransducerStates();
 		Set<TransducerTransition> ret = new HashSet();
@@ -131,5 +149,18 @@ public class TransducerAutomaton extends Automaton{
 		for (TransducerState t : states)
 			ret.addAll(t.transitions);
 		return ret;
+	}
+
+	@Override
+	public String toString() {
+		String b = "";
+
+		Set<TransducerState> states = getTransducerStates();
+		// setStateNumbers(states);
+		b += "initial state: " + initial.getId()+"\n";
+		for (TransducerState s : states)
+			b += s.toString();
+
+		return b;
 	}
 }

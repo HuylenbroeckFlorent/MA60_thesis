@@ -2,63 +2,70 @@ import java.util.*;
 
 import transducer.*;
 
+/**
+* Main class used to solve safety problems. 
+* Use main function to generate/create a safety game then call solve() function to find a winning set.
+*
+* @author HUYLENBROECK Floretn
+*/
 public class Main{
+
 	public static void main(String[] args){
 
-		Boolean verbose = false;
-		int k = 1;
-		char[] alphabet = {'e','s','l'};
-		RegExp v0 = new RegExp("sl*");
-		RegExp v1 = new RegExp("el*");
-		RegExp i = new RegExp("sl{"+(k-1)+"}l+");
-		RegExp f = new RegExp("(s|e)l{"+(k-1)+"}l+");
+		// generate safety game
+		SafetyProblem linear3 = SafetyProblem.linearGame(3);
 
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("a","se");
-		map.put("b","es");
-		map.put("c","ll");
-		map.put("d","0l");
-		map.put("e","l0");
+		// solve safety game
+		Automaton w0 = solve(linear3, false, false);
 
-		RegExp e = new RegExp("(ac*d?)|(bc*e?)");
-		SafetyProblem sp = new SafetyProblem(alphabet, v0.toAutomaton(), v1.toAutomaton(), i.toAutomaton(), f.toAutomaton(), e.toTransducer(map));
+		// display solution (use toDot() or toString())
+		System.out.println(w0.toString());
+	}
 
+	/**
+	* Wrapper function for solve using less parameters.
+	*
+	* @param sp SafetyProblem to solve.
+	* @return Automata describing the winning set for the safety game player 0.
+	*/
+	public static Automaton solve(SafetyProblem sp){
+		return solve(sp, false, false);
+	}
 
-		// System.out.println(TransducerOperations.run(te, "slll", "elll"));
-
-		// System.out.println(TransducerOperations.invert(sp.getTE()));
-		// System.out.println(sp.getTE());
-
-		// Automaton test = new RegExp("sl{3}").toAutomaton();
-		// Automaton test = new RegExp("sl{3}e").toAutomaton();
-		// System.out.println(TransducerOperations.image(sp.getTE(), test));
-		// System.out.println(TransducerOperations.image(TransducerOperations.invert(sp.getTE()), test));
-		
-		// Sample s = new Sample();
-		// Automaton w = new RegExp("(sl{"+(k-1)+"}l+)|(el{"+(k)+"}l+)").toAutomaton();
-		// System.out.println(sp.checkIfWinningSet(w, s));
-		int loop = 0;
-		Learner learner = new Learner(alphabet);
+	/**
+	* Solves a safety problem.
+	* Tries to learn a winning set by learning DFAs. See class SafetyProblem and Learner.
+	* This function is not guaranteed to halt.
+	*
+	* @param sp SafetyProblem to solve.
+	* @param verbose boolean. If true, more informations will be displayed while solving.
+	* @param debug boolean. if true, debug informations will be displayed. Automatas will not be minimized.
+	* @return Automata describing the winning set for the safety game player 0.
+	*/
+	public static Automaton solve(SafetyProblem sp, boolean verbose, boolean debug){
+		Learner learner = new Learner(sp.getAlphabet(), verbose, debug);
 		Automaton w;
 		boolean isWinningSet = false;
+		int loop=0;
 		do{
 			w = learner.conjecture();
 			isWinningSet = sp.checkIfWinningSet(w, learner.s);
 
 			if(verbose){
-				System.out.println("\n\n==== TRY "+(loop++)+" ====");
-				
-				System.out.println("CONJECTURED : ");
-				System.out.println(w);
-				
-				System.out.println("SAMPLE : ");
+				System.out.println("==========");
+				System.out.println("This iteration ("+(++loop)+"began with the following sample : ");
 				System.out.println(learner.s);
 				
+				System.out.println("The following DFA was conjectured : ");
+				System.out.println(w);
 			}
-			
 		}while(!isWinningSet);
 
-		System.out.println("Winning set found :");
-		System.out.println(w);
+		if(verbose){
+			System.out.println("=== Winning set found :");
+			System.out.println(w);
+		}
+		
+		return w;
 	}
 }
