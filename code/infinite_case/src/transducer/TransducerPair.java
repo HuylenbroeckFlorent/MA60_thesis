@@ -102,10 +102,10 @@ public class TransducerPair implements Comparable{
 	public int compareTo(Object o){
 		if (o instanceof TransducerPair){
 			TransducerPair p = (TransducerPair) o;
-			if (this.u=='0' && p.getU()!='0'){
+			if (this.u=='-' && p.getU()!='-'){
 				return -1;
 			}
-			else if (this.u!='0' && p.getU()=='0'){
+			else if (this.u!='-' && p.getU()=='-'){
 				return 1;
 			}
 			else{

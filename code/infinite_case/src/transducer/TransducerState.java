@@ -75,7 +75,7 @@ public class TransducerState extends State{
 	public Set<TransducerTransition> getAlphaTransitions(){
 		Set<TransducerTransition> ret = new HashSet();
 		for (TransducerTransition t: transitions){
-			if (t.getPair().getU()!='0'){
+			if (t.getPair().getU()!='-'){
 				ret.add(t);
 			}
 		}
@@ -90,7 +90,7 @@ public class TransducerState extends State{
 	public Set<TransducerTransition> getEpsilonTransitions(){
 		Set<TransducerTransition> ret = new HashSet();
 		for (TransducerTransition t: transitions){
-			if (t.getPair().getU()=='0'){
+			if (t.getPair().getU()=='-'){
 				ret.add(t);
 			}
 		}
