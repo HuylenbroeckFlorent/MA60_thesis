@@ -1,5 +1,10 @@
 \begin{thebibliography}{1}\setlength{\itemsep}{-1ex}\small
 
+\bibitem{NeiderThesis}
+D.~Neider.
+\newblock Applications of automata learning in verification and synthesis.
+\newblock Technical report, 2014.
+
 \bibitem{NeiderAutomaton}
 D.~Neider.
 \newblock An automaton learning approach to solving safety games over infinite

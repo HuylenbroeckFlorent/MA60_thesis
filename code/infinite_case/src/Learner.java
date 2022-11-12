@@ -77,12 +77,12 @@ public class Learner{
 	/**
 	* Boolean to enable debug mode.
 	*/
-	private boolean debug=false;
+	private boolean debug;
 
 	/**
 	* Boolean to enable verbose mode.
 	*/
-	private boolean verbose=false;
+	private boolean verbose;
 
 	/**
 	* Constructor. Once constructed, the learner should be used for the whole process og the learning, since it holds a sample
@@ -103,6 +103,9 @@ public class Learner{
 			map.put(alphabet[i], i);
 			invertedMap.put(i, alphabet[i]);
 		}
+
+		this.verbose=verbose;
+		this.debug=debug;
 	}
 
 	/**

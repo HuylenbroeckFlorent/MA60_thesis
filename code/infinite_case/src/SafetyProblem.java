@@ -31,6 +31,11 @@ public class SafetyProblem{
 
 	/**
 	* Generates a linear safety game with hyperparameter k.
+	* Linear safety problem is an infinite grid, bounded on the left, where player vertices alternate.
+	* Parameter k defines the set F. After k-th vertice of each player, F begins. Game starts on a vertice >k.
+	* Player 0 is called the system (s) and player 1 is called the environment (e)
+	*
+	* (e,O)<->(s,0)<->(e,1)<->(s,1)<-> ... <->(e,k)<->(s,k)<->(e,k+1)<-> ...
 	*
 	* @param k int used to parameterize safe and initial vertices.
 	* @return SafetyProblem linear safety game of parameter k.
@@ -43,7 +48,7 @@ public class SafetyProblem{
 		RegExp i = new RegExp("sl{"+(k-1)+"}l+");
 		RegExp f = new RegExp("(s|e)l{"+(k-1)+"}l+");
 
-		HashMap<String, String> map = new HashMap<String, String>();
+		HashMap<String, String> map = new HashMap();
 		map.put("a","se");
 		map.put("b","es");
 		map.put("c","ll");

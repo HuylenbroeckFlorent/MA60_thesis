@@ -4,4 +4,5 @@ report/*.out
 report/*.synctex.gz
 report/*.toc
 code/infinite_case/build/*
+code/infinite_case/lib/archives
 report/archive

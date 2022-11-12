@@ -12,11 +12,14 @@ public class Main{
 
 	public static void main(String[] args){
 
+		boolean verbose = true;
+		boolean debug = true;
+
 		// generate safety game
-		SafetyProblem linear3 = SafetyProblem.linearGame(3);
+		SafetyProblem game = SafetyProblem.linearGame(2);
 
 		// solve safety game
-		Automaton w0 = solve(linear3, false, false);
+		Automaton w0 = solve(game, verbose, debug);
 
 		// display solution (use toDot() or toString())
 		System.out.println(w0.toString());
@@ -53,7 +56,7 @@ public class Main{
 
 			if(verbose){
 				System.out.println("==========");
-				System.out.println("This iteration ("+(++loop)+"began with the following sample : ");
+				System.out.println("This iteration ("+(++loop)+") began with the following sample : ");
 				System.out.println(learner.s);
 				
 				System.out.println("The following DFA was conjectured : ");
