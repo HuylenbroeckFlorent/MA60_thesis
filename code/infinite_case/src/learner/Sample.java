@@ -1,6 +1,9 @@
+package learner;
+
 import java.util.*;
 
 import transducer.*;
+import teacher.*;
 
 /**
 * Sample used by the learner to store counter-examples for the learning process.

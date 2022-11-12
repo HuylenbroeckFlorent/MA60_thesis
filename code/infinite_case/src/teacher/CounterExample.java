@@ -1,3 +1,5 @@
+package teacher;
+
 import java.util.*;
 
 import transducer.*;

@@ -1,6 +1,9 @@
 import java.util.*;
 
 import transducer.*;
+import safetyproblem.*;
+import learner.*;
+import teacher.*;
 
 /**
 * Main class used to solve safety problems. 
@@ -12,8 +15,8 @@ public class Main{
 
 	public static void main(String[] args){
 
-		boolean verbose = true;
-		boolean debug = true;
+		boolean verbose = false;
+		boolean debug = false;
 
 		// generate safety game
 		SafetyProblem game = SafetyProblem.linearGame(2);
@@ -47,12 +50,13 @@ public class Main{
 	*/
 	public static Automaton solve(SafetyProblem sp, boolean verbose, boolean debug){
 		Learner learner = new Learner(sp.getAlphabet(), verbose, debug);
+		Teacher teacher = new Teacher(sp);
 		Automaton w;
 		boolean isWinningSet = false;
 		int loop=0;
 		do{
 			w = learner.conjecture();
-			isWinningSet = sp.checkIfWinningSet(w, learner.s);
+			isWinningSet = teacher.checkIfWinningSet(w, learner.s);
 
 			if(verbose){
 				System.out.println("==========");

@@ -1,3 +1,5 @@
+package learner;
+
 import java.util.*;
 import java.util.stream.*;
 
@@ -5,6 +7,7 @@ import com.microsoft.z3.*;
 import com.microsoft.z3.enumerations.*;
 
 import transducer.*;
+import teacher.*;
 
 /**
 * Learner for safety games. This object can be used, paired with a teacher for safety games,

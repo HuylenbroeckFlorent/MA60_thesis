@@ -1,3 +1,5 @@
+package safetyproblem;
+
 import java.util.*;
 
 import transducer.*;
@@ -142,55 +144,6 @@ public class SafetyProblem{
 	*/
 	public char[] getAlphabet(){
 		return alphabet;
-	}
-
-	/**
-	 * Checks if the given Automaton represents the winning set of this safety game.
-	 * Add a counter example to the sample if a check fails.
-	 * The check are always performed in the same order even tough it doesn't matter.
-	 *
-	 * @param cdfa Automaton conjectured by the learner 
-	 * @param s Sample object to store the current counter-examples.
-	 * @return Boolean, true if the Automaton represents the winning set for sp. False if a counter-example was added to the sample.
-	 */
-	public Boolean checkIfWinningSet(Automaton cdfa, Sample s){
-		
-		// Initial vertices
-		Automaton a1 = BasicOperations.minus(aI, cdfa);
-		if (!(BasicOperations.isEmpty(a1))){
-			s.addPos(BasicOperations.getShortestExample(a1, true));
-			return false;
-		}
-
-		// Safe vertices
-		Automaton a2 = BasicOperations.minus(cdfa, aF);
-		if (!(BasicOperations.isEmpty(a2))){
-			s.addNeg(BasicOperations.getShortestExample(a2, true));
-			return false;
-		}
-
-		// Existential closure
-		Automaton a3a = TransducerOperations.image(TransducerOperations.invert(tE), cdfa);
-		Automaton a3b = BasicOperations.minus(aV0, a3a);
-		Automaton a3c = BasicOperations.intersection(cdfa, a3b);
-		if (!(BasicOperations.isEmpty(a3c))){
-			String u = BasicOperations.getShortestExample(a3c, true);
-			s.addEx(u, TransducerOperations.image(tE, new RegExp(u).toAutomaton()));
-			return false;
-		}
-
-		// Universale closure
-		Automaton a4a = BasicOperations.minus(BasicOperations.union(aV0, aV1), cdfa);
-		Automaton a4b = TransducerOperations.image(TransducerOperations.invert(tE), a4a);
-		Automaton a4c = BasicOperations.intersection(BasicOperations.intersection(aV1, cdfa), a4b);
-		if (!(BasicOperations.isEmpty(a4c))){
-			String u = BasicOperations.getShortestExample(a4c, true);
-			s.addUni(u, TransducerOperations.image(tE, new RegExp(u).toAutomaton()));
-			return false;
-		}
-
-		// Passes
-		return true;
 	}
 }
 
