@@ -1,4 +1,4 @@
-### Solving safety game played on graphs.
+# Solving safety game played on graphs.
 
 Thesis wrote by HUYLENBROECK Florent, in order to achieve the Master grade in computer Sciences.
 
@@ -6,13 +6,22 @@ Thesis wrote by HUYLENBROECK Florent, in order to achieve the Master grade in co
 
 **Reviewers** : Gaëtan STACQUET, Clément TAMINES. 
 
-### Requirements
+This thesis studies the solving of safety games played on finite and infinite graphs. 
+The report can be found at report/memoire.pdf and the code is contained in the code directory.
+
+# Requirements
 To run the code for the infinite case, python3, ant, java 11+ and C++17+ are required. 
 
-### Build
+# Build
 To build the project, go to code/infinite_case/lib/z3-master and follow the instructions for building z3 bindings for java.
 
-### Run
+# Run
 To run the project for the finite case :
 - Go to code/finite_case
-- Open 
+- Open finite_arena.py and edit the main function to create a finite arena.
+- Call the instance method 'attractor([vertices], player) to compute the attractor for player number 'player' towards the set of vertices '[vertices]'
+
+To run the project for infinite case :
+- Go to  code/infinite_case
+- Open src/Main.java and create a SafetyGame object. (SafetyGame class has built-in function to generate safety games).
+- run 'ant' to build and run the project.
