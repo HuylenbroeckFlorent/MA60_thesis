@@ -1,5 +1,9 @@
 package transducer;
 
+/*
+* This version of the package has been modified by HUYLENBROECK Florent to be used in the implementation of transducers.
+*/
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;

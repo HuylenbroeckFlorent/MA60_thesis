@@ -28,7 +28,7 @@
  */
 
 /*
-* This version of the class has been modified by HUYLENBROECK Florent to be used in the implementation of transducers.
+* This version of the package has been modified by HUYLENBROECK Florent to be used in the implementation of transducers.
 */
 
 package transducer;
@@ -1088,19 +1088,5 @@ public class Automaton implements Serializable, Cloneable {
 	 */
 	public static Automaton replaceWhitespace(Automaton a) {
 		return SpecialOperations.replaceWhitespace(a);
-	}
-	
-	/**
-	 * See {@link ShuffleOperations#shuffleSubsetOf(Collection, Automaton, Character, Character)}.
-	 */ 
-	public static String shuffleSubsetOf(Collection<Automaton> ca, Automaton a, Character suspend_shuffle, Character resume_shuffle) {
-		return ShuffleOperations.shuffleSubsetOf(ca, a, suspend_shuffle, resume_shuffle);
-	}
-
-	/** 
-	 * See {@link ShuffleOperations#shuffle(Automaton, Automaton)}.
-	 */
-	public Automaton shuffle(Automaton a) {
-		return ShuffleOperations.shuffle(this, a);
 	}
 }

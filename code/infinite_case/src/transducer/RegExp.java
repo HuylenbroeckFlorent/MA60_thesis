@@ -28,7 +28,7 @@
  */
 
 /*
-* This version of the class has been modified by HUYLENBROECK Florent to be used in the implementation of transducers.
+* This version of the package has been modified by HUYLENBROECK Florent to be used in the implementation of transducers.
 */
 
 package transducer;
