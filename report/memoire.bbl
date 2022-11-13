@@ -6,11 +6,12 @@ D.~Neider.
 \newblock Technical report, 2014.
 
 \bibitem{NeiderAutomaton}
-D.~Neider.
+D.~Neider and U.~Topcu.
 \newblock An automaton learning approach to solving safety games over infinite
   graphs.
-\newblock Technical report, {Department of Electrical and Systems Engineering
-  University of Pennsylvania, USA}, 2016.
+\newblock In M.~Chechik and J.-F. Raskin, editors, {\em Tools and Algorithms
+  for the Construction and Analysis of Systems}, pages 204--221, Berlin,
+  Heidelberg, 2016. Springer Berlin Heidelberg.
 
 \bibitem{Church}
 W.~Thomas.

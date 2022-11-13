@@ -77,14 +77,14 @@
 \pagenumbering{arabic}
 \renewcommand{\leftmark}{INTRODUCTION}
 \chapter{Introduction}
-En informatique théorique, le problème du model-checking consiste à vérifier qu'un système informatique, exprimé sous la forme d'un modèle mathématique, satisfait une spécification. Par exemple, vérifier que le système d'atteint jamais un état de deadlock, qu'une variable du système ne se voit jamais attribuer une valeur nulle, ou qu'une requête recoit toujours une réponse. Les modèles utilisés peuvent varier : les comportements du système informatique peuvent être modelisés par un automate acceptant des mots infinis, tandis que la specification peut être modelisée par une formule de logique temporelle LTL.\\
-Cependant, plutot que de vérifier qu'un tel systéme satisfait une spécification, on peut aller plus loin en envisageant la synthèse de controlleur. Ainsi, dans le but de modèliser les interactions d'un système informatiques avec son environnement, on peut considèrer un graphe infini dont les sommets sont partagés entre le système et l'environnement. Les interactions entre les deux partis sont alors représentées par un chemin infini dans ce graphe, tel qu'en tout sommet du système (resp. de l'environnement), c'est lui qui décide quel arc suivre à partir de ce sommet.\\
-Le système peut être percu comme jouant un jeu en s'opposant à l'environnement. Son but est de satisfaire la spécification, peu importe ce que fait l'environnement. Pour gagner ce jeu, le système va devoir se munir d'une stratégie gagnante. Cette stratégie est ce que l'on appelle un programme de contrôle.\\
-La synthèse de controlleur revient donc à construire, quand c'est possible, une stratégie gagnante pour le système contre l'environnement pour un objectif donné.\\
+En informatique théorique, le problème du model-checking consiste à vérifier qu'un système informatique, exprimé sous la forme d'un modèle mathématique, satisfait une spécification. Par exemple, vérifier que le système n'atteint jamais un état de deadlock, qu'une variable du système ne se voit jamais attribuer une valeur nulle, ou qu'une requête reçoit toujours une réponse. Les modèles utilisés peuvent varier : les comportements du système informatique peuvent être modélisés par un automate acceptant des mots infinis, tandis que la spécification peut être modélisée par une formule de logique temporelle LTL.\\
+Cependant, plutôt que de vérifier qu'un tel système satisfait une spécification, on peut aller plus loin en envisageant la synthèse de contrôleur. Ainsi, dans le but de modéliser les interactions d'un système informatique avec son environnement, on peut considérer un graphe infini dont les sommets sont partagés entre le système et l'environnement. Les interactions entre les deux partis sont alors représentées par un chemin infini dans ce graphe, tel qu'en tout sommet du système (resp. de l'environnement), c'est lui qui décide quel arc suivre à partir de ce sommet.\\
+Le système peut être perçu comme jouant un jeu en s'opposant à l'environnement. Son but est de satisfaire la spécification, peu importe ce que fait ce dernier. Pour gagner ce jeu, le système va devoir se munir d'une stratégie gagnante. Cette stratégie est ce que l'on appelle un programme de contrôle.\\
+La synthèse de contrôleur revient donc à construire, quand c'est possible, une stratégie gagnante pour le système contre l'environnement pour un objectif donné.\\
 
 \noindent Dans ce mémoire, nous allons étudier ce problème de synthèse pour un type de jeu spécifique : les jeux de sûreté. L'objectif de ce jeu est d'éviter au système de passer par certains sommets du graphe. Autrement dit, d'empêcher le système informatique d'atteindre certaines configurations.\\
 
-\noindent Quand le graphe sur lequel le jeu est joué est de taille finie, il existe des algorithmes simples qui indiquent si le système peut y parvenir et qui calculent les stratégies gagnantes pour ce dernier. Quand le graphe est inifini, par contre, il n'existe pas d'algorithme exact. Nous allons étudier une méthode de calcul de stratégie proposée par \cite{NeiderAutomaton} consistant à transformer le jeu de base en un ensemble d'automates, pour ensuite en déduire une série de problèmes de stasfiabilité. Ces derniers, s'ils sont satisfiables, pourront donner une stratégie gagnante pour le système.\\
+\noindent Quand le graphe sur lequel le jeu est joué est de taille finie, il existe des algorithmes simples qui indiquent si le système peut y parvenir et qui calculent les stratégies gagnantes pour ce dernier. Quand le graphe est infini, par contre, il n'existe pas d'algorithme exact. Nous allons étudier une méthode de calcul de stratégie gagnante, proposée par \cite{NeiderAutomaton}, consistant à transformer le jeu de base en un ensemble d'automates, pour ensuite en déduire une série de problèmes de satisfiabilité. Ces derniers, s'ils sont satisfaisable, pourront donner une stratégie gagnante pour le système.\\
 
 \noindent Après avoir introduit les notions nécessaires, nous allons commencer par présenter un algorithme existant pour les jeux joués sur graphes finis. Ensuite, nous allons étudier la méthode introduite ci-dessus pour les jeux inifinis. Une implémentation sera finalement proposée pour cette méthode et la complexité de tous ces algorithmes sera discutée.
 \newpage
@@ -148,14 +148,14 @@ Une séquence infinie de coups forme une \emph{partie}.
 \begin{defi}
 	Une \emph{partie} d'un jeu est une séquence infinie $\pi=v_0 v_1 ...$ où $\forall i\in \mathbb{N},v_i \in V, $ et $(v_i, v_{i+1})\in E$.
 \end{defi}
-\noindent L'\emph{objectif} $\Omega$ d'un jeu joué sur graphes est ce qui va définir la condition de victoire des joueurs. Dans ce rapport nous allons nous intéresser à deux types de jeux, les jeux de sûreté et les jeux d'atteignabilité. L'objectif pour ces deux types de jeux est défini par un sous ensemble $F\subseteq V$. Dans ces jeux, les deux joueurs jouent selon des objectifs opposés.
+\noindent L'\emph{objectif} $\Omega$ d'un jeu joué sur graphes est ce qui va définir la condition de victoire des joueurs. Dans ce rapport, nous allons nous intéresser à deux types de jeux : les jeux de sûreté et les jeux d'atteignabilité. L'objectif pour ces deux types de jeux est défini par un sous-ensemble $F\subseteq V$. Dans ces jeux, les deux joueurs jouent selon des objectifs opposés.
 \subsection{Jeux de sûreté}
-Un jeu de sûreté est défini par un tuple $\mathfrak{G}=(A,I,F)$ avec $A$ une arène, $I\subseteq F$ un ensemble de sommets de départ et $F\subseteq V$ un sous ensemble de sommets dits \emph{sûrs}. L'objectif pour le joueur $j_0$ d'un jeu de sûreté est que tous les sommets visités lors de la partie soient des sommets sûrs. L'objectif pour le joueur $j_1$ est donc qu'au moins un sommet hors de $F$ soit visité.
+Un jeu de sûreté est défini par un tuple $\mathfrak{G}=(A,I,F)$ avec $A$ une arène, $I\subseteq F$ un ensemble de sommets de départ et $F\subseteq V$ un sous-ensemble de sommets dits \emph{sûrs}. L'objectif pour le joueur $j_0$ d'un jeu de sûreté est que tous les sommets visités lors de la partie soient des sommets sûrs. L'objectif pour le joueur $j_1$ est donc qu'au moins un sommet hors de $F$ soit visité.
 \begin{defi}
 Soit $\mathfrak{G}=(A,I,F)$ un jeu de sûreté, une partie $\pi=v_0v_1...$ est gagnante pour le joueur $j_0$ si $\forall i\in \mathbb{N}, v_i \in F$
 \end{defi}
 \subsection{Jeux d'atteignabilité}
-Un jeu d'atteignabilité est défini par un tuple $\mathfrak{G}=(A,I,F)$ avec $A$ une arène, $I\subseteq V\setminus F$ un ensemble de sommets de départ et $F\subseteq V$ un sous ensemble de sommets \emph{à atteindre}. L'objectif pour le joueur $j_0$ d'un jeu de sûreté est qu'au moins un sommet de $F$ soit visité au cours de la partie. L'objectif du joueur $j_1$ est que seuls des sommets hors de $F$ soient visités.
+Un jeu d'atteignabilité est défini par un tuple $\mathfrak{G}=(A,I,F)$ avec $A$ une arène, $I\subseteq V\setminus F$ un ensemble de sommets de départ et $F\subseteq V$ un sous-ensemble de sommets \emph{à atteindre}. L'objectif pour le joueur $j_0$ d'un jeu de sûreté est qu'au moins un sommet de $F$ soit visité au cours de la partie. L'objectif du joueur $j_1$ est que seuls des sommets hors de $F$ soient visités.
 \begin{defi}
 Soit $\mathfrak{G}=(A,I,F)$ un jeu d'atteignabilité, une partie $\pi=v_0v_1...$ est gagnante pour le joueur $j_0$ si $\exists i\in \mathbb{N}, v_i \in F$
 \end{defi}
@@ -165,7 +165,7 @@ Soit $\mathfrak{G}=(A,I,F)$ un jeu d'atteignabilité, une partie $\pi=v_0v_1...$
 \noindent Les coups des joueurs sont décidés par la \emph{stratégie} adoptée par ces derniers. Une stratégie est une fonction $s_{j_n} : V^*V_n\to V$ qui indique vers quel sommet le joueur $j_n$ va déplacer le pion depuis le sommet courant $v\in V_n$ selon la séquence de déplacements précédents.\\
 Une stratégie peut être \emph{sans mémoire} (ou \emph{positionnelle}) $s_{j_n} : V_n \to V$ si elle ne prend en compte que le sommet actuel où se trouve le pion.\\
 
-\noindent Une stratégie est gagnante \emph{à partir d'un sommet} $v$ si un partie jouée selon cette stratégie 
+\noindent Une stratégie pour le joueur $j_n$ est gagnante \emph{à partir d'un sommet} $v$ si une partie jouée selon cette stratégie mène à une victoire du joueur $j_n$.
 
 \begin{defi}
 Une partie $\pi=v_0 v_1 ...$ est dite \emph{jouée selon une stratégie} $s_{j_n}$  (à partir d'un sommet $v_0 \in V$) si $\forall i \in \mathbb{N}, v_i \in V_n, v_{i+1} = s_{j_n}(v_0v_1...v_i)$
@@ -184,7 +184,7 @@ Afin de résoudre les jeux de sûreté joués sur des graphes, nous allons disti
 \begin{defi}
 Une \emph{arène finie} est une arène $A=(V_0, V_1, E)$ pour laquelle $V_0$ et $V_1$ sont des ensembles finis.
 \end{defi}
-\noindent Dans cette section, nous allons définir la notion d'attracteur, et l'appliquer afin de calculer les ensembles gagnantes des arènes finies, et les stratégies gagnantes des deux joueurs. Nous allons aussi proposer un algorithme qui calcule les attracteurs d'une arène finie.
+\noindent Dans cette section, nous allons définir la notion d'attracteur, et l'appliquer afin de calculer les ensembles gagnants des arènes finies, et les stratégies gagnantes des deux joueurs. Nous allons aussi proposer un algorithme qui calcule ces attracteurs.
 \section{Résolution via les attracteurs}
 Une méthode pour calculer les ensembles gagnants des jeux de sûreté et d'atteignabilité se base sur le principe d'attracteur. 
 \begin{defi}
@@ -233,8 +233,8 @@ Ces deux cas étant exhaustifs, et ayant montré que $j_0$ est contraint de rest
 \end{demonstration}
 \noindent Ces deux cas exhaustifs nous permettent aussi de déduire la stratégie gagnante du joueur $j_1$. A chaque coup, il doit déplacer le pion vers un sommet hors de l'attracteur.
 
-Ainsi nous avons montré que l'on peut construire l'ensemble gagnant $W_0$ du joueur $j_0$ pour un jeu d'atteignabilité en utilisant le principe d'attracteur. On obtient aussi immédiatement l'ensemble gagnant $W_1=V\setminus W_0$ du joueur $j_1$. Chaque joueur peut gagner la partie à partir de chaque sommet de leur ensemble gagnant respectif en adoptant les stratégies énoncées ci-dessus.\\
-Ainsi, un jeu de sûreté joué selon ces stratégies sera toujours gagnant pour le joueur $j_0$ si $I\subseteq W_0$.
+Ainsi, nous avons montré que l'on peut construire l'ensemble gagnant $W_0$ du joueur $j_0$ pour un jeu d'atteignabilité en utilisant le principe d'attracteur. On obtient aussi immédiatement l'ensemble gagnant $W_1=V\setminus W_0$ du joueur $j_1$. Chaque joueur peut gagner la partie à partir de chaque sommet de leur ensemble gagnant respectif en adoptant les stratégies énoncées ci-dessus.\\
+Un jeu de d'atteignabilité joué selon ces stratégies sera toujours gagnant pour le joueur $j_0$ si $I\subseteq W_0$.
 
 \noindent De plus, la dualité entre un jeu d'atteignabilité et un jeu de sûreté nous permet d'énoncer le théorème suivant :
 
@@ -243,9 +243,9 @@ Ainsi, un jeu de sûreté joué selon ces stratégies sera toujours gagnant pour
 \label{thm:dualite}
 \end{thm}
 \begin{demonstration}
-Soit un jeu de sûreté $\mathfrak{G} = (A, F)$ avec $A$ une arène finie. on construit $Attr_{j_1}(V\setminus F)$, autrement dit la liste de sommets depuis lesquels $j_1$ peut forcer une visite d'un sommet hors de $F$. En adoptant la même stratégie que $j_0$ dans un jeu d'atteignabilité, cet attracteur donne l'ensemble gagnant de $j_1$ pour un jeu de sûreté. De manière analogue, $j_0$, en adoptant la stratégie du joueur $j_1$ du jeu d'atteignabilité, ne pourra gagner le jeu de sûreté que depuis les sommets hors de cet attracteur.
+Soit un jeu de sûreté $\mathfrak{G} = (A, F)$ avec $A$ une arène finie. On construit $Attr_{j_1}(V\setminus F)$, autrement dit la liste de sommets depuis lesquels $j_1$ peut forcer une visite d'un sommet hors de $F$. En adoptant la même stratégie que $j_0$ dans un jeu d'atteignabilité, cet attracteur donne l'ensemble gagnant de $j_1$ pour un jeu de sûreté. De manière analogue, $j_0$, en adoptant la stratégie du joueur $j_1$ du jeu d'atteignabilité, ne pourra gagner le jeu de sûreté que depuis les sommets hors de cet attracteur.
 \end{demonstration}
-\noindent La figure \ref{fig:ensemblegagnant} représente, en gris, l'ensemble gagnant du joueur $j_0$ d'un jeu d'atteignabilité joue sur l'arène de la figure \ref{fig:arena}, avec $F=\{1,2,11\}$.
+\noindent La figure \ref{fig:ensemblegagnant} représente, en gris, l'ensemble gagnant du joueur $j_0$ d'un jeu d'atteignabilité joué sur l'arène de la figure \ref{fig:arena}, avec $F=\{1,2,11\}$.
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[	
@@ -312,7 +312,7 @@ Nous allons maintenant proposer un algorithme de calcul du $i^e$ attracteur. Pou
 	&&appartient au joueur dont le numéro figure en \\
 	&&$i^e$ entrée de $players$).\\
 	&\textbf{F} : &Liste de numéros de sommets.\\
-	&\textbf{p} : &Numéro de joueur.\\
+	&\textbf{p} : &Numéro du joueur.\\
 	&\textbf{i} : &Nombre d'itération pour la construction de\\
 	&&l'attracteur, une valeur négative calculera l'attracteur\\
 	&&complet.\\
@@ -381,7 +381,7 @@ La première étape de la boucle principale est de copier la liste $attractor\_n
 \item $\{v'\in V\setminus V_n$ $|$ $\forall(v,v')\in E:v\in Attr^i_{j_n}(F)\}$. Dans la boucle intérieure, lignes 23-28, si un prédécesseur du noeud en cours de traitement n'appartient pas à $p$, alors il est ajouté à l'attracteur si tous ses successeurs sont aussi dans l'attracteur. C'est à cette étape que le pré-traitement joue un rôle. A chaque fois qu'un noeud est rencontré dans la liste des prédécesseurs d'un autre noeud, on décrémente la valeur correspondante dans $out\_degrees$. Si cette valeur atteint $0$, cela veut dire que tous les successeurs de ce noeud font partie de l'attracteur (car on ne visite les prédécesseurs d'un noeud que s'il a été ajouté à l'attracteur). On peut donc l'ajouter à son tour à l'attracteur.
 \end{itemize}
 Le calcul s'arrête quand aucun noeud n'est ajouté à l'attracteur au cours d'une itération ($attractor\_new$ est vide). Cela veut dire que le point fixe de la séquence d'attracteur $Attr^0_p(F)\subseteq Attr^1_p(F)\subseteq ...$ est atteint et que l'attracteur complet a été calculé.\\
-L'algorithme peut aussi retourner le $i^e$ attracteur si on lui passe en entrée une valeur de $i$ positive (et inférieure au nombre d'itération qu'il faut pour atteindre le point fixe). En effet, $i$ intervient dans le calcul de la condition d'arrêt. Celui-ci est décrémenté à chaque nouvel attracteur calculé. Cependant, la condition d'arrêt ne vérifie qui si $i\neq 0$. Une valeur négative de $i$ en entrée assurera donc le calcul de l'attracteur complet, car celui-ci ne causera pas l'arrêt de la boucle principale.
+L'algorithme peut aussi retourner le $i^e$ attracteur si on lui passe en entrée une valeur de $i$ positive (et inférieure au nombre d'itération qu'il faut pour atteindre le point fixe). En effet, $i$ intervient dans le calcul de la condition d'arrêt. Celui-ci est décrémenté à chaque nouvel attracteur calculé. Cependant, la condition d'arrêt ne vérifie que si $i\neq 0$. Une valeur négative de $i$ en entrée assurera donc le calcul de l'attracteur complet, car celui-ci ne causera pas l'arrêt de la boucle principale.
 \subsection{Complexité}
 Considérons un graphe $G$ possédant $n$ noeuds et $m$ arcs. Alors l'algorithme \emph{Attractor} possède une complexité dans le pire des cas en $O(n+m)$.
 \begin{demonstration}
@@ -395,7 +395,7 @@ Cette étape se fait en temps $O(n)$ car il y a au plus $n$ noeuds dans le graph
 Considérons une valeur de $i$ négative pour le pire des cas.\\
 L'étape du calcul de l'attracteur agit comme un parcours du graphe. En effet, une fois un noeud visité et marqué comme appartenant à l'attracteur, ce noeud ne sera plus visité. Chaque noeud n'est donc visité qu'une seule fois et, dans le pire des cas, tous les noeuds du graphe seront visités.\\
 La condition d'arrêt (ligne 15) est vérifiée au maximum $n$ fois (une fois pour chaque sommet, car il faut au minimum un sommet dans $attractor\_new$ pour satisfaire la condition et, dans le pire des cas, tous les sommets seront ajoutés un par un à l'attracteur). Le coût de cette évaluation est $O(1)$.\\
-Pour chaque sommet traité, on effectue une action en $O(1)$ (ligne 19) afin de récupérer la liste des ses prédécesseurs dans la structure de données $G$, une autre opération en $O(1)$ (lignes 32-34) afin de marquer ce sommet dans l'attracteur. En comptant aussi la condition d'arrêt et l'opération arithmétique (ligne 35), le coût total par sommet est donc $O(1)$.\\
+Pour chaque sommet traité, on effectue une action en $O(1)$ (ligne 19) afin de récupérer la liste de ses prédécesseurs dans la structure de données $G$, une autre opération en $O(1)$ (lignes 32-34) afin de marquer ce sommet dans l'attracteur. En comptant aussi la condition d'arrêt et l'opération arithmétique (ligne 35), le coût total par sommet est donc $O(1)$.\\
 Ensuite, pour chaque prédécesseur (autrement dit pour chaque arc), l'algorithme n'effectue que des opérations en $O(1)$ : ajouts à une liste (lignes 22 et 26), accès à un tableau via l'indice, comparaisons et opérations arithmétiques (lignes 20, 21, 24 et 25). Le coût total par arc est donc $O(1)$. Nous obtenons un coût total pour le parcours de $n\cdot O(1)+m\cdot O(1) = O(n+m)$.\\
 Il faut ajouter à cela le coût de copier la liste $attractor\_new$ dans $to\_check$. Etant donné que cette liste ne peut contenir qu'une fois chaque sommet à travers toutes les itérations, le coût total des copies vaudra $O(n)$. La complexité de l'étape de calcul est donc $O(n+m+n)=O(n+m)$.
 \end{itemize}
@@ -742,7 +742,7 @@ Afin d'illustrer le cas infini, nous allons considérer l'arène infinie simple 
 \section{Jeux de sûreté rationnels}
 Un jeu de sûreté rationnel est une représentation symbolique d'un jeu de sûreté, basée sur les langages rationnels et les relations rationnelles.
 \begin{defi}
-Une \emph{arène rationelle} sur l'alphabet $\Sigma$ est une arène $A_\Sigma=(V_0,V_1,E)$ où $V_0,V_1$ sont des langages réguliers et $E$ est une relation régulière.
+Une \emph{arène rationnelle} sur l'alphabet $\Sigma$ est une arène $A_\Sigma=(V_0,V_1,E)$ où $V_0,V_1$ sont des langages réguliers et $E$ est une relation régulière.
 \end{defi}
 
 \begin{defi}
@@ -890,14 +890,14 @@ Soit $\mathfrak{G}=(A,I,F)$ un jeu, avec $A=(V_0, V_1, E)$, l'\emph{ensemble gag
 Où \emph{Succ($v$)} est la fonction retournant les successeurs du sommet $v$.\\
 Cet ensemble n'est pas garanti d'exister pour un jeu de sûreté.
 \end{defi}
-Cette nouvelle définition de l'ensemble gagnant pour un jeu de sûreté nous donne immédiatement une stratégie gagnante pour le joueur $j_0$. Etant donné que $I\in W_0$, celui-ci n'a qu'a déplacer le pion vers un sommet de $W_0$ à chaque coup.\\
+Cette nouvelle définition de l'ensemble gagnant pour un jeu de sûreté nous donne immédiatement une stratégie gagnante pour le joueur $j_0$. Etant donné que $I\in W_0$, celui-ci n'a qu'à déplacer le pion vers un sommet de $W_0$ à chaque coup.\\
 Si un tel ensemble gagnant existe, le joueur $j_1$ ne peut pas gagner la partie. Nous allons maintenant décrire la manière de construire un tel ensemble gagnant. Dans le reste de ce rapport, nous allons supposer qu'un tel ensemble existe.\\
 
 
 \section{Apprentissage}\label{sectionapprentissage}
-Résoudre un jeu de sûreté rationnel consiste à produire un AFD qui acceptera tous les mots représentant les sommets de l'ensemble gagnant $W_0$. Afin de produire un tel automate, nous allons utiliser le principe d'\emph{apprentissage}. Cet apprentissage à lieu entre un \emph{enseignant}, lequel est en connaissance du jeu de sûreté que l'on veut résoudre, et un \emph{élève}, cherchant à en apprendre l'AFD décrivant l'ensemble gagnant. On suppose que l'alphabet utilisé est connu à l'avance par les deux partis\\
+Résoudre un jeu de sûreté rationnel consiste à produire un AFD qui acceptera tous les mots représentant les sommets de l'ensemble gagnant $W_0$. Afin de produire un tel automate, nous allons utiliser le principe d'\emph{apprentissage}. Cet apprentissage à lieu entre un \emph{enseignant}, lequel est en connaissance du jeu de sûreté que l'on veut résoudre, et un \emph{élève}, cherchant à en apprendre l'AFD décrivant l'ensemble gagnant. On suppose que l'alphabet utilisé est connu à l'avance par les deux partis.\\
 
-L'apprentissage se déroule à l'intérieur d'une boucle de type \emph{CEGIS} (Counter-example guided inductive synthesis, ou synthèse inductive guidée par le contre-exemple). A chaque itération de cette boucle, l'élève conjecture un AFD $\mathcal{C}$ et l'enseignant vérifie à l'aide de la définition \ref{infinitewinningset} si $\mathcal{L}(\mathcal{C})$ est un ensemble gagnant. Si c'est le cas l'enseignant répond "\emph{oui}" et l'apprentissage s'arrête. Sinon, l'enseignant retourne un \emph{contre-exemple} pour une des règles non respectées de la définition \ref{infinitewinningset} et l'apprentissage se poursuit dans l'itération suivante. Plus formellement, la définition suivante établit le protocole de vérification par l'enseignant :
+L'apprentissage se déroule à l'intérieur d'une boucle de type \emph{CEGIS} (Counter-example guided inductive synthesis, ou synthèse inductive guidée par le contre-exemple). A chaque itération de cette boucle, l'élève conjecture un AFD $\mathcal{C}$ et l'enseignant vérifie à l'aide de la définition \ref{infinitewinningset} si $\mathcal{L}(\mathcal{C})$ est un ensemble gagnant. Si c'est le cas, l'enseignant répond "\emph{oui}" et l'apprentissage s'arrête. Sinon, l'enseignant retourne un \emph{contre-exemple} pour une des règles non respectées de la définition \ref{infinitewinningset} et l'apprentissage se poursuit dans l'itération suivante. Plus formellement, la définition suivante établit le protocole de vérification par l'enseignant :
 \begin{defi}{Enseignant pour jeux de sûreté rationnels\\}
 \label{teacher}
 Soit $\mathfrak{G}_\Sigma=(A_\Sigma, I, F)$, un jeu de sûreté rationnel sur $\Sigma$, avec $A_\Sigma=(V_0,V_1,E)$. Soit un AFD $\mathcal{C}$. Un enseignant pour $\mathfrak{G}_\Sigma$ confronté à $\mathcal{C}$ va effectuer les vérifications suivantes :\\
@@ -932,7 +932,7 @@ Si un telle paire existe, alors à nouveau, le mot $v$ devrait à la fois être 
 \noindent Ainsi, l'élève devra s'assurer que les AFD qu'il soumet à l'enseignant sont \emph{cohérents} avec l'échantillon $S$.
 \begin{defi}
 \label{consistency}
-Soit $\mathcal{C}$ un $AFD$, $S=(Pos, Neg, Ex, Uni)$ un échantillon sans contradictions. On dit que $\mathcal{C}$ est \emph{cohérent} avec $S$ si
+Soit $\mathcal{C}$ un AFD, $S=(Pos, Neg, Ex, Uni)$ un échantillon sans contradictions. On dit que $\mathcal{C}$ est \emph{cohérent} avec $S$ si
 \begin{itemize}
 \item $Pos\subseteq \mathcal{L}(\mathcal{C})$
 \item $Neg\cap \mathcal{L}(\mathcal{C})=\emptyset$
@@ -942,22 +942,22 @@ Soit $\mathcal{C}$ un $AFD$, $S=(Pos, Neg, Ex, Uni)$ un échantillon sans contra
 \end{defi}
 \noindent Pour finir, si le contre-exemple retourné par l'enseignant engendre une contradiction dans $S$, alors l'enseignant peut en conclure que le jeu de sûreté est toujours gagné par le joueur $j_1$ (i.e. l'ensemble gagnant pour le joueur $j_0$ est $W_0=\emptyset$).\\
 
-\noindent La section suivante va maintenant pouvoir décrire la manière dont l'élève peut conjecturer un $AFD$ cohérent avec un échantillon $S$.
+\noindent La section suivante va maintenant pouvoir décrire la manière dont l'élève peut conjecturer un AFD cohérent avec un échantillon $S$.
 \section{Résolution par la programmation logique}\label{prolog}
-Afin de construire un $AFD$ cohérent avec un échantillon $S$ donné, une nouvelle étape de symbolisation va être nécessaire. Cette fois-ci, il s'agit de traduire le problème rationnel en une série de formules boléennes propositionnelles et de résoudre les problèmes de satisfaisabilité (\emph{problème SAT}) résultants. Il sera ensuite possible de traduire les \emph{modèles} (assignations de variables boléennes rendant la formule vraie) de ce problème SAT en ensemble gagnant pour le jeu de sûreté.
+Afin de construire un AFD cohérent avec un échantillon $S$ donné, une nouvelle étape de symbolisation va être nécessaire. Cette fois-ci, il s'agit de traduire le problème rationnel en une série de formules boléennes propositionnelles et de résoudre les problèmes de satisfaisabilité (\emph{problème SAT}) résultants. Il sera ensuite possible de traduire les \emph{modèles} (assignations de variables boléennes rendant la formule vraie) de ce problème SAT en ensemble gagnant pour le jeu de sûreté.
 
-\begin{defi}{Elève pour les jeux de sureté rationnels\\}
+\begin{defi}{Elève pour les jeux de sûreté rationnels\\}
 \label{learner}
 Soit $\mathfrak{G}_\Sigma=(A_\Sigma, I, F)$, un jeu de sûreté rationnel sur $\Sigma$, avec $A_\Sigma=(V_0,V_1,E)$ et $S=(Pos,Neg,Uni,Ex)$ un échantillon. Afin d'apprendre un AFD $\mathcal{C}$ à soumettre à l'enseignant, l'élève pour $\mathfrak{G}_\Sigma$ va créer une série de formules boléennes $\phi^S_n$ pour une valeur incrémentale de $n\in\mathbb{N}_0$ et telle que :
 \begin{itemize}
 \item La formule $\phi^S_n$ est satisfaisable si et seulement si il existe un AFD qui possède $n$ sommets et qui est cohérent avec $S$.
 \item Un modèle $\mathfrak{M}$ de $\phi^S_n$ contient assez d'information pour construire un AFD $\mathcal{A}_\mathfrak{M}$ à $n$ sommets cohérent avec $S$.
 \end{itemize}
-\noindent Autrement formulé, l'objectif de $\phi^S_n$ est d'encoder un $AFD$ $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ où $|Q|=n$ et cohérent avec $S$.\\
+\noindent Autrement formulé, l'objectif de $\phi^S_n$ est d'encoder un AFD $\mathcal{A}=(Q,\Sigma,\delta,q_0,F)$ où $|Q|=n$ et cohérent avec $S$.\\
 L'élève soumettra à l'enseignant un AFD $\mathcal{C}$ minimal, c.-à-d. construit à partir du modèle $\mathfrak{M}\models \phi_n^S$ pour la plus petite valeur de $n$ possible.
 \end{defi}
 
-\noindent La manière dont l'élève va construire cet AFD est la suivante. Etant donné $n$, on peut à l'avance fixer l'ensemble des états de cet $AFD$  à $Q=\{0,1,...$ $,n-1\}$ et le sommet de départ $q_0=0$. Ainsi, la formule $\phi^S_n$ n'a plus qu'à en encoder les transitions $\delta$ et les états finaux $F$ (pour rappel, $\Sigma$ est connu à l'avance par l'élève). Afin de représenter ces deux ensembles, nous allons introduire les variables boléennes $f_q$ et $d_{p,a,q}$ avec $a\in\Sigma$ et $p,q\in Q$. La variable $f_q=$ $vrai$ signifie que $q$ est un état final de $\mathcal{A}$ et $d_{p,a,q}=$ $vrai$ signifie que la transition $\delta(p,a)$ existe et transitionne vers $q$. De plus, vu que l'on cherche à encoder un AFD, et non un AFN, il faut imposer des conditions à nos variables, afin de respecter la définition \ref{deter}. Ces conditions s'obtiennent par la formule
+\noindent La manière dont l'élève va construire cet AFD est la suivante. Etant donné $n$, on peut à l'avance fixer l'ensemble des états de cet AFD  à $Q=\{0,1,...$ $,n-1\}$ et le sommet de départ $q_0=0$. Ainsi, la formule $\phi^S_n$ n'a plus qu'à en encoder les transitions $\delta$ et les états finaux $F$ (pour rappel, $\Sigma$ est connu à l'avance par l'élève). Afin de représenter ces deux ensembles, nous allons introduire les variables boléennes $f_q$ et $d_{p,a,q}$ avec $a\in\Sigma$ et $p,q\in Q$. La variable $f_q=$ $vrai$ signifie que $q$ est un état final de $\mathcal{A}$ et $d_{p,a,q}=$ $vrai$ signifie que la transition $\delta(p,a)$ existe et transitionne vers $q$. De plus, vu que l'on cherche à encoder un AFD, et non un AFN, il faut imposer des conditions à nos variables, afin de respecter la définition \ref{deter}. Ces conditions s'obtiennent par la formule
 \begin{equation}
 \label{booldeter1}
 \begin{aligned} \bigwedge _{p \in Q}~ \bigwedge _{a \in \varSigma }~ \bigwedge _{q, q' \in Q, q \ne q'}~ \neg (d_{p, a, q} \land d_{p, a, q'}) \end{aligned}
@@ -1047,7 +1047,7 @@ La formule $\phi_n^{Uni}$ reste cependant correcte. En effet, dans l'objectif d'
 
 \noindent Soit $i_{Ex}=(u,\mathcal{A})\in Ex$ un contre-exemple d'implication existentielle, avec $\mathcal{A}=(Q^\mathcal{A},\Sigma,q_0^\mathcal{A},\delta^\mathcal{A},F^\mathcal{A})$, nous allons maintenant introduire une dernière variable boléenne $z_{q,q^\mathcal{A},\mathnormal{l}}$ avec $q\in Q$, $q^\mathcal{A}\in Q^\mathcal{A}$ et $\mathnormal{l}\in \{0,...$ $,k\}$, $k\in\mathbb{N}$ pour laquelle $z_{q,q^\mathcal{A},\mathnormal{l}}=$ $vrai$ indique qu'il existe un mot $v\in\Sigma^*$ de longueur $|v|=\mathnormal{l}$ tel que le parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par $v$ se termine sur la paire d'états $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$.\\
 
-\noindent Afin que le nombre de variable nécessaire soit fini, il faut déterminer une valeur maximale pour $\mathnormal{l}$. Il faut donc trouver la plus petite longueur maximale de mot de $\Sigma^*$ pour laquelle $z_{q,q^\mathcal{A},\mathnormal{l}}$ permet de décrire tous les parcours en  parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$. Nous allons déterminer cette valeur sur base d'une simple observation : si, lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot $v\in\Sigma$ un état $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteint deux fois, alors le facteur $w\in\Sigma^*$ de $v$ entre cette répétition peut être retiré de $v$ sans que $z_{q,q^\mathcal{A},\mathnormal{l}}$ ne perde d'information. Ainsi, la valeur maximale pour $\mathnormal{l}$ est la longueur maximale de mot telle que, lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par ce mot, chaque paire d'état $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte au plus une fois. Cette valeur sera donc donnée par $k=|Q||Q^\mathcal{A}|-1=n|Q^\mathcal{A}|-1$\\
+\noindent Afin que le nombre de variables nécessaires soit fini, il faut déterminer une valeur maximale pour $\mathnormal{l}$. Il faut donc trouver la plus petite longueur maximale de mot de $\Sigma^*$ pour laquelle $z_{q,q^\mathcal{A},\mathnormal{l}}$ permet de décrire tous les parcours en  parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$. Nous allons déterminer cette valeur sur base d'une simple observation : si, lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par un mot $v\in\Sigma$ un état $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteint deux fois, alors le facteur $w\in\Sigma^*$ de $v$ entre cette répétition peut être retiré de $v$ sans que $z_{q,q^\mathcal{A},\mathnormal{l}}$ ne perde d'information. Ainsi, la valeur maximale pour $\mathnormal{l}$ est la longueur maximale de mot telle que, lors du parcours en parallèle de $\mathcal{A}_\mathfrak{M}$ et $\mathcal{A}$ par ce mot, chaque paire d'état $(q,q^\mathcal{A})\in Q\times Q^\mathcal{A}$ est atteinte au plus une fois. Cette valeur sera donc donnée par $k=|Q||Q^\mathcal{A}|-1=n|Q^\mathcal{A}|-1$\\
 
 Maintenant que nous avons réussi à limiter le nombre de ces variables, passons à leur définition.\\
 Pour commencer, la formule  
@@ -1095,12 +1095,12 @@ que, si un mot $u$ est accepté par $\mathcal{A}_\mathfrak{M}$, alors au moins u
 \noindent En construisant une formule $\phi_{n,i}^{Ex}=(\ref{boolex1})\land(\ref{boolex2})\land(\ref{boolex3})\land(\ref{boolex4})\land(\ref{boolex5})$ pour chaque contre-exemple d'implication existentielle $i\in Ex$, on obtient la définition de la formule $\phi^{Ex}_n=\bigwedge_{i\in(Ex)}\phi_{n,i}^{Ex}$.\\
 Par la construction de cette formule, on a bien que si $\mathfrak{M}\models\phi_n^{Ex}\land\phi^{W}_n\land\phi^{AFD}_n$, alors $\forall(u,\mathcal{A})\in Ex, u\in\mathcal{L}(\mathcal{A})\implies \mathcal{L}(\mathcal{A}_\mathfrak{M})\cap\mathcal{L}(\mathcal{A})\neq\emptyset$\\
 
-Ainsi, nous obtenons une formule $\phi^S_n=\phi_n^{AFD}\land\phi_n^{W}\land\phi_n^{Pos}\land\phi_n^{Neg}\land\phi_n^{Ex}\land\phi_n^{Uni}$ dont un modèle $\mathfrak{M}$ contiendra assez d'information pour construire un $AFD$ $\mathcal{A}_\mathfrak{M}$ à $n$ états et cohérent avec l'échantillon $S$.\\
+Ainsi, nous obtenons une formule $\phi^S_n=\phi_n^{AFD}\land\phi_n^{W}\land\phi_n^{Pos}\land\phi_n^{Neg}\land\phi_n^{Ex}\land\phi_n^{Uni}$ dont un modèle $\mathfrak{M}$ contiendra assez d'information pour construire un AFD $\mathcal{A}_\mathfrak{M}$ à $n$ états et cohérent avec l'échantillon $S$.\\
 
 Tous les outils nécessaires à l'apprentissage étant maintenant définis, la section suivante va détailler l'échange entre l'enseignant et l'élève menant à la construction de l'ensemble gagnant d'un problème de sûreté.  
 \newpage
 \section{Implémentation}
-Nous allons maintenant décrire les structures de données et les algorithmes qui vont permettre l'apprentissage d'un ensemble gagnant pour les jeux de sûreté. Cette description débutera par des algorithmes généraux, peu détaillés, lesquels seront au fur et à mesure décomposés afin d'être expliqué plus en profondeur.\\
+Nous allons maintenant décrire les structures de données et les algorithmes qui vont permettre l'apprentissage d'un ensemble gagnant pour les jeux de sûreté. Cette description débutera par des algorithmes généraux, peu détaillés, lesquels seront au fur et à mesure décomposés afin d'être expliqués plus en profondeur.\\
 Ensuite nous calculerons la complexité en temps de ces algorithmes. Cette section se terminera enfin sur un exemple du déroulement de la résolution d'un jeu de sûreté rationnel.
 \subsection{Structures de données}
 Afin de stocker les mots de $W=Pos\cup Neg\cup Ante(Ex)$ $\cup$ $Ante(Uni)$ pour un échantillon $S=(Pos, Neg, Uni, Ex)$, nous allons utiliser un \emph{arbre des préfixes}. La définiton de cette structure de données est la suivante :
@@ -1110,7 +1110,7 @@ Soit $\Sigma$ un alphabet, $W$ une liste de mots de $\Sigma^*$. L'\emph{arbre de
 \begin{itemize}
 \item Un \emph{noeud} de cet arbre contient un mot $u\in Pref(W)$ et une liste \emph{succ} de noeuds de taille maximale $|\Sigma|$ qui sont ses successeurs.
 \item La racine de l'arbre contient le mot vide $\epsilon$. Un arbre ne contenant que sa racine est appelé l'\emph{arbre vide}.
-\item Pour chaque successeur $n\in\{0,$ $...$ $,|\Sigma|-1\}$ de la liste des successeurs d'un noeud de l'arbre, lequel contient un mot $u\in Pref(W)$, le mot contenu par le $n^{eme}$ successeur est le mot $ua\in Pref(W)$ tel que $a$ est le $n^{eme}$ caractère de $\Sigma$. Un successeurs n'est pas garanti d'exister pour toute valeur de $n$ pour un noeud.
+\item Pour chaque successeur $n\in\{0,$ $...$ $,|\Sigma|-1\}$ de la liste des successeurs d'un noeud de l'arbre, lequel contient un mot $u\in Pref(W)$, le mot contenu par le $n^{eme}$ successeur est le mot $ua\in Pref(W)$ tel que $a$ est le $n^{eme}$ caractère de $\Sigma$. Un successeur n'est pas garanti d'exister pour toute valeur de $n$ pour un noeud.
 \end{itemize}
 \end{defi}
 \noindent Cette structure de données est utile pour l'apprentissage car elle permet, en plus de stocker efficacement tous les mots de $Pref(W)$, d'établir les liens entre tous ces mots. Cela facilitera la création des variables boléennes $x_{u,q}$ décrites à la section \ref{sectionapprentissage}. \\
@@ -1125,12 +1125,12 @@ Une fonction $add(u, a)$ permet d'ajouter un mot $u\in\Sigma^*$ à cet arbre et 
 Pour finir, la \emph{taille} $|arbre|$ d'un arbre des préfixes est le nombre de noeuds qu'il contient et chaque noeud aura un identifiant unique $id\in\{0,$ $...$ $|arbre|-1\}$.
 
 \subsection{Algorithmes}
-Soit un jeu de sûreté rationel $\mathfrak{G}_\Sigma=(A_\Sigma, \mathcal{A}_I, \mathcal{A}_F)$ sur $\Sigma$, avec $A_\Sigma=(\mathcal{A}_{V_0}, \mathcal{A}_{V_1}, \mathcal{T}_E)$ que nous allons fixer pour le reste de cette section. On suppose l'alphabet $\Sigma$ défini globalement. L'algorithme \ref{alginifnitemain} décrit, de manière générale, l'échange entre l'élève et l'enseignant pour $\mathfrak{G}_\Sigma$.
+Soit un jeu de sûreté rationnel $\mathfrak{G}_\Sigma=(A_\Sigma, \mathcal{A}_I, \mathcal{A}_F)$ sur $\Sigma$, avec $A_\Sigma=(\mathcal{A}_{V_0}, \mathcal{A}_{V_1}, \mathcal{T}_E)$ que nous allons fixer pour le reste de cette section. On suppose l'alphabet $\Sigma$ défini globalement. L'algorithme \ref{alginifnitemain} décrit, de manière générale, l'échange entre l'élève et l'enseignant pour $\mathfrak{G}_\Sigma$.
 \begin{algorithm}[H]
 \caption{Apprentissage}\label{alginifnitemain}
 \hspace*{\algorithmicindent} 
 \begin{tabular}{lll}
-	\textbf{Entrées} & \textbf{$\mathfrak{G}_\Sigma$} : &Un jeu de sûreté rationel sur $\Sigma$\\
+	\textbf{Entrées} & \textbf{$\mathfrak{G}_\Sigma$} : &Un jeu de sûreté rationnel sur $\Sigma$\\
 	&\textbf{teacher} : &Un enseignant pour $\mathfrak{G}_\Sigma$\\
 	&\textbf{learner} : &Un élève pour $\mathfrak{G}_\Sigma$\\
 	\textbf{Sortie} &\multicolumn{2}{l}{Un AFD décrivant $W_0$ l'ensemble gagnant de $\mathfrak{G}_\Sigma$ pour le joueur $j_0$}\\
@@ -1206,14 +1206,14 @@ La fonction $learner.translatemodel$, décrite par l'algorithme \ref{alginfinite
 \algstore{construct}
 \end{algorithmic}
 \end{algorithm}
-\noindent On commence par initialiser les tableaux $f,d,x,y$ et $z$ qui vont contenir les variables boléennes composant le problème SAT, $nVar$ qui va permettre d'attribuer un identifiant unique a chacune de ces variables et $solver$ l'objet qui va contenir toutes les variables et contraintes boléennes de notre problème SAT.\\
+\noindent On commence par initialiser les tableaux $f,d,x,y$ et $z$ qui vont contenir les variables boléennes composant le problème SAT, $nVar$ qui va permettre d'attribuer un identifiant unique à chacune de ces variables et $solver$ l'objet qui va contenir toutes les variables et contraintes boléennes de notre problème SAT.\\
 
-Concrètement, le solveur SAT ne sera pas implémenté dans le cadre de ce travail. Les solveurs SAT étant des outils complexes dont il existe une multitude d'implémentation optimisées. Le solveur théorique $solver$ que nous allons décrire va cependant reflèter l'usage d'un solveur SAT en pratique.\\
+Concrètement, le solveur SAT ne sera pas implémenté dans le cadre de ce travail. Les solveurs SAT étant des outils complexes dont il existe une multitude d'implémentations optimisées. Le solveur théorique $solver$ que nous allons décrire va cependant refléter l'usage d'un solveur SAT en pratique.\\
 
-\noindent La formulation $solver(\bar{f},\bar{d},\bar{x},\bar{y},\bar{z})$ indique le ce solveur utilisera les variables de $f,d,x,y$ et $z$.\\
+\noindent La formulation $solver(\bar{f},\bar{d},\bar{x},\bar{y},\bar{z})$ indique que ce solveur utilisera les variables de $f,d,x,y$ et $z$.\\
 
 \noindent Chaque variable boléenne sera identifiée par un entier unique $b>
-0$. On ajoutera des contraintes $\varphi$ au solveur en appelant $solver.constraint(\varphi)$. Une contrainte pour ce solveur sera une formule bolèenne $\varphi$ respectant la grammaire \ref{boolgrammar}.\\
+0$. On ajoutera des contraintes $\varphi$ au solveur en appelant $solver.constraint(\varphi)$. Une contrainte pour ce solveur sera une formule boléenne $\varphi$ respectant la grammaire \ref{boolgrammar}.\\
 De plus, la fonction $solver.check()$ vérifiera s'il est possible d'assigner une valeur boléenne à chaque variable $b$ de manière à rendre toutes les contraintes $\varphi$ vraies (i.e. si le problème SAT est satisfaisable). Cette opération correspond à la ligne $6$ dans $learner.conjecture$.\\
 S'il est satisfaisable, la fonction $solver.model()$ retournera un modèle satisfaisant toutes les contraintes ajoutées au solveur.\\
 \begin{center}
@@ -1261,7 +1261,7 @@ $<formule>$ & $\rightarrow$ & $(<formule>)$\\
 \algstore{construct}
 \end{algorithmic}
 \end{algorithm}
-\noindent On initialise les variables boléennes de type $f_q$, $d_{p,a,q}$ et $x_{u,q}$ en leur attribuant chacune un identifiant entier unique.
+\noindent On initialise les variables boléennes de type $f_q$, $d_{p,a,q}$ et $x_{u,q}$ en leur attribuant à chacune un identifiant entier unique.
 
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
@@ -1285,7 +1285,7 @@ $<formule>$ & $\rightarrow$ & $(<formule>)$\\
 \algstore{construct}
 \end{algorithmic}
 \end{algorithm}
-\noindent On commence par fixer les contraintes qui vont rendre l'AFD déterministe et sa fonction de transition totale. Ensuite, on va fixer l'état initial de cet AFD comme étant $q_0$ en contraignant le parcours de cet AFD par le mot vide (mot contenu dans la racine de l'arbre des préfixes) à arriver sur l'état $0$. On s'assure ensuite que ce soit le seul parcours valide par le mot vide $\epsilon$ en contraignant les autre variables $x_{\epsilon,q\in\{1,...,n-1\}}$ à être fausse.
+\noindent On commence par fixer les contraintes qui vont rendre l'AFD déterministe et sa fonction de transition totale. Ensuite, on va fixer l'état initial de cet AFD comme étant $q_0$ en contraignant le parcours de cet AFD par le mot vide (mot contenu dans la racine de l'arbre des préfixes) à arriver sur l'état $0$. On s'assure ensuite que ce soit le seul parcours valide par le mot vide $\epsilon$ en contraignant les autres variables $x_{\epsilon,q\in\{1,...,n-1\}}$ à être fausses.
 
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
@@ -1333,7 +1333,7 @@ $<formule>$ & $\rightarrow$ & $(<formule>)$\\
 \end{algorithm}
 \noindent Ensuite, l'algorithme va parcourir tous les noeuds de l'arbre des préfixes afin de contraindre le parcours de l'AFD par les préfixes de $W$.\\
 Premièrement, chaque parcours de l'arbre par un mot $u\in Pref(W)$ sera rendu unique en contraignant la vérité des variables $x$. Pour chaque préfixe, une seule variable $x_{prefix, q}$ pourra être rendue vraie.\\
-Ensuite, on contraint la manière dont l'AFD sera parcouru par un mot. Si une paire de variable $x_{u,p}$ et $d_{p,a,q}$  est vraie, alors la variable $x_{ua,q}$ sera rendue vraie elle aussi. Ainsi, dans l'AFD, si on arrive sur un état $q$ en lisant le mot $u$, et qu'il existe une transition $\delta(p,a)=q$, alors l'état $q$ sera atteint en lisant le mot $ua$.\\
+Ensuite, on contraint la manière dont l'AFD sera parcouru par un mot. Si une paire de variables $x_{u,p}$ et $d_{p,a,q}$  est vraie, alors la variable $x_{ua,q}$ sera rendue vraie elle aussi. Ainsi, dans l'AFD, si on arrive sur un état $q$ en lisant le mot $u$, et qu'il existe une transition $\delta(p,a)=q$, alors l'état $q$ sera atteint en lisant le mot $ua$.\\
 Pour finir, l'acceptance du mot contenu dans le noeud de l'arbre des préfixes actuel est contrainte. Si la valeur de $accept=1$, alors on s'assure que si le parcours de l'AFD par le préfixe $u$ de ce noeud se termine sur l'état $q$, alors $f_q=$ $vrai$ ce qui fera de $q$ un état final. La négation de cette contrainte sera appliquée si $accept=-1$.\\
 
 \noindent Il reste ensuite à créer les contraintes pour les contre-exemples d'implication.
@@ -1454,7 +1454,7 @@ Après cela, on détermine les paires d'états atteintes lors des parcours en pa
 \end{algorithmic}
 \end{algorithm}
 \noindent Le procédé pour contraindre les contre-exemples d'implication existentielle est similaire à celui des contre-exemples d'implication universelle auquel on ajoute une dimension $l$ correspondant à la taille du mot par lequel les paires d'états sont atteintes dans les deux automates.\\
-La différence entre ces deux contre-exemples est la formule $reverse$. Cette formule assure que si une contrainte de la forme $(z_{p,p',l}\land d_{p,a,q}) \implies z_{q,q',l+1}$ à rendu la conséquence vraie, c'est que l'antécédent est vrai lui aussi. Pour cela, si une variable $z_{q,q',l}=$ $vrai$, alors on cherche, parmi les transitions du sommet dans l'automate du contre-exemple, si l'une d'elle atteint $q'$ en lisant mot $a$ depuis un état $p'$. Si c'est le cas, on s'assure qu'une transition similaire existe dans l'AFD à conjecturer.
+La différence entre ces deux contre-exemples est la formule $reverse$. Cette formule assure que si une contrainte de la forme $(z_{p,p',l}\land d_{p,a,q}) \implies z_{q,q',l+1}$ a rendu la conséquence vraie, c'est que l'antécédent est vrai lui aussi. Pour cela, si une variable $z_{q,q',l}=$ $vrai$, alors on cherche, parmi les transitions du sommet dans l'automate du contre-exemple, si l'une d'elles atteint $q'$ en lisant mot $a$ depuis un état $p'$. Si c'est le cas, on s'assure qu'une transition similaire existe dans l'AFD à conjecturer.
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
 \algrestore{construct}
@@ -1480,7 +1480,7 @@ La différence entre ces deux contre-exemples est la formule $reverse$. Cette fo
 \noindent On termine ensuite par construire la formule \ref{boolex5} pour ce contre-exemple.\\
 \noindent Une fois tous les contre-exemples d'implication traités, $solver$ est retourné.\\
 
-La suite de l'apprentissage correspondra à un appel à $solver.check()$. Si celui ci renvoie la valeur $vrai$, on sort de la boucle d'apprentissage et on récupère un modéle pour notre problème grâce à un appel à $solver.model()$.\\
+La suite de l'apprentissage correspondra à un appel à $solver.check()$. Si celui-ci renvoie la valeur $vrai$, on sort de la boucle d'apprentissage et on récupère un modèle pour notre problème grâce à un appel à $solver.model()$.\\
 
 \noindent Ce modèle pourra ensuite être traduit en un AFD grâce à l'algorithme \ref{alginfinitetranslate} décrivant l'appel à $learner.translatemodel$.
 
@@ -1523,7 +1523,7 @@ La suite de l'apprentissage correspondra à un appel à $solver.check()$. Si cel
 \State\Return $\mathcal{A}$
 \end{algorithmic}
 \end{algorithm}
-\noindent Afin de construire un AFD à $n$ états cohérent avec $S$ selon le modèle $\mathfrak{M}$, seules les variables boléennes $f$ et $d$ nous intéressent, comme décrit par \ref{translate}. Ainsi, l'élève commence par initialiser les $n$ états de l'AFD et défini l'état $n=0$ comme étant l'état initial.\\
+\noindent Afin de construire un AFD à $n$ états cohérent avec $S$ selon le modèle $\mathfrak{M}$, seules les variables boléennes $f$ et $d$ nous intéressent, comme décrit par \ref{translate}. Ainsi, l'élève commence par initialiser les $n$ états de l'AFD et définit l'état $n=0$ comme étant l'état initial.\\
 Ensuite, le modèle est parcouru pour les valeurs des variables $d$. Si une variable $d_{p,a,q}=$ $vrai$ dans le modèle, alors on construit une transition de l'état $p$ vers l'état $q$ utilisant le caractère $a$.\\
 Finalement, pour chaque valeur $f_{q}=$ $vrai$ du modèle, l'état $f$ est défini comme état final de l'automate.\\
 
@@ -1535,7 +1535,7 @@ La manière dont celui-ci effectue les vérifications de la définition \ref{tea
 \caption{teacher.check}\label{alginfinitecheck}
 \hspace*{\algorithmicindent} 
 \begin{tabular}{lll}
-	\textbf{Entrées} & \textbf{$\mathfrak{G}_\Sigma$} : &Un jeu de sûreté rationel sur $\Sigma$\\
+	\textbf{Entrées} & \textbf{$\mathfrak{G}_\Sigma$} : &Un jeu de sûreté rationnel sur $\Sigma$\\
 	&\textbf{$\mathcal{C}$} : &AFD tentant de décrire l'ensemble gagnant $W_0$ pour\\
 	&&le joueur $j_0$ de $\mathfrak{G}_\Sigma$.\\
 	\textbf{Sortie} &\multicolumn{2}{l}{Un contre-exemple si l'une des règles de la définition d'ensemble}\\
@@ -1580,7 +1580,7 @@ Afin de vérifier que $\mathcal{C}$ est un ensemble gagnant pour le jeu $\mathfr
 
 \noindent\textbf{3.} En ce qui concerne la fermeture existentielle, plusieurs AFN sont nécessaires. 
 \begin{itemize}
-\item Premièrement, l'enseignant calcule l'AFN $\mathcal{B}_{E1}$ qui est l'image de $\mathcal{C}$ par la relation inverse $\mathcal{R}(\mathcal{T}_E)^{-1}$. Ainsi, $\mathcal{L}(\mathcal{B}_{E1})$ contient tous les sommets qui ont un successeur dans $\mathcal{L}(\mathcal{C})$. \item Ensuite, $\mathcal{B}_{E2}$ est construit de manière que $\mathcal{L}(\mathcal{B}_{E2})=\mathcal{L}(\mathcal{A}_{V_0})\setminus\mathcal{L}(\mathcal{B}_{E1})$. On aura donc que $\mathcal{B}_{E2}$ contient tous les sommets appartenant à $j_0$ qui n'ont pas de successeur dans $\mathcal{C}$. 
+\item Premièrement, l'enseignant calcule l'AFN $\mathcal{B}_{E1}$ qui est l'image de $\mathcal{C}$ par la relation inverse $\mathcal{R}(\mathcal{T}_E)^{-1}$. Ainsi, $\mathcal{L}(\mathcal{B}_{E1})$ contient tous les sommets qui ont un successeur dans $\mathcal{L}(\mathcal{C})$. \item Ensuite, $\mathcal{B}_{E2}$ est construit de manière que $\mathcal{L}(\mathcal{B}_{E2})=\mathcal{L}(\mathcal{A}_{V_0})\setminus\mathcal{L}(\mathcal{B}_{E1})$. On aura donc que $\mathcal{B}_{E2}$ contient tous les sommets appartenant à $j_0$ qui n'ont pas de successeurs dans $\mathcal{C}$. 
 \item Pour finir, afin d'obtenir tous les sommets de $j_0$ qui sont dans $\mathcal{C}$ mais qui n'ont eux-mêmes pas de successeurs dans $\mathcal{C}$, l'enseignant construit l'AFN $\mathcal{B}_E$ tel que $\mathcal{L}(\mathcal{B}_E)=\mathcal{L}(\mathcal{C})\cap\mathcal{L}(\mathcal{B}_{E2})$. 
 \end{itemize}
 Si $\mathcal{L}(\mathcal{B}_E)\neq\emptyset$, alors il existe un sommet de $j_0$ qui contredit la fermeture existentielle. L'enseignant construit un contre-exemple d'implication existentielle en prenant un mot $u\in\mathcal{L}(\mathcal{B}_E)$ et en calculant $\mathcal{A}=\mathcal{R}(\mathcal{T}_E)(\{u\})$, l'image de ce mot par la relation $\mathcal{R}(\mathcal{T}_E)$. Il retourne ainsi $(u,\mathcal{A})$ signifiant qu'un sommet $u$ appartenant à $j_0$ est inclu dans l'ensemble gagnant sans qu'au moins un de ses successeurs (les mots de $\mathcal{L}(\mathcal{A})$) n'ait été accepté.\\
@@ -1595,39 +1595,39 @@ Si $\mathcal{L}(\mathcal{B}_U)\neq\emptyset$, chaque mot $u\in\mathcal{L}(\mathc
 
 \noindent Si aucun contre-exemple n'a été retourné, alors l'apprentissage s'arrête. $\mathcal{C}$ décrit $W_0$ et est retourné.\\
 
-Cependant, si il n'exsite pas d'ensemble gagnant pour le joueur $j_0$. L'aglorithme d'apprentissage ne s'arrêtera jamais. Une manière de contourner cela serait d'introduire une fonction pour l'enseignant afin qu'il vérifie si l'échantillon $S$ contient une contradiction, ce qui permettrait d'affimer la victoire dans tous les cas du joueur $j_1$ (i.e. $W_0=\emptyset$). Néanmoins, cette condition ne suffirait pas à empecher l'algorithme de continuer à l'infini car il est probable que l'échantillon $S$ reste sans contradictions malgré qu'un ensemble gagnant ne puisse pas être appris pour le joueur $j_0$.
+Cependant, s'il n'existe pas d'ensemble gagnant pour le joueur $j_0$. L'aglorithme d'apprentissage ne s'arrêtera jamais. Une manière de contourner cela serait d'introduire une fonction pour l'enseignant afin qu'il vérifie si l'échantillon $S$ contient une contradiction, ce qui permettrait d'affimer la victoire dans tous les cas du joueur $j_1$ (i.e. $W_0=\emptyset$). Néanmoins, cette condition ne suffirait pas à empêcher l'algorithme de continuer à l'infini car il est probable que l'échantillon $S$ reste sans contradictions malgré qu'un ensemble gagnant ne puisse pas être appris pour le joueur $j_0$.
 
 \subsection{Complexité}
-Nous allons maintenant discuter la complexité des algorithmes présentés.  présenté à la section précédente.\\
-Supposons qu'un ensemble gagnant pour le joueur $j_0$ d'un jeu de sûreté sur un alphabet de taille $a$ existe et soit accepté par un DFA ayant au minimum $n$ états. Alors $Apprentissage$ (\ref{alginifnitemain}) pour ce jeu de sûreté possède une complexité en temps de $O(a(n!)(2^{an^2}))$.\\
+Nous allons maintenant discuter la complexité des algorithmes présentés à la section précédente.\\
+Supposons qu'un ensemble gagnant pour le joueur $j_0$ d'un jeu de sûreté sur un alphabet de taille $a$ existe et soit accepté par un AFD ayant au minimum $n$ états. Alors $Apprentissage$ (\ref{alginifnitemain}) pour ce jeu de sûreté possède une complexité en temps de $O(a(n!)(2^{an^2}))$.\\
 
-\begin{demonstration} Soit un jeu de sûreté rationel $\mathfrak{G}_\Sigma=(A_\Sigma, \mathcal{A}_I, \mathcal{A}_F)$ sur $\Sigma$, avec $A_\Sigma=(\mathcal{A}_{V_0}, \mathcal{A}_{V_1}, \mathcal{T}_E)$ pour lequel $|\mathfrak{G}|$ est le nombre total de sommet dans les automates de $\mathfrak{G}$. On suppose qu'il existe un ensemble gagnant pour ce jeu, dont le langage est accepté par un AFD possèdant $n$ états. Soit $S=(Pos, Neg, Ex, Uni)$ l'échantillon pour l'apprentissage. Soit $|prefixTree|$ le nombre de noeuds dans l'arbre des préfixes, $a=|\Sigma|$, $|Q_E|$ (resp. $|Q_U|$) le nombre total d'états dans les AFD des conséquences des contre-exemples d'implication universelle (resp. existentielle) de $Uni$ (resp. de $Ex$). Décomposons $Apprentissage$ (\ref{alginifnitemain}) l'algorithme de la même manière qu'à la section précédente.
+\begin{demonstration} Soit un jeu de sûreté rationnel $\mathfrak{G}_\Sigma=(A_\Sigma, \mathcal{A}_I, \mathcal{A}_F)$ sur $\Sigma$, avec $A_\Sigma=(\mathcal{A}_{V_0}, \mathcal{A}_{V_1}, \mathcal{T}_E)$. On suppose qu'il existe un ensemble gagnant pour ce jeu, dont le langage est accepté par un AFD possédant $n$ états. Soit $S=(Pos, Neg, Ex, Uni)$ l'échantillon pour l'apprentissage. Soit $|prefixTree|$ le nombre de noeuds dans l'arbre des préfixes, $a=|\Sigma|$, $|Q_E|$ (resp. $|Q_U|$) le nombre total d'états dans les AFD des conséquences des contre-exemples d'implication universelle (resp. existentielle) de $Uni$ (resp. de $Ex$). Décomposons $Apprentissage$ (\ref{alginifnitemain}) l'algorithme de la même manière qu'à la section précédente.
 \begin{itemize}
-\item Les lignes \textbf{1-2} n'ajoutent pas de complexité à l'algorithme étant donné qu'il s'agit de déclaration de variable et sont donc en $O(1)$.
-\item L'algorithme entre ensuite dans sa boucle princpipale. La condition d'arrêt de cette boucle s'évalue en $O(1)$.
+\item Les lignes \textbf{1-2} n'ajoutent pas de complexité à l'algorithme étant donné qu'il s'agit de déclarations de variables et sont donc en $O(1)$.
+\item L'algorithme entre ensuite dans sa boucle principale. La condition d'arrêt de cette boucle s'évalue en $O(1)$.
 \item Une itération de cette boucle commence par un appel à $learner.conjecture$. C'est cet appel qui va être responsable de la plus grande partie de la complexité de cet algorithme. Premièrement, on appelle $learner.constructSAT$. La complexité totale de cet appel est calculée comme suit :
 \begin{itemize}
 \item L'initialisation des variables se fait en $O(n+n^2a+n|prefixTree|+n|Q_U|+n^2|Q_E|^2)=O(n^2a)$ car il s'agit de parcourir des tableaux des tailles respectives $n$, $an^2$, $n|prefixTree|$, $n|Q_U|$ et $n^2|Q_E|^2$ et d'y effectuer des assignations en $O(1)$
 \item La contrainte des variables $d$ (lignes \textbf{26-37}) se fait en $O(an^2)$.
 \item La contrainte des variables $x$ initiales (lignes \textbf{38-41}) se fait en $O(n)$
 \item La contrainte des variables $x$ pour tous les préfixes dans $prefixTree$ (lignes \textbf{42-72}) se fait en temps $O(|prefixTree|*(n^2*an^2*n*n))=O(an^2)$.
-\item Les contraintes sur les contre-exemples d'implications universelle (lignes \textbf{84-107}) se contruisent en temps $O(|Q_U|*(|Q_U|^2*a*n^2+n|Q_U|))=O(an^2)$. En effet, étant donné que la boucle ligne \textbf{73-110} itère sur chaque sommet du contre-exemple actuel, on peut considérer qu'elle itère sur tous les sommets de tous les contre-exemples dans $Uni$, par la mise en évidence.\\
+\item Les contraintes sur les contre-exemples d'implication universelle (lignes \textbf{84-107}) se contruisent en temps $O(|Q_U|*(|Q_U|^2*a*n^2+n|Q_U|))=O(an^2)$. En effet, étant donné que la boucle ligne \textbf{73-110} itère sur chaque sommet du contre-exemple actuel, on peut considérer qu'elle itère sur tous les sommets de tous les contre-exemples dans $Uni$, par la mise en évidence.\\
 Ensuite, la première boucle interne étant l'initialisation des variables $y$, elle a déjà été prise en compte dans notre calcul.\\
-La boucle suivante (lignes \textbf{87-97}) itère d'abord sur les $n$, puis sur les transitions de l'état actuel dans $|Q_U|$, dont on peut borner le nombre total à $|Q_U|*a$ car il y a au plus $a$ transitions qui démarrent de chaque sommets. Et ensuite, les deux boucles les plus imbriquées itèrent à nouveaux sur les $n$. Pour finir, la dernière étape (lignes \textbf{101-107})  utilise deux boucles imbriquées lesquelles itèrent respectivement sur toutes les valeurs de $n$ et de $|Q_U|$ (car, dans le pire des cas, tous les états de tous les automates de tous les contre-exemples sont des états finaux).
+La boucle suivante (lignes \textbf{87-97}) itère d'abord sur les $n$, puis sur les transitions de l'état actuel dans $|Q_U|$, dont on peut borner le nombre total à $|Q_U|*a$ car il y a au plus $a$ transitions qui démarrent de chaque sommets. Ensuite, les deux boucles les plus imbriquées itèrent à nouveaux sur les $n$. Pour finir, la dernière étape (lignes \textbf{101-107})  utilise deux boucles imbriquées lesquelles itèrent respectivement sur toutes les valeurs de $n$ et de $|Q_U|$ (car, dans le pire des cas, tous les états de tous les automates de tous les contre-exemples sont des états finaux).
 \item Les contraintes pour les contre-exemples d'implication existentielle se construisent, par raisonnement similaire au point précédent avec un facteur $l_{max}=n*|Q_E|$ additionel, en temps $O(|Q_E|*(n|Q_E|+n^3a|Q_E|^3+n^3a|Q_E|^4)+n^2|Q_E|^2)=O(an^3)$
 \end{itemize}
-Ainsi, un appel à la fonction $learner.conjecture$ aura une complexité de $O(an^3)$. Le nombre $nVar$ de variables boléennes créés par cet algorithme sera de $nVar=n+n^2a+n|prefixTree|+n|Q_U|+n^2|Q_E|^2\approx an^2$
-\item La méthode $learner.solveSAT$, correspondant à l'utilisation d'un solveur SAT comme décrit dans la section précédente, va tenter d'attribuer une valeur, parmis deux possibles, à chaque variable créée dans le problème SAT. Ainsi, cet appel aura pour complexité $O(2^{ nVar})=O(2^{an^2})$.
+Ainsi, un appel à la fonction $learner.conjecture$ aura une complexité de $O(an^3)$. Le nombre $nVar$ de variables boléennes créées par cet algorithme sera de $nVar=n+n^2a+n|prefixTree|+n|Q_U|+n^2|Q_E|^2\approx an^2$
+\item La méthode $learner.solveSAT$, correspondant à l'utilisation d'un solveur SAT comme décrit dans la section précédente, va tenter d'attribuer une valeur, parmi deux possibles, à chaque variable créée dans le problème SAT. Ainsi, cet appel aura pour complexité $O(2^{ nVar})=O(2^{an^2})$.
 \item De retour à la boucle principale, la méthode $teacher.check$ aura pour complexité la somme des opérations successives réalisées sur les automates. Ainsi, étant donné que la complexité d'une somme est équivalente à la complexité de son terme dominant, nous n'avons qu'à considérer la complexité de l'opération la plus lourde réalisée par l'enseignant dans cet algorithme. Cette opération est la dernière étape de la vérification de la fermeture existentielle. Calculer l'intersection de deux AFN $\mathcal{A}$ et $\mathcal{B}$ avec $|\mathcal{A}|=n_a$ et $|\mathcal{B}|=n_b$ se fait en temps $O(n_an_b)$. De ce fait, même dans le pire des cas, les vérifications de l'enseignant n'influenceront pas la complexité totale de la boucle de notre algorithme, car on a déjà calculé une complexité en $O(2^{an^2})$ qui bornerait la complexité quadratique de cette étape.
 \item Pour finir, la complexité de la méthode $translatemodel$ est linéaire pour le nombre de variable créées dans le modèle, et est donc en $O(nVar)=O(an^2)$.
 \end{itemize}
-La dernière étape pour ce calcul de complexité est de se demander combien de fois au maximum la boucle principale va s'executer. Pour un nombre d'états $n$ et un alphabet de taille $a$, il y a au plus $an!$ configurations d'AFD. Ainsi, dans le pire des cas, la boucle principale s'executera $an!$ fois. \\
+La dernière étape pour ce calcul de complexité est de se demander combien de fois au maximum la boucle principale va s'exécuter. Pour un nombre d'états $n$ et un alphabet de taille $a$, il y a au plus $an!$ configurations d'AFD. Ainsi, dans le pire des cas, la boucle principale s'exécutera $an!$ fois. \\
 La complexité totale de l'algorithme d'apprentissage s'élève donc à $O(1+(an!)*(an^3+2^{an^2})+an^2)=O(a(n!)(2^{an^2}))$.
 \end{demonstration}
 \subsection{Exemple}
 Afin d'illustrer le fonctionnement de cet algorithme, nous allons reprendre l'exemple de jeu de sûreté rationnel sur l'alphabet $\Sigma=\{e,s,|\}$ introduit à la section \ref{secexemple} et décrire l'échange entre un enseignant et un élève pour ce jeu dans le but d'apprendre un ensemble gagnant $W_0$ pour le joueur $j_0$.\\
 
-Après avoir initialisé un échantillon $S$ et un arbre des préfixes $prefixTree$ vides tous les deux, l'élève cherche à conjecturer un premier $AFD$ à $n=1$ états. Etant donné qu'il n'y a pas de contre-exemple dans $S$, l'élève retourne l'AFD suivant :
+Après avoir initialisé un échantillon $S$ et un arbre des préfixes $prefixTree$, vides tous les deux, l'élève cherche à conjecturer un premier AFD à $n=1$ états. Etant donné qu'il n'y a pas de contre-exemple dans $S$, l'élève retourne l'AFD suivant :
 
 \begin{figure}[H]
 \centering
@@ -1640,7 +1640,7 @@ Après avoir initialisé un échantillon $S$ et un arbre des préfixes $prefixTr
 \node (1) [state, initial, accepting, initial text=] {$0$};
 \end{tikzpicture}
 \end{figure}
-\noindent Avec $\mathcal{L}(\mathcal{C})=\emptyset$. L'enseignant, confronté à cet AFD, va retourner un contre-exemple positif car cet AFD ne vérifie pas la première condition de la définition \ref{infinitewinningset} d'ensemble gagnant. En effet, si l'on soustrait le langage de $\mathcal{C}$ au langage de $\mathcal{A}_I$, on conserve l'intégralité du langage de ce dernier. L'enseignant choisit alors un mot dans $\mathcal{A}_I$ et le retourne. Disons que le contre-exemple positif retourné est $sll$. Celui-ci sera ajouté à l'échantillon, dans $Pos$ ainsi qu'à l'arbre des préfixes, avec une valeur $accept=1$. Cet arbre contient maintenant 4 noeuds.\\
+\noindent Avec $\mathcal{L}(\mathcal{C})=\emptyset$. L'enseignant, confronté à cet AFD, va retourner un contre-exemple positif car cet AFD ne vérifie pas la première condition de la définition \ref{infinitewinningset} d'ensemble gagnant. En effet, si l'on soustrait le langage de $\mathcal{C}$ au langage de $\mathcal{A}_I$, on conserve l'intégralité du langage de ce dernier. L'enseignant choisit alors un mot dans $\mathcal{A}_I$ et le retourne. Disons que le contre-exemple positif retourné est $s||$. Celui-ci sera ajouté à l'échantillon, dans $Pos$ ainsi qu'à l'arbre des préfixes, avec une valeur $accept=1$. Cet arbre contient maintenant 4 noeuds.\\
 
 Ensuite, lors de l'itération suivante, supposons que l'élève conjecture l'AFD suivant, cohérent avec $S$.
 
@@ -1665,9 +1665,9 @@ Ensuite, lors de l'itération suivante, supposons que l'élève conjecture l'AFD
 	
 \end{tikzpicture}
 \end{figure}
-\noindent Cet AFD va respecter toutes les conditions de la définition \ref{infinitewinningset} sauf la fermeture existentielle. L'enseignant renvoie donc un contre-exemple d'implication existentielle $(s||, \mathcal{A})$ avec $\mathcal{L}(\mathcal{A})=\{e||,e|||\}$. En effet, l'AFD conjecturé par l'éleve ne contient pas de sommet de l'enseignant. Celui ci lui affirme donc, au travers du contre-exemple, que si le sommet $s||$ veut être accepté dans l'ensemble gagnant, alors il faut qu'au moins un des sommets de l'environnement parmis $e||$ et $e|||$ soit accepté. (D'ailleurs, $s||$ faisant partie de $Pos$, il sera accepté par tous les futurs AFD conjecturés par l'élève, et fera donc partie de l'ensemble gagnant s'il existe).\\
+\noindent Cet AFD va respecter toutes les conditions de la définition \ref{infinitewinningset} sauf la fermeture existentielle. L'enseignant renvoie donc un contre-exemple d'implication existentielle $(s||, \mathcal{A})$ avec $\mathcal{L}(\mathcal{A})=\{e||,e|||\}$. En effet, l'AFD conjecturé par l'éleve ne contient pas de sommet de l'enseignant. Celui-ci lui affirme donc, au travers du contre-exemple, que si le sommet $s||$ veut être accepté dans l'ensemble gagnant, alors il faut qu'au moins un des sommets de l'environnement parmi $e||$ et $e|||$ soit accepté. (D'ailleurs, $s||$ faisant partie de $Pos$, il sera accepté par tous les futurs AFD conjecturés par l'élève, et fera donc partie de l'ensemble gagnant s'il existe).\\
 
-Finalement, l'AFD suivant, cohérent avec les deux précédents contre-exemples, sera conjecturé par l'élève :
+Finalement, l'AFD suivant, cohérent avec les deux contre-exemples précédents, sera conjecturé par l'élève :
 
 \begin{figure}[H]
 \centering
@@ -1700,14 +1700,14 @@ Finalement, l'AFD suivant, cohérent avec les deux précédents contre-exemples,
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
 \renewcommand{\leftmark}{CONCLUSION}
-Dans ce mémoire, nous avons étudié la manière de résoudre les jeux de sûreté joué sur des arènes de taille finie et infinie.\\
+Dans ce mémoire, nous avons étudié la manière de résoudre les jeux de sûreté joués sur des arènes de taille finie et infinie.\\
 
-Dans le premier cas, nous avons pu implémenter un algorithme simple qui nous a permis de calculer une stratégie gagnante pour le système. En effet, en calculant un attracteur pour les sommets hors de l'ensemble des sommets sûrs, le système peut gagner la partie en ne déplacant jamais le pion vers un des sommets de cet attracteur.\\
+Dans le premier cas, nous avons pu implémenter un algorithme simple qui nous a permis de calculer une stratégie gagnante pour le système. En effet, en calculant un attracteur pour les sommets hors de l'ensemble des sommets sûrs, le système peut gagner la partie en ne déplaçant jamais le pion vers un des sommets de cet attracteur.\\
 
-Dans le cas infini, nous n'avons été capable que de décrire un algorithme partiel. Munis d'une définition plus robuste de l'ensemble gagnant, il s'agit de transformer le jeu de sûreté en un jeu de sûreté rationnel, en utilisant les définitions de langage réguliers et de relation régulière. Ensuite, une étape d'apprentissage entre un élève et un enseignant pour ce jeu de sûreté rationnel permettra d'apprendre un ensemble gagnant pour le système. Pour cela, l'élève construit une série de problème SAT et les résous, afin d'en déduire un automate acceptant le langage qui décrit les sommets l'ensemble gagnant du système pour le jeu.\\
+Dans le cas infini, nous n'avons été capables que de décrire un algorithme partiel. Munis d'une définition plus robuste de l'ensemble gagnant, il s'agit de transformer le jeu de sûreté en un jeu de sûreté rationnel, en utilisant les définitions de langages réguliers et de relations régulières. Ensuite, une étape d'apprentissage entre un élève et un enseignant pour ce jeu de sûreté rationnel permettra d'apprendre un ensemble gagnant pour le système. Pour cela, l'élève construit une série de problème SAT et les résout, afin d'en déduire un automate acceptant le langage qui décrit les sommets de l'ensemble gagnant du système pour le jeu.\\
 Cet algorithme n'étant que partiel, il ne s'arrête pas si un tel ensemble n'existe pas. Ce potentiel ensemble gagnant donne immédiatement une stratégie pour le jeu infini. Il suffit au système de toujours déplacer le pion vers un des sommets de cet ensemble. S'il n'existe pas, le système ne peut pas garantir le respect de la spécification.\\
 
-Dans un futur travail, cet algorithme pourrait être amélioré en ajoutant des moyens à l'enseignant de détecter qu'un ensemble gagnant n'existe pas et ainsi mettre fin à l'apprentissage. Sa complexité aussi pourrait être améliorée en augmentant le nombre d'état de l'automate à conjecturer de manière plus intelligente après chaque itération où un problème SAT construit par l'élève n'était pas satisfaisable.\\
+Dans un futur travail, cet algorithme pourrait être amélioré en ajoutant des moyens à l'enseignant de détecter qu'un ensemble gagnant n'existe pas et ainsi mettre fin à l'apprentissage. Sa complexité aussi pourrait être améliorée, par exemple, en augmentant le nombre d'état de l'automate à conjecturer de manière plus intelligente après chaque itération où un problème SAT construit par l'élève n'était pas satisfaisable.\\
 
 \newpage
 %Le style bibliographique utilis
