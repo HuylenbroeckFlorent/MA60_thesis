@@ -1,7 +1,7 @@
+.gitignore
 report/*.aux
 report/*.log
 report/*.out
 report/*.synctex.gz
 report/*.toc
 code/infinite_case/build/*
-Articles/*
