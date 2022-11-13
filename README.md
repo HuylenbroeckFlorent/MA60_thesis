@@ -12,8 +12,19 @@ The report can be found at report/memoire.pdf and the code is contained in the c
 # Requirements
 To run the code for the infinite case, python3, ant, java 11+ and C++17+ are required. 
 
-# Build
-To build the project, go to code/infinite_case/lib/z3-master and follow the instructions for building z3 bindings for java.
+# Building Z3
+To build the project for the infinite case, navigate to 'code/infinite_case/lib/z3-master' and run
+```sh
+python3 scripts/mk_make.py --java --prefix=../..
+cd build
+make
+sudo make install
+```
+To uninstall, navigate to 'code/infinite_case/lib/z3-master' and run
+```sh
+cd build
+sudo make uninstall
+```
 
 # Run
 To run the project for the finite case :
