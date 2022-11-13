@@ -34,7 +34,7 @@ To clean the java classes, in 'code/infinite_case', run
 ant clean
 ```
 See 'code/inifinite_case/lib/z3-master/README.md' for more informations on Z3.
-# Run
+# Using the solver
 To run the project for the finite case :
 - Go to code/finite_case
 - Open finite_arena.py and edit the main function to create a finite arena.
