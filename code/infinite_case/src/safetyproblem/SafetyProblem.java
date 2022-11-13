@@ -62,6 +62,40 @@ public class SafetyProblem{
 	}
 
 	/**
+	* Generates a box safety game. 
+	* A box safetygame is layed on an infinite grid.
+	* The token is initially placed on a horizontal line. The goal for the system is to stay within 1 cell of that horizontal line.
+	*
+	* Enconding is as follows : a word starting with a means it's the system's turn. b means it's the environment turn.
+	* The the trail of a's indicate the vertical offset from the starting position.
+	* The next b is a separator character.
+	* Then the following trail of a's indicate the horizontal offset.
+	*
+	* @return SafetyGame boxgame.
+	*/
+	public static SafetyProblem boxGame(){
+		char[] alphabet = {'a','b'};
+		RegExp v0 = new RegExp("aa*ba*");
+		RegExp v1 = new RegExp("ba*ba*");
+		RegExp i = new RegExp("baba*");
+		RegExp f = new RegExp("(a|b)a{0,2}ba*");
+
+		HashMap<String, String> map = new HashMap();
+		map.put("a","aa");
+		map.put("b","ba");
+		map.put("c","-a");
+		map.put("d","ab");
+		map.put("e","bb");
+		map.put("f","-b");
+		map.put("g","a-");
+		map.put("h","b-");
+		map.put("i","--");
+
+		RegExp e = new RegExp("(d((a*b(f|(da*c))))|(a*c(h|(ba*g))))|(ba*ea*(c|g))");
+		return new SafetyProblem(alphabet, v0.toAutomaton(), v1.toAutomaton(), i.toAutomaton(), f.toAutomaton(), e.toTransducer(map));
+	}
+
+	/**
 	* Constructor for safety games.
 	*
 	* @param alphabet char[] were each entry is a letter used in the represented safety game.

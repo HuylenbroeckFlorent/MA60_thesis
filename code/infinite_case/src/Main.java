@@ -15,11 +15,15 @@ public class Main{
 
 	public static void main(String[] args){
 
+		// boolean verbose = true;
+		// boolean debug = true;
+
 		boolean verbose = false;
 		boolean debug = false;
 
 		// generate safety game
-		SafetyProblem game = SafetyProblem.linearGame(2);
+		SafetyProblem game = SafetyProblem.linearGame(3);
+		//SafetyProblem game = SafetyProblem.boxGame();
 
 		// solve safety game
 		Automaton w0 = solve(game, verbose, debug);
@@ -59,12 +63,15 @@ public class Main{
 			isWinningSet = teacher.checkIfWinningSet(w, learner.s);
 
 			if(verbose){
-				System.out.println("==========");
-				System.out.println("This iteration ("+(++loop)+") began with the following sample : ");
-				System.out.println(learner.s);
-				
 				System.out.println("The following DFA was conjectured : ");
 				System.out.println(w);
+
+				System.out.println("==========");
+				System.out.println("The next iteration ("+(++loop)+") begins with the following sample : ");
+				System.out.println(learner.s);
+				if(debug){
+					String line = new Scanner(System.in).nextLine();
+				}
 			}
 		}while(!isWinningSet);
 
