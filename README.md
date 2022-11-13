@@ -15,7 +15,7 @@ To run the code for the infinite case, python3, ant, java 11+ and C++17+ are req
 # Building Z3
 To build the project for the infinite case, navigate to 'code/infinite_case/lib/z3-master' and run
 ```sh
-python3 scripts/mk_make.py --java --prefix=../..
+python3 scripts/mk_make.py --java
 cd build
 make
 sudo make install
