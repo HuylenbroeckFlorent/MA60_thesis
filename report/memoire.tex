@@ -95,7 +95,7 @@ Avant de proposer des méthodes de résolution pour les jeux de sûreté, nous a
 \section{Arènes}
 Une \emph{arène} est un graphe $A = (V_0,V_1,E)$ composé de deux ensembles disjoints, non-vides de sommets $V_0$ et $V_1$, avec $V_0 \cup V_1 = V$, et d'un ensemble d'arcs $E \subseteq V\times V$. De plus, chaque sommet d'une arène doit posséder au moins un successeur.\\
 
-\noindent La figure \ref{fig:arena} représente une arène. Les sommets carrés appartiennent à $V_0$ et les sommets ronds à $V_1$. L'ensemble $E$ correspond aux flèches reliant ces sommets.
+\noindent La figure \ref{fig:arena} représente une arène. Les sommets carrés appartiennent à $V_0$ et les sommets ronds à $V_1$. L'ensemble $E$ correspond aux arcs reliant ces sommets.
 
 \begin{figure}[h]
 \centering
@@ -165,7 +165,7 @@ Soit $\mathfrak{G}=(A,I,F)$ un jeu d'atteignabilité, une partie $\pi=v_0v_1...$
 \noindent Les coups des joueurs sont décidés par la \emph{stratégie} adoptée par ces derniers. Une stratégie est une fonction $s_{j_n} : V^*V_n\to V$ qui indique vers quel sommet le joueur $j_n$ va déplacer le pion depuis le sommet courant $v\in V_n$ selon la séquence de déplacements précédents.\\
 Une stratégie peut être \emph{sans mémoire} (ou \emph{positionnelle}) $s_{j_n} : V_n \to V$ si elle ne prend en compte que le sommet actuel où se trouve le pion.\\
 
-\noindent Une stratégie pour le joueur $j_n$ est gagnante \emph{à partir d'un sommet} $v$ si une partie jouée selon cette stratégie mène à une victoire du joueur $j_n$.
+\noindent Une stratégie pour le joueur $j_n$ est \emph{gagnante à partir d'un sommet} $v$ si une partie jouée selon cette stratégie mène à une victoire du joueur $j_n$.
 
 \begin{defi}
 Une partie $\pi=v_0 v_1 ...$ est dite \emph{jouée selon une stratégie} $s_{j_n}$  (à partir d'un sommet $v_0 \in V$) si $\forall i \in \mathbb{N}, v_i \in V_n, v_{i+1} = s_{j_n}(v_0v_1...v_i)$
@@ -690,13 +690,13 @@ Un transducteur, en acceptant des paires de mots, permet de définir une \emph{r
 \begin{defi}[Image d'une relation \cite{NeiderThesis}]
 Soit $\mathcal{T}$ un transducteur acceptant la relation $R$ sur $\hat{\Sigma}=(\Sigma\cup\{\epsilon\})\times(\Gamma\cup\{\epsilon\})$ et $\mathcal{A}$ un AFN, alors\\ $\mathcal{R}(\mathcal{T})(\mathcal{L}(\mathcal{A}))=\{v\in\Gamma^*$ $|$ $\exists u\in\Sigma^*, (u,v)\in\mathcal{R}(\mathcal{T})\}$ est l'image du langage $\mathcal{L}(\mathcal{A})$ par la relation $R$.
 \end{defi}
-\begin{defi}[Inverse d'une relation]
+\begin{defi}[Inverse d'une relation \cite{NeiderThesis}]
 Soit $\mathcal{T}=(Q,\hat{\Sigma},\delta,q_0,F)$ un transducteur acceptant la relation $R$. On définit l'inverse de $R$ par $R^{-1}=\{(u,v)$ $|$ $(v,u)\in R\}$, la relation que l'on obtient en échangeant tous les éléments des paires de $R$.
 \end{defi}
 
 \section{Exemple de jeu de sûreté infini}
 \label{secexemple}
-Afin d'illustrer le cas infini, nous allons considérer l'arène infinie simple représentée à la figure \ref{fig:infinite-arena}. Il s'agit d'un tableau infini, à une dimension, fermé à gauche. Chaque sommet est décrit par le numéro du joueur à qui il appartient, et un nombre $k\in\mathbb{N}$. Il existe un sommet appartenant à chaque joueur pour chaque valeur possible de $k$ et ceux-ci sont arrangés dans l'ordre croissant de cette valeur, en alternant les sommets de $j_0$ et $j_1$. L'ensemble $F$ est représenté par les sommets grisés. Il est décrit par une certaine valeur non nulle de $k$, à partir de laquelle tous les sommets font partie de $F$ (à la figure \ref{fig:infinite-arena}, $k=2$).
+Afin d'illustrer le cas infini, nous allons considérer l'arène infinie simple représentée à la figure \ref{fig:infinite-arena}. Il s'agit d'un tableau infini, à une dimension, fermé à gauche. Chaque sommet est décrit par le numéro du joueur auquel il appartient, et un nombre $k\in\mathbb{N}$. Il existe un sommet appartenant à chaque joueur pour chaque valeur possible de $k$ et ceux-ci sont arrangés dans l'ordre croissant de cette valeur, en alternant les sommets de $j_0$ et $j_1$. L'ensemble $F$ est représenté par les sommets grisés. Il est décrit par une certaine valeur non nulle de $k$, à partir de laquelle tous les sommets font partie de $F$ (à la figure \ref{fig:infinite-arena}, $k=2$).
 
 \begin{figure}[H]
 \centering
@@ -890,12 +890,13 @@ Soit $\mathfrak{G}=(A,I,F)$ un jeu, avec $A=(V_0, V_1, E)$, l'\emph{ensemble gag
 Où \emph{Succ($v$)} est la fonction retournant les successeurs du sommet $v$.\\
 Cet ensemble n'est pas garanti d'exister pour un jeu de sûreté.
 \end{defi}
-Cette nouvelle définition de l'ensemble gagnant pour un jeu de sûreté nous donne immédiatement une stratégie gagnante pour le joueur $j_0$. Etant donné que $I\in W_0$, celui-ci n'a qu'à déplacer le pion vers un sommet de $W_0$ à chaque coup.\\
-Si un tel ensemble gagnant existe, le joueur $j_1$ ne peut pas gagner la partie. Nous allons maintenant décrire la manière de construire un tel ensemble gagnant. Dans le reste de ce rapport, nous allons supposer qu'un tel ensemble existe.\\
+Cette nouvelle définition de l'ensemble gagnant pour un jeu de sûreté nous donne immédiatement une stratégie gagnante pour le joueur $j_0$. Etant donné que $I\in W_0$, celui-ci n'a qu'à déplacer le pion vers un sommet de $W_0$ à chaque coup. $j_1$ n'aura pas le choix que de déplacer son pion vers un sommet dans $W_0$ lui aussi.\\
+
+\noindent Si un tel ensemble gagnant existe, le joueur $j_1$ ne peut pas gagner la partie (car $I\in W_0$). Nous allons maintenant décrire la manière de construire un tel ensemble gagnant. Dans le reste de ce rapport, nous allons supposer qu'un tel ensemble existe.\\
 
 
 \section{Apprentissage}\label{sectionapprentissage}
-Résoudre un jeu de sûreté rationnel consiste à produire un AFD qui acceptera tous les mots représentant les sommets de l'ensemble gagnant $W_0$. Afin de produire un tel automate, nous allons utiliser le principe d'\emph{apprentissage}. Cet apprentissage à lieu entre un \emph{enseignant}, lequel est en connaissance du jeu de sûreté que l'on veut résoudre, et un \emph{élève}, cherchant à en apprendre l'AFD décrivant l'ensemble gagnant. On suppose que l'alphabet utilisé est connu à l'avance par les deux partis.\\
+Résoudre un jeu de sûreté rationnel consiste à produire un AFD qui acceptera tous les mots représentant les sommets de l'ensemble gagnant $W_0$. Afin de produire un tel automate, nous allons utiliser le principe d'\emph{apprentissage}. Cet apprentissage à lieu entre un \emph{enseignant}, lequel est en connaissance du jeu de sûreté rationnel que l'on veut résoudre, et un \emph{élève}, cherchant à en apprendre l'AFD décrivant l'ensemble gagnant. On suppose que l'alphabet utilisé est connu à l'avance par les deux partis.\\
 
 L'apprentissage se déroule à l'intérieur d'une boucle de type \emph{CEGIS} (Counter-example guided inductive synthesis, ou synthèse inductive guidée par le contre-exemple). A chaque itération de cette boucle, l'élève conjecture un AFD $\mathcal{C}$ et l'enseignant vérifie à l'aide de la définition \ref{infinitewinningset} si $\mathcal{L}(\mathcal{C})$ est un ensemble gagnant. Si c'est le cas, l'enseignant répond "\emph{oui}" et l'apprentissage s'arrête. Sinon, l'enseignant retourne un \emph{contre-exemple} pour une des règles non respectées de la définition \ref{infinitewinningset} et l'apprentissage se poursuit dans l'itération suivante. Plus formellement, la définition suivante établit le protocole de vérification par l'enseignant :
 \begin{defi}{Enseignant pour jeux de sûreté rationnels\\}
@@ -1621,7 +1622,7 @@ Ainsi, un appel à la fonction $learner.conjecture$ aura une complexité de $O(a
 \item De retour à la boucle principale, la méthode $teacher.check$ aura pour complexité la somme des opérations successives réalisées sur les automates. Ainsi, étant donné que la complexité d'une somme est équivalente à la complexité de son terme dominant, nous n'avons qu'à considérer la complexité de l'opération la plus lourde réalisée par l'enseignant dans cet algorithme. Cette opération est la dernière étape de la vérification de la fermeture existentielle. Calculer l'intersection de deux AFN $\mathcal{A}$ et $\mathcal{B}$ avec $|\mathcal{A}|=n_a$ et $|\mathcal{B}|=n_b$ se fait en temps $O(n_an_b)$. De ce fait, même dans le pire des cas, les vérifications de l'enseignant n'influenceront pas la complexité totale de la boucle de notre algorithme, car on a déjà calculé une complexité en $O(2^{an^2})$ qui bornerait la complexité quadratique de cette étape.
 \item Pour finir, la complexité de la méthode $translatemodel$ est linéaire pour le nombre de variable créées dans le modèle, et est donc en $O(nVar)=O(an^2)$.
 \end{itemize}
-La dernière étape pour ce calcul de complexité est de se demander combien de fois au maximum la boucle principale va s'exécuter. Pour un nombre d'états $n$ et un alphabet de taille $a$, il y a au plus $an!$ configurations d'AFD. Ainsi, dans le pire des cas, la boucle principale s'exécutera $an!$ fois. \\
+La dernière étape pour ce calcul de complexité est de se demander combien de fois au maximum la boucle principale va s'exécuter. Pour un nombre d'états $n$ et un alphabet de taille $a$, il y a au plus $(a+1)n!$ configurations d'AFD. Ainsi, dans le pire des cas, la boucle principale s'exécutera $\approx an!$ fois. \\
 La complexité totale de l'algorithme d'apprentissage s'élève donc à $O(1+(an!)*(an^3+2^{an^2})+an^2)=O(a(n!)(2^{an^2}))$.
 \end{demonstration}
 \subsection{Exemple}
