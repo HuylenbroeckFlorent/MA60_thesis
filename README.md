@@ -39,8 +39,15 @@ To run the project for the finite case :
 - Go to code/finite_case
 - Open finite_arena.py and edit the main function to create a finite arena.
 - Call the instance method 'attractor([vertices], player) to compute the attractor for player number 'player' towards the set of vertices '[vertices]'
-- 
+- Then simply execute
+```sh
+python3 finite_arena.py
+```
 To run the project for infinite case :
 - Go to  code/infinite_case
 - Open src/Main.java and create a SafetyGame object. (SafetyGame class has built-in function to generate safety games).
-- run 'ant' to build and run the project.
+- Then,to run the solver, simply execute
+```sh
+ant
+```
+
