@@ -1,0 +1,11 @@
+\beamer@sectionintoc {1}{Jeux joués sur graphes}{3}{0}{1}
+\beamer@sectionintoc {2}{Cas fini}{4}{0}{2}
+\beamer@subsectionintoc {2}{1}{Attracteurs}{5}{0}{2}
+\beamer@subsectionintoc {2}{2}{Ensemble gagnant}{7}{0}{2}
+\beamer@sectionintoc {3}{Cas infini}{9}{0}{3}
+\beamer@subsectionintoc {3}{1}{Représentation rationnelle du problème}{10}{0}{3}
+\beamer@subsectionintoc {3}{2}{Apprentissage}{12}{0}{3}
+\beamer@subsectionintoc {3}{3}{Représentation boléenne du problème}{15}{0}{3}
+\beamer@subsectionintoc {3}{4}{Ensemble gagnant}{16}{0}{3}
+\beamer@sectionintoc {4}{Conclusion}{17}{0}{4}
+\beamer@sectionintoc {5}{Questions}{18}{0}{5}
