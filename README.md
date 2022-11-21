@@ -4,7 +4,7 @@ Thesis wrote by HUYLENBROECK Florent, in order to achieve the Master grade in co
 
 **Director** : Véronique BRUYERE. 
 
-**Reviewers** : Gaëtan STACQUET, Clément TAMINES. 
+**Reviewers** : Gaëtan STAQUET, Clément TAMINES. 
 
 This thesis studies the solving of safety games played on finite and infinite graphs. For the finite case, an algorithm computing attractors was implemented. For the inifinite games, a learning algorithm unsing finite state automatas and SAT solvers was implemented, inspired from D. Neider's work in '[An Automaton Learning Approach to Solving Safety Games over Infinite Graphs](https://link.springer.com/chapter/10.1007/978-3-662-49674-9_12)'.
 The report can be found at 'report/memoire.pdf' and the code is contained in the 'code/' directory.
