@@ -169,6 +169,7 @@ $\rightarrow$ La construction opposée nous donne une stratégie gagnante pour u
 Construire l'attracteur pour l'environnement vers les sommets hors de l'objectif $F$ indique au système quels sommets éviter. Il obtient ainsi une stratégie gagnante en restant hors de cet attracteur à chaque coup.
 \end{frame}
 
+\subsection{Exemple}
 \begin{frame}
 \frametitle{Exemple}
 Calculons l'attracteur de l'environnement vers les sommets hors de l'objectif pour l'arène précédente. Les sommets du $0^e$-attracteur sont entourés en rouge.
@@ -626,7 +627,7 @@ Ainsi, la formule
 où $P$ contient les contre-exemples positifs, forcera les mots de ces contre-exemples à être accepté par l'automate.
 \end{frame}
 
-\subsection{Ensemble gagnant}
+\subsection{Stratégie gagnante}
 \begin{frame}
 \frametitle{Traduction d'un modèle en un ensemble gagnant}
 $\mathcal{A}_{W_s}=\{Q,\Sigma,q_0,\delta,F\}$ tel que :
@@ -639,7 +640,6 @@ $\mathcal{A}_{W_s}=\{Q,\Sigma,q_0,\delta,F\}$ tel que :
 \end{itemize}
 \end{frame}
 
-\section{Stratégie gagnante}
 \begin{frame}
 \frametitle{Stratégie gagnante}
 Si l'apprentissage s'arrête, alors l'ensemble gagnant retourné donne immédiatment une stratégie gagnante pour le système.\\[3mm]
@@ -647,6 +647,7 @@ Cependant, si un tel ensemble n'existe pas, alors l'apprentissage ne s'arrêtera
 $\rightarrow$ L'algorithme n'est que partiel (et, s'il s'arrête, est de l'ordre de \alert{$O(n2^{n^2})$} pour un ensemble gagnant décrit par un automate à $n$ sommets).
 \end{frame}
 
+\subsection{Exemple}
 \begin{frame}
 \frametitle{Exemple}
 Premier automate conjecturé par l'élève, en l'absence de contre-exemple :

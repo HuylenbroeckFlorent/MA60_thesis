@@ -2,10 +2,11 @@
 \beamer@sectionintoc {2}{Cas fini}{6}{0}{2}
 \beamer@subsectionintoc {2}{1}{Attracteurs}{7}{0}{2}
 \beamer@subsectionintoc {2}{2}{Stratégie gagnante}{9}{0}{2}
+\beamer@subsectionintoc {2}{3}{Exemple}{10}{0}{2}
 \beamer@sectionintoc {3}{Cas infini}{13}{0}{3}
 \beamer@subsectionintoc {3}{1}{Représentation rationnelle du problème}{14}{0}{3}
 \beamer@subsectionintoc {3}{2}{Apprentissage}{21}{0}{3}
 \beamer@subsectionintoc {3}{3}{Représentation boléenne du problème}{25}{0}{3}
-\beamer@subsectionintoc {3}{4}{Ensemble gagnant}{26}{0}{3}
-\beamer@sectionintoc {4}{Stratégie gagnante}{27}{0}{4}
-\beamer@sectionintoc {5}{Questions}{30}{0}{5}
+\beamer@subsectionintoc {3}{4}{Stratégie gagnante}{26}{0}{3}
+\beamer@subsectionintoc {3}{5}{Exemple}{28}{0}{3}
+\beamer@sectionintoc {4}{Questions}{30}{0}{4}
