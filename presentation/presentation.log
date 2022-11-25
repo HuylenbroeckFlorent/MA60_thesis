@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.5.31)  25 NOV 2022 00:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.5.31)  25 NOV 2022 11:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1115,12 +1115,12 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 737.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 737.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 737.
 Package rerunfilecheck Info: File `presentation.out' has not changed.
-(rerunfilecheck)             Checksum: 5600362DF4034D1EDF9C33E91D89BD0A;810.
+(rerunfilecheck)             Checksum: 22000D8E10C448C5BA9D16278A5ECE4F;814.
  ) 
 Here is how much of TeX's memory you used:
  23466 strings out of 481239
  478053 string characters out of 5920377
- 757263 words of memory out of 5000000
+ 757265 words of memory out of 5000000
  38116 multiletter control sequences out of 15000+600000
  545845 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1139,7 +1139,7 @@ ts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/ms
 am10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msb
 m10.pfb>
-Output written on presentation.pdf (31 pages, 194084 bytes).
+Output written on presentation.pdf (31 pages, 194085 bytes).
 PDF statistics:
  950 PDF objects out of 1000 (max. 8388607)
  888 compressed objects within 9 object streams

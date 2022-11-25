@@ -4,7 +4,7 @@
 \beamer@subsectionintoc {2}{2}{Stratégie gagnante}{9}{0}{2}
 \beamer@subsectionintoc {2}{3}{Exemple}{10}{0}{2}
 \beamer@sectionintoc {3}{Cas infini}{13}{0}{3}
-\beamer@subsectionintoc {3}{1}{Représentation rationnelle du problème}{14}{0}{3}
+\beamer@subsectionintoc {3}{1}{Représentation régulière du problème}{14}{0}{3}
 \beamer@subsectionintoc {3}{2}{Apprentissage}{21}{0}{3}
 \beamer@subsectionintoc {3}{3}{Représentation boléenne du problème}{25}{0}{3}
 \beamer@subsectionintoc {3}{4}{Stratégie gagnante}{26}{0}{3}

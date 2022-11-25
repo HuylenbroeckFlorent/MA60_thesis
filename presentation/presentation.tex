@@ -377,7 +377,7 @@ Un algorithme linéaire en terme d'arcs et de sommets aurait une complexité \al
 $\rightarrow$ Il faut passer par une étape d'abstraction.
 \end{frame}
 
-\subsection{Représentation rationnelle du problème}
+\subsection{Représentation régulière du problème}
 \begin{frame}
 \frametitle{Alphabet, mots et langage}
 \begin{block}{Alphabet, mot et langage}
@@ -428,7 +428,7 @@ $\mathcal{A}$ est l'automate qui accepte le langage de l'exemple précédent.
 \begin{frame}
 \frametitle{Transducteurs}
 \begin{block}{Transducteur}
-Un transducteur est un automate fini dont les transitions se font par des paires de caractères, dont les composantes appartiennent chacune à un alphabet respectif. Il permet de définir une relations entre deux langages.
+Un transducteur est un automate fini dont les transitions se font par des paires de caractères, dont les composantes appartiennent chacune à un alphabet respectif. Il permet de définir une relation entre deux langages.
 \end{block}
 \begin{exampleblock}{Exemple}
 \begin{figure}[H]
@@ -501,7 +501,7 @@ Initialement, le pion est placé sur un sommet du système dans $F$.
 \end{frame}
 
 \begin{frame}
-\frametitle{Représentation rationnelle}
+\frametitle{Représentation régulière}
 Afin de représenter notre jeu de sûreté sous forme d'automates, il faut trouver un encodage, afin de définir l'alphabet utilisé par les automates.\\[3mm]
 Pour cet exemple, l'alphabet choisit est $\Sigma=\{s,e,i\}$. Les sommets seront encodés par les mots $u\in\{si^n,ei^n, n\in\mathbb{N}\}$
 
@@ -511,7 +511,7 @@ Le premier sommet de l'ensemble $F$ sera encodé par $eii$, le sommet à sa droi
 \end{frame}
 
 \begin{frame}
-\frametitle{Représentation rationnelle}
+\frametitle{Représentation régulière}
 L'automate $\mathcal{A}_{V_s}$ représente les sommets du système.
 \begin{tikzpicture} [
 						node distance=1.5cm, 
@@ -690,7 +690,7 @@ Sur base de ce contre-exemple, l'élève soumet l'automate
 
 \begin{frame}
 \frametitle{Exemple}
-L'enseignant retourne un contre-exemple d'implication existentielle $(sii, \mathcal{A})$ avec $\mathcal{L}(\mathcal{A})=\{eii,eiii\}$.\\
+L'enseignant retourne un contre-exemple d'implication existentielle $(sii, \mathcal{A})$ avec $\mathcal{L}(\mathcal{A})=\{eiii\}$.\\
 L'élève retourne ensuite l'automate 
 \begin{figure}[H]
 \centering
